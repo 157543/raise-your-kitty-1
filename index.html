@@ -209,7 +209,7 @@
      某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
   ========================= */
   const ASSETS = Object.freeze({
-    version: "real-v1",
+    version: "real-v3-webp-cache",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",
@@ -293,9 +293,11 @@
 
   /* =========================
      4.5 写实视觉渲染模块
+     所有照片统一使用 WebP
   ========================= */
   const Visual = (() => {
     const {$} = Utils;
+    const imageCache = new Map();
 
     function roomLevel(damage=0){
       if(damage<15)return "clean";
@@ -318,38 +320,83 @@
       return ASSETS.rooms[roomLevel(game.houseDamage||0)];
     }
 
-    function catPath(game,stateOverride=null){
+    function catPath(game,stateOverride=null,ageOverride=null){
       const state=stateFor(game,stateOverride);
-      return `assets/cats/${game.breedKey||"orange"}/${game.ageStage||"kitten"}/${state}.webp`;
+      const age=ageOverride||game.ageStage||"kitten";
+      return `assets/cats/${game.breedKey||"orange"}/${age}/${state}.webp`;
     }
 
-    function makeImage(className,path,onLoad,onError){
-      const img=document.createElement("img");
-      img.className=className;
-      img.alt="";
-      img.decoding="async";
-      img.loading="eager";
-      img.addEventListener("load",()=>{img.classList.add("loaded");if(onLoad)onLoad(img)});
-      img.addEventListener("error",()=>{img.remove();if(onError)onError()});
-      img.src=path;
-      return img;
+    function versioned(path){
+      if(!path)return "";
+      const separator=path.includes("?")?"&":"?";
+      return `${path}${separator}v=${encodeURIComponent(ASSETS.version)}`;
     }
 
-    function renderScene(target,game,options={}){
-      const element=typeof target==="string"?$(target):target;
-      if(!element||!game)return;
-      const state=stateFor(game,options.state||null);
-      element.innerHTML="";
+    function loadImage(path,priority="auto"){
+      if(!path)return Promise.resolve({ok:false,path:"",url:""});
+      if(imageCache.has(path))return imageCache.get(path);
 
+      const promise=new Promise(resolve=>{
+        const image=new Image();
+        const url=versioned(path);
+        let settled=false;
+
+        image.decoding="async";
+        image.loading="eager";
+        if("fetchPriority" in image)image.fetchPriority=priority;
+
+        const finish=async ok=>{
+          if(settled)return;
+          settled=true;
+          if(ok&&typeof image.decode==="function"){
+            try{await image.decode()}catch(error){}
+          }
+          resolve({ok,path,url});
+        };
+
+        image.addEventListener("load",()=>finish(true),{once:true});
+        image.addEventListener("error",()=>finish(false),{once:true});
+        image.src=url;
+
+        if(image.complete){
+          queueMicrotask(()=>finish(image.naturalWidth>0));
+        }
+      });
+
+      imageCache.set(path,promise);
+      return promise;
+    }
+
+    function readyImage(className,result,alt=""){
+      const image=document.createElement("img");
+      image.className=`${className} loaded`;
+      image.alt=alt;
+      image.decoding="sync";
+      image.loading="eager";
+      if("fetchPriority" in image)image.fetchPriority="high";
+      image.src=result.url;
+      return image;
+    }
+
+    function buildStage(game,state,roomResult,catResult,options={}){
       const stage=document.createElement("div");
+      const requestedRoom=roomPath(game);
+      const requestedCat=catPath(game,state);
+
       stage.className=`visual-stage state-${state}`;
+      stage.dataset.roomPath=requestedRoom;
+      stage.dataset.catPath=requestedCat;
+      stage.dataset.ready="1";
 
       const roomFallback=document.createElement("div");
       roomFallback.className="visual-room-fallback";
       roomFallback.innerHTML=Art.roomSVG(game,true,true);
       stage.appendChild(roomFallback);
 
-      stage.appendChild(makeImage("visual-room-photo",roomPath(game),()=>stage.classList.add("room-loaded")));
+      if(roomResult.ok){
+        stage.appendChild(readyImage("visual-room-photo",roomResult,"房间背景"));
+        stage.classList.add("room-loaded");
+      }
 
       const shadow=document.createElement("div");
       shadow.className="visual-cat-shadow";
@@ -360,7 +407,10 @@
       catFallback.innerHTML=Art.catSVG({...game,mood:state==="mischievous"?"happy":state});
       stage.appendChild(catFallback);
 
-      stage.appendChild(makeImage("visual-cat-photo",catPath(game,state),()=>stage.classList.add("cat-loaded")));
+      if(catResult.ok){
+        stage.appendChild(readyImage("visual-cat-photo",catResult,"猫咪"));
+        stage.classList.add("cat-loaded");
+      }
 
       const light=document.createElement("div");
       light.className="visual-light";
@@ -370,26 +420,78 @@
       vignette.className="visual-vignette";
       stage.appendChild(vignette);
 
-      if(options.showAssetHint){
+      if(options.showAssetHint&&(!roomResult.ok||!catResult.ok)){
         const hint=document.createElement("div");
         hint.className="asset-hint";
-        hint.textContent="真实素材会自动替换当前占位画面";
+        hint.textContent="相应的 WebP 素材上传后会自动显示";
         stage.appendChild(hint);
       }
 
-      element.appendChild(stage);
       return stage;
     }
 
-    function renderCover(){
+    function fallbackStage(game,state,options={}){
+      const missing={ok:false,path:"",url:""};
+      const stage=buildStage(game,state,missing,missing,options);
+      stage.dataset.ready="0";
+      return stage;
+    }
+
+    async function renderScene(target,game,options={}){
+      const element=typeof target==="string"?$(target):target;
+      if(!element||!game)return null;
+
+      const state=stateFor(game,options.state||null);
+      const requestedRoom=roomPath(game);
+      const requestedCat=catPath(game,state);
+      const current=element.querySelector(".visual-stage");
+
+      if(
+        current&&
+        current.dataset.ready==="1"&&
+        current.dataset.roomPath===requestedRoom&&
+        current.dataset.catPath===requestedCat
+      ){
+        return current;
+      }
+
+      const token=(element.__visualRenderToken||0)+1;
+      element.__visualRenderToken=token;
+
+      /* 第一次进入时才显示占位图。切换状态时保留旧实拍图，直到新图解码完成。 */
+      if(!current){
+        element.replaceChildren(fallbackStage(game,state,options));
+      }
+
+      const [roomResult,catResult]=await Promise.all([
+        loadImage(requestedRoom,"high"),
+        loadImage(requestedCat,"high")
+      ]);
+
+      if(element.__visualRenderToken!==token)return null;
+
+      const nextStage=buildStage(game,state,roomResult,catResult,options);
+      element.replaceChildren(nextStage);
+      return nextStage;
+    }
+
+    async function renderCover(){
       const box=$("#logoArt");
       if(!box)return;
+
       box.innerHTML="";
+      box.classList.remove("has-cover");
+
       const fallback=document.createElement("div");
       fallback.className="cover-fallback";
       fallback.innerHTML=Art.logoSVG();
       box.appendChild(fallback);
-      box.appendChild(makeImage("cover-photo",ASSETS.cover,()=>box.classList.add("has-cover")));
+
+      const result=await loadImage(ASSETS.cover,"high");
+      if(!result.ok)return;
+
+      box.appendChild(readyImage("cover-photo",result,"游戏封面"));
+      box.classList.add("has-cover");
     }
 
     function eventState(event){
@@ -417,33 +519,88 @@
       return null;
     }
 
-    function renderEvent(target,event){
+    async function renderEvent(target,event){
       const element=typeof target==="string"?$(target):target;
       const game=Game.get();
       if(!element)return;
+
+      const token=(element.__eventRenderToken||0)+1;
+      element.__eventRenderToken=token;
       element.classList.remove("event-photo-mode");
-      element.innerHTML="";
+
+      /* 先显示已经预载的对应猫状态，事件插图加载成功后再无缝替换。 */
+      if(game){
+        await renderScene(element,game,{state:event.visual?.catState||eventState(event)});
+      }else{
+        element.innerHTML="";
+      }
+
+      if(element.__eventRenderToken!==token)return;
+
       const key=event.visual?.eventKey||eventKey(event);
       const explicit=event.visual?.eventImage;
       const path=explicit||(key?ASSETS.eventImages[key]:null);
-      if(path){
-        const photo=makeImage("event-photo",path,()=>element.classList.add("event-photo-mode"),()=>{
-          element.classList.remove("event-photo-mode");
-          if(game)renderScene(element,game,{state:event.visual?.catState||eventState(event)});
+      if(!path)return;
+
+      const result=await loadImage(path,"high");
+      if(element.__eventRenderToken!==token||!result.ok)return;
+
+      element.replaceChildren(readyImage("event-photo",result,event.title||"事件插图"));
+      element.classList.add("event-photo-mode");
+    }
+
+    function warm(paths,delay=0){
+      setTimeout(()=>{
+        [...new Set(paths.filter(Boolean))].forEach(path=>{
+          loadImage(path,"low");
         });
-        element.appendChild(photo);
-      }else if(game){
-        renderScene(element,game,{state:event.visual?.catState||eventState(event)});
-      }
+      },delay);
     }
 
     function preload(game){
-      if(!game)return;
-      Object.values(ASSETS.rooms).forEach(path=>{const img=new Image();img.src=path});
-      ASSETS.catStates.forEach(state=>{const img=new Image();img.src=catPath(game,state)});
+      if(!game)return Promise.resolve();
+
+      const currentRoom=roomPath(game);
+      const currentCat=catPath(game);
+      const currentAge=game.ageStage||"kitten";
+      const otherAge=currentAge==="kitten"?"adult":"kitten";
+
+      const priority=Promise.all([
+        loadImage(currentRoom,"high"),
+        loadImage(currentCat,"high")
+      ]);
+
+      /* 当前年龄的全部状态优先预载，保证互动弹窗即时切换。 */
+      warm([
+        ...Object.values(ASSETS.rooms),
+        ...ASSETS.catStates.map(state=>catPath(game,state,currentAge)),
+        ASSETS.cover
+      ],0);
+
+      /* 后台预载另一年龄，避免第7天成年时闪烁。 */
+      warm(
+        ASSETS.catStates.map(state=>catPath(game,state,otherAge)),
+        900
+      );
+
+      return priority;
     }
 
-    return {renderScene,renderCover,renderEvent,preload,stateFor,roomPath,catPath};
+    function preloadStatic(){
+      warm([ASSETS.cover,...Object.values(ASSETS.rooms)],0);
+    }
+
+    return {
+      renderScene,
+      renderCover,
+      renderEvent,
+      preload,
+      preloadStatic,
+      loadImage,
+      stateFor,
+      roomPath,
+      catPath
+    };
   })();
 
   /* =========================
@@ -711,7 +868,7 @@
     function renderCandidate(){const c=Game.getCandidate();Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=CONFIG.breeds[c.breedKey].name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none'}
     function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥣 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
     function damageLabel(d){return d<15?'房间完好':d<40?'轻微破坏':d<70?'明显破坏':'惨不忍睹'}
-    function renderHome(){const g=Game.get();if(!g)return;$('#dayChip').textContent=`第${g.day}天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · 来源：${g.routeName}`;Visual.renderScene('#roomArt',g);Visual.preload(g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careBtn').textContent=g.isSick?'🏥 小猫生病了':g.bathDue?'🛁 需要护理':'🛁 护理与看病';$('#compactStats').innerHTML=statCards(g,['health','hunger','cleanliness','intimacy']);$('#actionPointsText').textContent=`今日行动：${g.actionsLeft}/4 · 金币：${g.coins}`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年：${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(b=>b.disabled=g.actionsLeft<=0);$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('')}
+    function renderHome(){const g=Game.get();if(!g)return;$('#dayChip').textContent=`第${g.day}天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · 来源：${g.routeName}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careBtn').textContent=g.isSick?'🏥 小猫生病了':g.bathDue?'🛁 需要护理':'🛁 护理与看病';$('#compactStats').innerHTML=statCards(g,['health','hunger','cleanliness','intimacy']);$('#actionPointsText').textContent=`今日行动：${g.actionsLeft}/4 · 金币：${g.coins}`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年：${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(b=>b.disabled=g.actionsLeft<=0);$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('')}
     function roomCaption(g){if(g.isSick)return `${g.name}生病了，看起来没有精神。`;if(g.mood==='angry')return `${g.name}现在看起来不太高兴。`;if(g.mood==='sleepy')return `${g.name}困了，正准备找地方睡觉。`;if(g.mood==='happy')return `${g.name}心情很好，尾巴轻轻晃着。`;if(g.stats.hunger<25)return `${g.name}正在等你放饭。`;return `${g.name}在房间里观察你。`}
     function renderAttributes(){const g=Game.get(),p=CONFIG.personalities[g.personality];$('#attributeDay').textContent=`第${g.day}天`;$('#attributeName').textContent=`${g.name}的档案`;Visual.renderScene('#attributeArt',g);$('#attributeInfo').innerHTML=`<div class="info-box"><small>品种</small><strong>${CONFIG.breeds[g.breedKey].name}</strong></div><div class="info-box"><small>性别</small><strong>${g.sex}</strong></div><div class="info-box"><small>年龄</small><strong>${g.ageStage==='adult'?'成年猫':'幼猫'}</strong></div><div class="info-box"><small>获得方式</small><strong>${g.routeName}</strong></div><div class="info-box"><small>初始性格</small><strong>${CONFIG.personalities[g.initialPersonality].name}</strong></div><div class="info-box"><small>房屋损坏</small><strong>${Math.round(g.houseDamage)}%</strong></div>`;$('#attributeStats').innerHTML=statCards(g,['health','trust','vitality','courage','intimacy','hunger','cleanliness']);$('#attributePersonality').textContent=`当前性格：${p.name}`;$('#attributePersonalityDesc').textContent=p.desc}
     function renderCare(){const g=Game.get();if(!g)return;const cost=g.isSick?(Number.isInteger(g.treatmentCost)?g.treatmentCost:Game.becomeSick()):null;$('#careDay').textContent=`第${g.day}天`;Visual.renderScene('#careArt',g,{state:g.isSick?'sick':null});$('#bathStatus').textContent=g.bathDue?'现在需要护理':`下次第${g.nextBathDay}天`;$('#illnessStatus').textContent=g.isSick?`生病中 · 治疗${cost}金币`:'健康';$('#careActionsLeft').textContent=`${g.actionsLeft}/4`;$('#careCoins').textContent=`${g.coins}`;$('#careNotice').innerHTML=g.isSick?`<div class="sick-note">${g.name}正在生病。生病期间每天会继续损失健康，本次治疗费用为${cost}金币，请尽快看病。</div>`:`<div class="healthy-note">${g.name}目前没有生病。每天结束时有4%的概率随机生病，每次治疗费用会在100～300金币之间随机生成。</div>`;$('#bathBtn').disabled=!g.bathDue||g.actionsLeft<=0;$('#bathBtnHint').textContent=g.bathDue?'本次护理会消耗1次行动':'还没有到需要护理的时间';$('#doctorBtnHint').textContent=g.isSick?`本次治疗需要${cost}金币，并消耗1次行动`:'每次生病的治疗费在100～300金币之间随机生成';$('#doctorBtn').disabled=!g.isSick||g.actionsLeft<=0||g.coins<cost}
@@ -760,7 +917,7 @@
       $('#restartAfterDeath').addEventListener('click',()=>{$('#deathOverlay').classList.remove('show');UI.showScreen('startScreen')});
     }
     function bindModals(){$('#eventOverlay').addEventListener('click',UI.closeEvent);$('#growthClose').addEventListener('click',()=>{$('#growthOverlay').classList.remove('show');Storage.save(Game.get());UI.renderHome()});$('#abandonBtn').addEventListener('click',Abandon.open);$('#cancelAbandon').addEventListener('click',()=>$('#abandonConfirm').classList.remove('show'));$('#confirmAbandon').addEventListener('click',Abandon.confirm);$('#leaveAbandon').addEventListener('click',()=>{$('#abandonResult').classList.remove('show');UI.showScreen('startScreen')});['#abandonConfirm','#growthOverlay'].forEach(sel=>$(sel).addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('show')}))}
-    function init(){Visual.renderCover();UI.updateContinue();bindNavigation();bindGame();bindModals()}
+    function init(){Visual.preloadStatic();Visual.renderCover();const saved=Storage.load();if(saved)Visual.preload(saved);UI.updateContinue();bindNavigation();bindGame();bindModals()}
     return {init};
   })();
 
