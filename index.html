@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fff4e8">
-  <title>云养小猫 · 护理与看病</title>
+  <title>云养小猫 · 写实视觉升级版</title>
   <style>
     :root{
       --bg:#fff8ef;--card:rgba(255,255,255,.9);--text:#3e342e;--muted:#82756c;
@@ -18,30 +18,53 @@
     .app{width:min(100%,780px);min-height:100svh;margin:auto;padding:max(18px,env(safe-area-inset-top)) 16px max(26px,env(safe-area-inset-bottom))}
     .screen{display:none;animation:fade .25s ease}.screen.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
     .hero,.panel,.home-card,.log-card{border:1px solid rgba(255,255,255,.94);border-radius:28px;background:var(--card);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--shadow)}
-    .hero,.panel{padding:24px}.hero{text-align:center}.logo{width:140px;height:140px;margin:2px auto 18px;border-radius:40px;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#ffe1c3);box-shadow:0 16px 38px rgba(171,98,48,.15)}
-    .logo svg{width:108px;height:108px}h1,h2,h3,p{margin-top:0}h1{margin-bottom:8px;font-size:clamp(34px,9vw,52px);letter-spacing:-.05em}h2{margin-bottom:8px;font-size:clamp(27px,7vw,38px);letter-spacing:-.04em}.subtitle{margin-bottom:0;color:var(--muted);line-height:1.7}.section-title{margin:24px 4px 12px;font-size:18px}
+    .hero,.panel{padding:24px}.hero{text-align:center}.logo{position:relative;width:100%;height:225px;margin:2px auto 20px;border-radius:26px;overflow:hidden;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#ffe1c3);box-shadow:0 16px 38px rgba(171,98,48,.15)}
+    .logo svg{width:118px;height:118px}.logo .cover-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s ease}.logo .cover-photo.loaded{opacity:1}.logo .cover-fallback{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#ffe1c3);transition:opacity .35s ease}.logo.has-cover .cover-fallback{opacity:0}h1,h2,h3,p{margin-top:0}h1{margin-bottom:8px;font-size:clamp(34px,9vw,52px);letter-spacing:-.05em}h2{margin-bottom:8px;font-size:clamp(27px,7vw,38px);letter-spacing:-.04em}.subtitle{margin-bottom:0;color:var(--muted);line-height:1.7}.section-title{margin:24px 4px 12px;font-size:18px}
     .route-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.route-card,.adult-card{min-height:132px;padding:16px;border:1px solid var(--line);border-radius:22px;color:var(--text);background:rgba(255,255,255,.85);box-shadow:0 10px 28px rgba(105,73,51,.08);text-align:left;transition:.18s}.route-card:active,.adult-card:active,.action-btn:active,.primary:active,.secondary:active,.tiny-btn:active{transform:scale(.97)}.route-card:hover,.adult-card:hover{border-color:rgba(233,119,49,.42)}
     .route-icon{display:block;margin-bottom:8px;font-size:32px}.route-name{display:block;margin-bottom:5px;font-size:16px;font-weight:900}.route-desc{color:var(--muted);font-size:13px;line-height:1.48}
     .continue-box{display:none;margin-top:16px;padding:16px;border-radius:20px;background:#fff1df;text-align:left}.continue-box.show{display:block}.button-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
     .primary,.secondary{min-height:52px;padding:12px 16px;border-radius:17px;font-weight:900}.primary{color:#fff;background:linear-gradient(135deg,var(--orange2),var(--orange));box-shadow:0 12px 26px rgba(231,111,49,.26)}.secondary{color:#675b53;background:#f3ece7}
     .back-link{display:inline-flex;align-items:center;gap:7px;margin-bottom:14px;padding:8px 11px;border-radius:13px;color:#6d6159;background:#f4ede8;font-weight:850}.choice-list{display:grid;gap:12px;margin-top:18px}.adult-card{width:100%;min-height:116px}.adult-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;font-weight:900}.personality-tag{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900}.spirit{color:#2d7b50;background:#dcf5e6}.demon{color:#ad5a1f;background:#ffead3}.chaos{color:#94333f;background:#ffe0e4}
-    .candidate{text-align:center}.candidate-art{height:230px;margin:8px 0 16px;border-radius:24px;overflow:hidden;background:#fff5e6}.candidate-art svg{width:100%;height:100%;display:block}.origin-story{margin:14px 0;padding:14px;border-radius:18px;color:#665a52;background:#fff4e8;line-height:1.65;text-align:left}.candidate-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0;text-align:left}.meta-box{padding:12px;border-radius:16px;background:#f8f2ed}.meta-box small{display:block;margin-bottom:4px;color:#9a8d83;font-weight:800}.name-input{width:100%;min-height:56px;padding:0 16px;border:1.5px solid var(--line);border-radius:17px;outline:none;background:#fff;font-size:17px}.name-input:focus{border-color:rgba(233,119,49,.55);box-shadow:0 0 0 4px rgba(255,155,88,.12)}
+    .candidate{text-align:center}.candidate-art{height:245px;margin:8px 0 16px;border-radius:24px;overflow:hidden;background:#fff5e6}.candidate-art svg{width:100%;height:100%;display:block}.origin-story{margin:14px 0;padding:14px;border-radius:18px;color:#665a52;background:#fff4e8;line-height:1.65;text-align:left}.candidate-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0;text-align:left}.meta-box{padding:12px;border-radius:16px;background:#f8f2ed}.meta-box small{display:block;margin-bottom:4px;color:#9a8d83;font-weight:800}.name-input{width:100%;min-height:56px;padding:0 16px;border:1.5px solid var(--line);border-radius:17px;outline:none;background:#fff;font-size:17px}.name-input:focus{border-color:rgba(233,119,49,.55);box-shadow:0 0 0 4px rgba(255,155,88,.12)}
     .home-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.home-top h2{margin:0;font-size:23px}.top-buttons{display:flex;gap:8px;align-items:center}.day-chip,.tiny-btn{padding:8px 11px;border-radius:999px;font-size:12px;font-weight:900}.day-chip{color:#9c551f;background:#fff0dd}.tiny-btn{color:#665a52;background:rgba(255,255,255,.84);box-shadow:0 8px 22px rgba(93,66,47,.09)}
     .home-card{padding:16px}.room-frame{position:relative;overflow:hidden;border-radius:24px;background:#f5e8d6;aspect-ratio:16/10}#roomArt{position:absolute;inset:0}.room-frame svg{width:100%;height:100%;display:block}.room-caption{position:absolute;left:12px;bottom:12px;max-width:72%;padding:9px 12px;border-radius:14px 14px 14px 4px;background:rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(72,52,39,.12);font-size:13px;line-height:1.4}.room-damage-label{position:absolute;right:12px;top:12px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.86);font-size:12px;font-weight:900;color:#805f4e}
     .cat-summary{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-top:14px}.cat-name{margin:0 0 4px;font-size:27px}.cat-sub{color:var(--muted);font-size:13px;line-height:1.5}.stats-compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}.stat-card{padding:11px;border:1px solid rgba(127,93,68,.09);border-radius:16px;background:rgba(255,255,255,.78)}.stat-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:7px;font-size:12px;font-weight:850}.bar{height:8px;overflow:hidden;border-radius:999px;background:#eee5df}.bar span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ffb577,#f17f3b);transition:width .25s}
     .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.action-btn{min-height:76px;padding:12px;border-radius:19px;color:var(--text);background:rgba(255,255,255,.88);box-shadow:0 10px 25px rgba(101,70,48,.08);font-weight:900;text-align:left}.action-btn span{display:block;margin-bottom:4px;font-size:25px}.action-btn small{color:var(--muted);font-weight:700}.action-btn:disabled{opacity:.44}.action-btn.work-action{grid-column:1/-1;background:linear-gradient(135deg,rgba(255,247,224,.96),rgba(255,232,198,.96));border:1px solid rgba(202,135,66,.16)}.status-line{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px;padding:11px 13px;border-radius:17px;background:#f7eee8;font-size:13px;font-weight:850}.log-card{margin-top:14px;padding:16px}.log-card h3{margin-bottom:10px;font-size:16px}.log-list{display:grid;gap:8px;max-height:235px;overflow:auto}.log-item{padding:10px 12px;border-radius:14px;color:#665a52;background:#faf4ef;font-size:13px;line-height:1.55}.small-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-    .attribute-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.attribute-art{height:230px;margin:14px 0;border-radius:24px;overflow:hidden;background:#fff3df}.attribute-art svg{width:100%;height:100%}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.info-box{padding:13px;border-radius:17px;background:#f8f2ed}.info-box small{display:block;color:#988a80;font-weight:800;margin-bottom:5px}.personality-detail{margin-top:14px;padding:16px;border-radius:20px;background:#fff1df}.personality-detail h3{margin-bottom:7px}.personality-detail p{margin:0;color:#6c5f56;line-height:1.65;font-size:14px}
+    .attribute-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.attribute-art{height:245px;margin:14px 0;border-radius:24px;overflow:hidden;background:#fff3df}.attribute-art svg{width:100%;height:100%}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.info-box{padding:13px;border-radius:17px;background:#f8f2ed}.info-box small{display:block;color:#988a80;font-weight:800;margin-bottom:5px}.personality-detail{margin-top:14px;padding:16px;border-radius:20px;background:#fff1df}.personality-detail h3{margin-bottom:7px}.personality-detail p{margin:0;color:#6c5f56;line-height:1.65;font-size:14px}
+    /* 写实图片分层系统：图片不存在时自动退回原矢量画面 */
+    .visual-stage{position:relative;width:100%;height:100%;overflow:hidden;background:linear-gradient(145deg,#f4e5d5,#d9b995);isolation:isolate}
+    .visual-room-fallback,.visual-room-photo,.visual-light,.visual-vignette{position:absolute;inset:0;width:100%;height:100%}
+    .visual-room-fallback{z-index:0;transition:opacity .35s ease}.visual-room-fallback svg{width:100%;height:100%;display:block}
+    .visual-room-photo{z-index:1;object-fit:cover;opacity:0;transition:opacity .45s ease;user-select:none;pointer-events:none}.visual-room-photo.loaded{opacity:1}.visual-stage.room-loaded .visual-room-fallback{opacity:0}
+    .visual-cat-shadow{position:absolute;z-index:2;left:50%;bottom:6.5%;width:25%;height:6.5%;transform:translateX(-50%);border-radius:50%;background:rgba(45,31,23,.25);filter:blur(11px);opacity:.8;pointer-events:none}
+    .visual-cat-fallback{position:absolute;z-index:3;left:50%;bottom:3.8%;width:40%;height:65%;transform:translateX(-50%);transition:opacity .3s ease;pointer-events:none}.visual-cat-fallback svg{width:100%;height:100%;display:block;filter:drop-shadow(0 13px 10px rgba(54,38,29,.2))}
+    .visual-cat-photo{position:absolute;z-index:4;left:50%;bottom:4.2%;width:42%;max-height:79%;object-fit:contain;object-position:center bottom;transform:translateX(-50%);transform-origin:center bottom;opacity:0;filter:drop-shadow(0 13px 10px rgba(54,38,29,.22));transition:opacity .35s ease,transform .35s ease;user-select:none;pointer-events:none}.visual-cat-photo.loaded{opacity:1}.visual-stage.cat-loaded .visual-cat-fallback{opacity:0}
+    .visual-light{z-index:5;pointer-events:none;background:linear-gradient(125deg,rgba(255,238,201,.22),transparent 46%,rgba(50,31,20,.08));mix-blend-mode:screen}.visual-vignette{z-index:6;pointer-events:none;box-shadow:inset 0 0 80px rgba(55,34,22,.13)}
+    .visual-stage.state-idle .visual-cat-photo,.visual-stage.state-idle .visual-cat-fallback{animation:catBreathing 3.4s ease-in-out infinite}
+    .visual-stage.state-happy .visual-cat-photo,.visual-stage.state-happy .visual-cat-fallback{animation:catHappy 1.55s ease-in-out infinite}
+    .visual-stage.state-angry .visual-cat-photo,.visual-stage.state-angry .visual-cat-fallback{animation:catAngry .22s linear 3}
+    .visual-stage.state-sick .visual-cat-photo,.visual-stage.state-sick .visual-cat-fallback{animation:catSick 4.5s ease-in-out infinite;filter:saturate(.72) drop-shadow(0 12px 10px rgba(54,38,29,.16))}
+    .visual-stage.state-sleepy .visual-cat-photo,.visual-stage.state-sleepy .visual-cat-fallback{animation:catSleep 4s ease-in-out infinite}
+    .visual-stage.state-mischievous .visual-cat-photo,.visual-stage.state-mischievous .visual-cat-fallback{animation:catMischief 2.2s ease-in-out infinite}
+    @keyframes catBreathing{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.012,.994)}}
+    @keyframes catHappy{0%,100%{transform:translateX(-50%) translateY(0) rotate(-.6deg)}50%{transform:translateX(-50%) translateY(-5px) rotate(.8deg)}}
+    @keyframes catAngry{0%,100%{transform:translateX(-50%)}50%{transform:translateX(calc(-50% + 4px))}}
+    @keyframes catSick{0%,100%{transform:translateX(-50%) scale(1);opacity:.9}50%{transform:translateX(-50%) scale(1.006,.989);opacity:1}}
+    @keyframes catSleep{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(2px)}}
+    @keyframes catMischief{0%,100%{transform:translateX(-50%) rotate(-1deg)}50%{transform:translateX(-50%) rotate(1deg)}}
+    .event-illustration{height:215px;margin:-6px -6px 15px;border-radius:21px;overflow:hidden;background:#efe0d1}.event-illustration .visual-stage{min-height:100%}.event-illustration .visual-cat-photo{width:46%;bottom:1%}.event-illustration .visual-cat-fallback{width:44%;bottom:1%}.event-illustration.event-photo-mode img.event-photo{width:100%;height:100%;object-fit:cover;display:block}
+    .asset-hint{position:absolute;left:10px;top:10px;z-index:8;padding:5px 8px;border-radius:999px;color:#725f53;background:rgba(255,255,255,.76);font-size:10px;font-weight:800;opacity:.72;pointer-events:none}
     .care-entry{position:absolute;left:12px;top:12px;z-index:4;padding:8px 12px;border-radius:999px;color:#6b5143;background:rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(72,52,39,.13);font-size:12px;font-weight:900}.care-entry.alert{color:#9d3c47;background:#fff0f2;animation:pulse 1.4s ease-in-out infinite}@keyframes pulse{50%{transform:scale(1.05)}}
     .care-status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.care-status{padding:14px;border-radius:18px;background:#f8f2ed}.care-status small{display:block;margin-bottom:5px;color:#96877d;font-weight:800}.care-status strong{font-size:15px}.care-actions{display:grid;gap:12px;margin-top:16px}.care-action{min-height:78px;padding:15px;border-radius:20px;text-align:left;color:var(--text);background:rgba(255,255,255,.9);box-shadow:0 10px 26px rgba(101,70,48,.09);font-weight:900}.care-action span{display:block;margin-bottom:5px;font-size:27px}.care-action small{color:var(--muted);font-weight:700}.care-action:disabled{opacity:.45;cursor:not-allowed}.sick-note{margin-top:12px;padding:13px;border-radius:17px;color:#8c3d49;background:#fff0f2;font-size:13px;line-height:1.6}.healthy-note{margin-top:12px;padding:13px;border-radius:17px;color:#367451;background:#eaf7ef;font-size:13px;line-height:1.6}.choice-buttons{display:grid;gap:10px;margin-top:16px}.danger-button{min-height:52px;padding:12px 16px;border-radius:17px;color:#fff;background:linear-gradient(135deg,#c96a72,#9f3f49);font-weight:900}.death-card{border:2px solid rgba(125,91,75,.2);background:linear-gradient(160deg,#fff,#f3eee9)}
     .abandon-corner{position:fixed;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:50;display:none;padding:6px 10px;border:1px solid rgba(151,71,71,.16);border-radius:999px;color:#9b4d4d;background:rgba(255,247,247,.82);box-shadow:0 7px 20px rgba(101,52,52,.1);font-size:11px;font-weight:850;opacity:.74}.abandon-corner.show{display:block}
     .overlay{display:none;position:fixed;inset:0;z-index:100;place-items:center;padding:18px;background:rgba(45,35,29,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.overlay.show{display:grid}.modal-card{width:min(92vw,470px);padding:23px;border-radius:26px;background:#fff;box-shadow:0 25px 80px rgba(36,28,23,.3);text-align:center;animation:pop .26s ease}@keyframes pop{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}.event-card{pointer-events:none}.event-emoji{font-size:64px;margin-bottom:8px}.event-card h2{font-size:28px}.event-body{color:#6d6057;line-height:1.7}.effect-list{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-top:14px}.effect-chip{padding:6px 9px;border-radius:999px;background:#f6eee8;color:#6c5b50;font-size:12px;font-weight:850}.tap-hint{margin-top:15px;color:#a39287;font-size:12px}.abandon-result.shame{border:2px solid rgba(194,65,78,.35);background:linear-gradient(160deg,#fff,#fff1f2)}.abandon-result.mercy{border:2px solid rgba(119,104,90,.24);background:linear-gradient(160deg,#fff,#f7f3ef)}.quote{margin:14px 0 0;padding:14px;border-radius:17px;color:#5f5048;background:rgba(255,255,255,.76);line-height:1.75;text-align:left}.toast{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));z-index:130;padding:11px 16px;border-radius:999px;color:#fff;background:rgba(55,43,35,.9);font-size:13px;font-weight:850;transform:translate(-50%,18px);opacity:0;pointer-events:none;transition:.22s}.toast.show{transform:translate(-50%,0);opacity:1}
-    @media(max-width:520px){.route-card{min-height:145px}.candidate-meta,.info-grid{grid-template-columns:1fr 1fr}.room-caption{max-width:78%}}
+    @media(max-width:520px){.logo{height:190px}.route-card{min-height:145px}.candidate-meta,.info-grid{grid-template-columns:1fr 1fr}.room-caption{max-width:78%}}
   </style>
 </head>
 <body>
   <main class="app">
     <section class="screen active" id="startScreen">
-      <div class="hero"><div class="logo" id="logoArt"></div><h1>云养小猫</h1><p class="subtitle">获得一只猫，陪它生活、长大，并承担每一次选择带来的后果。</p></div>
+      <div class="hero"><div class="logo" id="logoArt"></div><h1>云养小猫</h1><p class="subtitle">获得一只猫，陪它生活、长大，并让真实房间与猫咪画面记录每一次变化。</p></div>
       <div class="continue-box" id="continueBox"><strong id="continueTitle"></strong><p class="subtitle" id="continueText"></p><div class="button-row"><button class="primary" id="continueBtn">继续养猫</button><button class="secondary" id="newGameBtn">重新开始</button></div></div>
       <h2 class="section-title">先获得一只小猫</h2>
       <div class="route-grid">
@@ -96,7 +119,7 @@
 
   <button class="abandon-corner" id="abandonBtn">弃养</button>
 
-  <div class="overlay" id="eventOverlay"><div class="modal-card event-card"><div class="event-emoji" id="eventEmoji"></div><h2 id="eventTitle"></h2><div class="event-body" id="eventBody"></div><div class="effect-list" id="effectList"></div><div class="tap-hint">点击任意位置继续</div></div></div>
+  <div class="overlay" id="eventOverlay"><div class="modal-card event-card"><div class="event-illustration" id="eventIllustration"></div><div class="event-emoji" id="eventEmoji"></div><h2 id="eventTitle"></h2><div class="event-body" id="eventBody"></div><div class="effect-list" id="effectList"></div><div class="tap-hint">点击任意位置继续</div></div></div>
   <div class="overlay" id="growthOverlay"><div class="modal-card"><div class="event-emoji" id="growthEmoji"></div><h2>性格定型</h2><div class="event-body" id="growthBody"></div><button class="primary" id="growthClose" style="width:100%;margin-top:16px">接受命运</button></div></div>
   <div class="overlay" id="abandonConfirm"><div class="modal-card"><div class="event-emoji">🚪</div><h2>真的要弃养吗？</h2><p class="event-body" id="abandonConfirmText"></p><div class="button-row"><button class="secondary" id="cancelAbandon">我再想想</button><button class="primary" id="confirmAbandon">确认弃养</button></div></div></div>
   <div class="overlay" id="abandonResult"><div class="modal-card abandon-result" id="abandonResultCard"><div class="event-emoji" id="abandonResultEmoji"></div><h2 id="abandonResultTitle"></h2><div class="quote" id="abandonResultText"></div><button class="secondary" id="leaveAbandon" style="width:100%;margin-top:18px">返回开始界面</button></div></div>
@@ -122,6 +145,20 @@
   <div class="toast" id="toast"></div>
 
   <script>
+  /*
+    写实素材目录约定：
+    assets/cover/home-cover.webp
+    assets/rooms/room-clean.webp
+    assets/rooms/room-light-damage.webp
+    assets/rooms/room-heavy-damage.webp
+    assets/rooms/room-destroyed.webp
+    assets/cats/<品种>/<kitten或adult>/<状态>.webp
+
+    品种键：orange tabby tuxedo white black calico silver
+    状态键：idle happy sleepy angry sick mischievous
+
+    图片尚未上传时，系统自动使用原矢量占位图。
+  */
   /* =========================
      1. 配置数据模块
   ========================= */
@@ -166,6 +203,40 @@
   })();
 
   /* =========================
+     2.5 写实视觉资源配置
+
+     代码会优先读取 assets 文件夹中的真实图片。
+     某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
+  ========================= */
+  const ASSETS = Object.freeze({
+    version: "real-v1",
+    cover: "assets/cover/home-cover.webp",
+    rooms: {
+      clean: "assets/rooms/room-clean.webp",
+      light: "assets/rooms/room-light-damage.webp",
+      heavy: "assets/rooms/room-heavy-damage.webp",
+      destroyed: "assets/rooms/room-destroyed.webp"
+    },
+    effects: {
+      windowLight: "assets/effects/window-light.webp"
+    },
+    catStates: ["idle","happy","sleepy","angry","sick","mischievous"],
+    eventImages: {
+      feed: "assets/events/feed.webp",
+      feedSpill: "assets/events/feed-spill.webp",
+      pet: "assets/events/pet.webp",
+      attack: "assets/events/attack.webp",
+      bathGood: "assets/events/bath-good.webp",
+      bathStruggle: "assets/events/bath-struggle.webp",
+      doctor: "assets/events/doctor.webp",
+      sick: "assets/events/sick.webp",
+      grow: "assets/events/grow-up.webp",
+      damage: "assets/events/damage.webp",
+      work: "assets/events/work.webp"
+    }
+  });
+
+  /* =========================
      3. 存档模块
   ========================= */
   const Storage = (() => {
@@ -202,7 +273,7 @@
       <path d="M-22 83 q-7 31 4 40 M15 85 q6 30-2 38" stroke="${c.base}" stroke-width="18" stroke-linecap="round"/>
       <path d="M-28 64 q15 18 28 2 q12 17 27-1" fill="none" stroke="${c.light}" stroke-width="8" opacity=".8"/>
     </g>`}
-    function roomSVG(game,preview=false){const d=game.houseDamage||0;const level=d<15?0:d<40?1:d<70?2:3;const mood=game.mood||"neutral";const age=game.ageStage||"kitten";const breed=game.breedKey||"orange";const scratches=level>=1?`<path d="M184 239 l22-38 M194 245 l22-37 M205 247 l17-31" stroke="#8d5b45" stroke-width="4" opacity=".65"/>`:"";const torn=level>=2?`<path d="M477 72 l17 34 l-9 25 l16 34 l-14 28" fill="#f4d4c2" stroke="#bb7966" stroke-width="3"/>`:"";const chaos=level>=3?`<g><path d="M84 92 l38 12 l-34 22z" fill="#ede6dd"/><path d="M365 85 l28 10 l-25 18z" fill="#ede6dd"/><path d="M525 276 l30 5" stroke="#6e5a4f" stroke-width="5"/><circle cx="548" cy="292" r="13" fill="#d8ad70"/><path d="M521 288 l34 11" stroke="#56835d" stroke-width="6"/></g>`:"";const plant=level>=2?`<g transform="translate(535 291) rotate(68)"><rect x="-20" y="0" width="40" height="28" rx="5" fill="#b66d4b"/><path d="M0 0 q-20-35-9-67 M0 0 q16-35 8-64" stroke="#4f8d5c" stroke-width="7"/><circle cx="-13" cy="-60" r="15" fill="#6fa66d"/><circle cx="13" cy="-54" r="14" fill="#6fa66d"/></g>`:`<g transform="translate(535 275)"><rect x="-20" y="0" width="40" height="34" rx="5" fill="#b66d4b"/><path d="M0 0 q-20-35-9-67 M0 0 q16-35 8-64" stroke="#4f8d5c" stroke-width="7"/><circle cx="-13" cy="-60" r="15" fill="#6fa66d"/><circle cx="13" cy="-54" r="14" fill="#6fa66d"/></g>`;return `<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" aria-label="小猫的房间">
+    function roomSVG(game,preview=false,hideCat=false){const d=game.houseDamage||0;const level=d<15?0:d<40?1:d<70?2:3;const mood=game.mood||"neutral";const age=game.ageStage||"kitten";const breed=game.breedKey||"orange";const scratches=level>=1?`<path d="M184 239 l22-38 M194 245 l22-37 M205 247 l17-31" stroke="#8d5b45" stroke-width="4" opacity=".65"/>`:"";const torn=level>=2?`<path d="M477 72 l17 34 l-9 25 l16 34 l-14 28" fill="#f4d4c2" stroke="#bb7966" stroke-width="3"/>`:"";const chaos=level>=3?`<g><path d="M84 92 l38 12 l-34 22z" fill="#ede6dd"/><path d="M365 85 l28 10 l-25 18z" fill="#ede6dd"/><path d="M525 276 l30 5" stroke="#6e5a4f" stroke-width="5"/><circle cx="548" cy="292" r="13" fill="#d8ad70"/><path d="M521 288 l34 11" stroke="#56835d" stroke-width="6"/></g>`:"";const plant=level>=2?`<g transform="translate(535 291) rotate(68)"><rect x="-20" y="0" width="40" height="28" rx="5" fill="#b66d4b"/><path d="M0 0 q-20-35-9-67 M0 0 q16-35 8-64" stroke="#4f8d5c" stroke-width="7"/><circle cx="-13" cy="-60" r="15" fill="#6fa66d"/><circle cx="13" cy="-54" r="14" fill="#6fa66d"/></g>`:`<g transform="translate(535 275)"><rect x="-20" y="0" width="40" height="34" rx="5" fill="#b66d4b"/><path d="M0 0 q-20-35-9-67 M0 0 q16-35 8-64" stroke="#4f8d5c" stroke-width="7"/><circle cx="-13" cy="-60" r="15" fill="#6fa66d"/><circle cx="13" cy="-54" r="14" fill="#6fa66d"/></g>`;return `<svg viewBox="0 0 640 400" xmlns="http://www.w3.org/2000/svg" aria-label="小猫的房间">
       <defs><linearGradient id="wall" x2="0" y2="1"><stop stop-color="#fff8ec"/><stop offset="1" stop-color="#f6dfc9"/></linearGradient><linearGradient id="floor" x2="1"><stop stop-color="#d8a875"/><stop offset="1" stop-color="#efc38f"/></linearGradient></defs>
       <rect width="640" height="285" fill="url(#wall)"/><rect y="285" width="640" height="115" fill="url(#floor)"/><path d="M0 312 H640 M0 350 H640" stroke="#c38b5c" opacity=".45"/>
       <rect x="430" y="34" width="150" height="142" rx="8" fill="#d8effc" stroke="#fff" stroke-width="11"/><path d="M505 39 V171 M435 105 H575" stroke="#fff" stroke-width="7"/>${torn}
@@ -211,11 +282,167 @@
       <g transform="translate(297 185)"><rect x="0" y="0" width="18" height="125" rx="9" fill="#b88b61"/><rect x="-28" y="-8" width="74" height="18" rx="9" fill="#9b7253"/><circle cx="9" cy="-25" r="12" fill="#ef8e52"/></g>
       <g transform="translate(38 274)"><ellipse cx="55" cy="38" rx="55" ry="23" fill="#bd8a65"/><ellipse cx="55" cy="34" rx="44" ry="16" fill="#ffe4c8"/></g>
       ${plant}${chaos}
-      ${catGroup(breed,age,mood,360,228)}
+      ${hideCat?"":catGroup(breed,age,mood,360,228)}
       ${preview?"":`<circle cx="590" cy="336" r="16" fill="#ef8f54"/><path d="M580 327 l20 18 M600 327 l-20 18" stroke="#fff" stroke-width="3"/>`}
     </svg>`}
+    function catSVG(game){const breed=game.breedKey||"orange";const age=game.ageStage||"kitten";const mood=game.mood||"neutral";return `<svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg" aria-label="猫咪占位图">${catGroup(breed,age,mood,128,90)}</svg>`}
     function logoSVG(){return `<svg viewBox="0 0 120 120"><circle cx="60" cy="65" r="40" fill="#e79a55"/><path d="M28 43 L36 12 L53 37 M92 43 L84 12 L67 37" fill="#e79a55"/><circle cx="47" cy="62" r="5"/><circle cx="73" cy="62" r="5"/><path d="M60 72 l-5 5 h10z" fill="#9e5f62"/><path d="M60 77 q-7 8-15 1 M60 77 q7 8 15 1" fill="none" stroke="#5b4138" stroke-width="3"/><path d="M18 68 h24 M78 68 h24 M20 78 h23 M77 78 h23" stroke="#5b4138" stroke-width="2"/></svg>`}
-    return {roomSVG,logoSVG};
+    return {roomSVG,catSVG,logoSVG};
+  })();
+
+  /* =========================
+     4.5 写实视觉渲染模块
+  ========================= */
+  const Visual = (() => {
+    const {$} = Utils;
+
+    function roomLevel(damage=0){
+      if(damage<15)return "clean";
+      if(damage<40)return "light";
+      if(damage<70)return "heavy";
+      return "destroyed";
+    }
+
+    function stateFor(game,override=null){
+      if(override)return override;
+      if(game.isSick)return "sick";
+      if(game.mood==="angry")return "angry";
+      if(game.mood==="sleepy")return "sleepy";
+      if(game.mood==="happy")return "happy";
+      if(game.personality==="demon"&&game.houseDamage>=15)return "mischievous";
+      return "idle";
+    }
+
+    function roomPath(game){
+      return ASSETS.rooms[roomLevel(game.houseDamage||0)];
+    }
+
+    function catPath(game,stateOverride=null){
+      const state=stateFor(game,stateOverride);
+      return `assets/cats/${game.breedKey||"orange"}/${game.ageStage||"kitten"}/${state}.webp`;
+    }
+
+    function makeImage(className,path,onLoad,onError){
+      const img=document.createElement("img");
+      img.className=className;
+      img.alt="";
+      img.decoding="async";
+      img.loading="eager";
+      img.addEventListener("load",()=>{img.classList.add("loaded");if(onLoad)onLoad(img)});
+      img.addEventListener("error",()=>{img.remove();if(onError)onError()});
+      img.src=path;
+      return img;
+    }
+
+    function renderScene(target,game,options={}){
+      const element=typeof target==="string"?$(target):target;
+      if(!element||!game)return;
+      const state=stateFor(game,options.state||null);
+      element.innerHTML="";
+
+      const stage=document.createElement("div");
+      stage.className=`visual-stage state-${state}`;
+
+      const roomFallback=document.createElement("div");
+      roomFallback.className="visual-room-fallback";
+      roomFallback.innerHTML=Art.roomSVG(game,true,true);
+      stage.appendChild(roomFallback);
+
+      stage.appendChild(makeImage("visual-room-photo",roomPath(game),()=>stage.classList.add("room-loaded")));
+
+      const shadow=document.createElement("div");
+      shadow.className="visual-cat-shadow";
+      stage.appendChild(shadow);
+
+      const catFallback=document.createElement("div");
+      catFallback.className="visual-cat-fallback";
+      catFallback.innerHTML=Art.catSVG({...game,mood:state==="mischievous"?"happy":state});
+      stage.appendChild(catFallback);
+
+      stage.appendChild(makeImage("visual-cat-photo",catPath(game,state),()=>stage.classList.add("cat-loaded")));
+
+      const light=document.createElement("div");
+      light.className="visual-light";
+      stage.appendChild(light);
+
+      const vignette=document.createElement("div");
+      vignette.className="visual-vignette";
+      stage.appendChild(vignette);
+
+      if(options.showAssetHint){
+        const hint=document.createElement("div");
+        hint.className="asset-hint";
+        hint.textContent="真实素材会自动替换当前占位画面";
+        stage.appendChild(hint);
+      }
+
+      element.appendChild(stage);
+      return stage;
+    }
+
+    function renderCover(){
+      const box=$("#logoArt");
+      if(!box)return;
+      box.innerHTML="";
+      const fallback=document.createElement("div");
+      fallback.className="cover-fallback";
+      fallback.innerHTML=Art.logoSVG();
+      box.appendChild(fallback);
+      box.appendChild(makeImage("cover-photo",ASSETS.cover,()=>box.classList.add("has-cover")));
+    }
+
+    function eventState(event){
+      const text=`${event.title||""} ${event.body||""}`;
+      if(/生病|病情|应激|发热/.test(text))return "sick";
+      if(/攻击|出爪|哈气|警告|不许碰|伏击/.test(text))return "angry";
+      if(/推翻|破坏|抓坏|撕裂|跑酷|偷走|捣乱|快递箱/.test(text))return "mischievous";
+      if(/睡|困/.test(text))return "sleepy";
+      if(/开心|呼噜|蹭|顺利|陪伴|礼物|治愈/.test(text))return "happy";
+      return null;
+    }
+
+    function eventKey(event){
+      const text=`${event.title||""} ${event.body||""}`;
+      if(/成年|性格定型/.test(text))return "grow";
+      if(/看病|治疗|医生|医院/.test(text))return "doctor";
+      if(/洗护非常顺利|表现很乖/.test(text))return "bathGood";
+      if(/洗澡|洗护|剪指甲|挣扎/.test(text))return "bathStruggle";
+      if(/生病|病情|应激|发热/.test(text))return "sick";
+      if(/攻击|出爪|脚踝|哈气/.test(text))return "attack";
+      if(/打工/.test(text))return "work";
+      if(/推翻|杯子|抓坏|撕裂|破坏/.test(text))return "damage";
+      if(/喂|吃饭|猫粮|食盆|碗/.test(text))return /推翻|掀|撒|倒/.test(text)?"feedSpill":"feed";
+      if(/摸|蹭|肚皮|呼噜/.test(text))return "pet";
+      return null;
+    }
+
+    function renderEvent(target,event){
+      const element=typeof target==="string"?$(target):target;
+      const game=Game.get();
+      if(!element)return;
+      element.classList.remove("event-photo-mode");
+      element.innerHTML="";
+      const key=event.visual?.eventKey||eventKey(event);
+      const explicit=event.visual?.eventImage;
+      const path=explicit||(key?ASSETS.eventImages[key]:null);
+      if(path){
+        const photo=makeImage("event-photo",path,()=>element.classList.add("event-photo-mode"),()=>{
+          element.classList.remove("event-photo-mode");
+          if(game)renderScene(element,game,{state:event.visual?.catState||eventState(event)});
+        });
+        element.appendChild(photo);
+      }else if(game){
+        renderScene(element,game,{state:event.visual?.catState||eventState(event)});
+      }
+    }
+
+    function preload(game){
+      if(!game)return;
+      Object.values(ASSETS.rooms).forEach(path=>{const img=new Image();img.src=path});
+      ASSETS.catStates.forEach(state=>{const img=new Image();img.src=catPath(game,state)});
+    }
+
+    return {renderScene,renderCover,renderEvent,preload,stateFor,roomPath,catPath};
   })();
 
   /* =========================
@@ -467,14 +694,14 @@
   const UI = (() => {
     const {$,$$,clamp}=Utils;let eventCloseCallback=null;
     function showScreen(id){$$('.screen').forEach(s=>s.classList.toggle('active',s.id===id));const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&['homeScreen','attributeScreen','careScreen'].includes(id));window.scrollTo({top:0,behavior:'smooth'})}
-    function renderCandidate(){const c=Game.getCandidate();$('#candidateArt').innerHTML=Art.roomSVG({breedKey:c.breedKey,ageStage:c.ageStage,houseDamage:0,mood:'neutral'},true);$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=CONFIG.breeds[c.breedKey].name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none'}
+    function renderCandidate(){const c=Game.getCandidate();Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=CONFIG.breeds[c.breedKey].name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none'}
     function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥣 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
     function damageLabel(d){return d<15?'房间完好':d<40?'轻微破坏':d<70?'明显破坏':'惨不忍睹'}
-    function renderHome(){const g=Game.get();if(!g)return;$('#dayChip').textContent=`第${g.day}天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · 来源：${g.routeName}`;$('#roomArt').innerHTML=Art.roomSVG(g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careBtn').textContent=g.isSick?'🏥 小猫生病了':g.bathDue?'🛁 需要护理':'🛁 护理与看病';$('#compactStats').innerHTML=statCards(g,['health','hunger','cleanliness','intimacy']);$('#actionPointsText').textContent=`今日行动：${g.actionsLeft}/4 · 金币：${g.coins}`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年：${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(b=>b.disabled=g.actionsLeft<=0);$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('')}
+    function renderHome(){const g=Game.get();if(!g)return;$('#dayChip').textContent=`第${g.day}天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · 来源：${g.routeName}`;Visual.renderScene('#roomArt',g);Visual.preload(g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careBtn').textContent=g.isSick?'🏥 小猫生病了':g.bathDue?'🛁 需要护理':'🛁 护理与看病';$('#compactStats').innerHTML=statCards(g,['health','hunger','cleanliness','intimacy']);$('#actionPointsText').textContent=`今日行动：${g.actionsLeft}/4 · 金币：${g.coins}`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年：${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(b=>b.disabled=g.actionsLeft<=0);$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('')}
     function roomCaption(g){if(g.isSick)return `${g.name}生病了，看起来没有精神。`;if(g.mood==='angry')return `${g.name}现在看起来不太高兴。`;if(g.mood==='sleepy')return `${g.name}困了，正准备找地方睡觉。`;if(g.mood==='happy')return `${g.name}心情很好，尾巴轻轻晃着。`;if(g.stats.hunger<25)return `${g.name}正在等你放饭。`;return `${g.name}在房间里观察你。`}
-    function renderAttributes(){const g=Game.get(),p=CONFIG.personalities[g.personality];$('#attributeDay').textContent=`第${g.day}天`;$('#attributeName').textContent=`${g.name}的档案`;$('#attributeArt').innerHTML=Art.roomSVG(g,true);$('#attributeInfo').innerHTML=`<div class="info-box"><small>品种</small><strong>${CONFIG.breeds[g.breedKey].name}</strong></div><div class="info-box"><small>性别</small><strong>${g.sex}</strong></div><div class="info-box"><small>年龄</small><strong>${g.ageStage==='adult'?'成年猫':'幼猫'}</strong></div><div class="info-box"><small>获得方式</small><strong>${g.routeName}</strong></div><div class="info-box"><small>初始性格</small><strong>${CONFIG.personalities[g.initialPersonality].name}</strong></div><div class="info-box"><small>房屋损坏</small><strong>${Math.round(g.houseDamage)}%</strong></div>`;$('#attributeStats').innerHTML=statCards(g,['health','trust','vitality','courage','intimacy','hunger','cleanliness']);$('#attributePersonality').textContent=`当前性格：${p.name}`;$('#attributePersonalityDesc').textContent=p.desc}
-    function renderCare(){const g=Game.get();if(!g)return;$('#careDay').textContent=`第${g.day}天`;$('#careArt').innerHTML=Art.roomSVG(g,true);$('#bathStatus').textContent=g.bathDue?'现在需要护理':`下次第${g.nextBathDay}天`;$('#illnessStatus').textContent=g.isSick?'生病中':'健康';$('#careActionsLeft').textContent=`${g.actionsLeft}/4`;$('#careCoins').textContent=`${g.coins}`;$('#careNotice').innerHTML=g.isSick?`<div class="sick-note">${g.name}正在生病。生病期间每天会继续损失健康，请尽快看病。</div>`:`<div class="healthy-note">${g.name}目前没有生病。每天结束时有4%的概率随机生病。</div>`;$('#bathBtn').disabled=!g.bathDue||g.actionsLeft<=0;$('#bathBtnHint').textContent=g.bathDue?'本次护理会消耗1次行动':'还没有到需要护理的时间';$('#doctorBtn').disabled=!g.isSick||g.actionsLeft<=0||g.coins<20}
-    function showEvent(event,after=null){$('#eventEmoji').textContent=event.emoji;$('#eventTitle').textContent=event.title;$('#eventBody').textContent=event.body;$('#effectList').innerHTML=Utils.effectText(event.effects).map(t=>`<span class="effect-chip">${t}</span>`).join('');eventCloseCallback=after;$('#eventOverlay').classList.add('show')}
+    function renderAttributes(){const g=Game.get(),p=CONFIG.personalities[g.personality];$('#attributeDay').textContent=`第${g.day}天`;$('#attributeName').textContent=`${g.name}的档案`;Visual.renderScene('#attributeArt',g);$('#attributeInfo').innerHTML=`<div class="info-box"><small>品种</small><strong>${CONFIG.breeds[g.breedKey].name}</strong></div><div class="info-box"><small>性别</small><strong>${g.sex}</strong></div><div class="info-box"><small>年龄</small><strong>${g.ageStage==='adult'?'成年猫':'幼猫'}</strong></div><div class="info-box"><small>获得方式</small><strong>${g.routeName}</strong></div><div class="info-box"><small>初始性格</small><strong>${CONFIG.personalities[g.initialPersonality].name}</strong></div><div class="info-box"><small>房屋损坏</small><strong>${Math.round(g.houseDamage)}%</strong></div>`;$('#attributeStats').innerHTML=statCards(g,['health','trust','vitality','courage','intimacy','hunger','cleanliness']);$('#attributePersonality').textContent=`当前性格：${p.name}`;$('#attributePersonalityDesc').textContent=p.desc}
+    function renderCare(){const g=Game.get();if(!g)return;$('#careDay').textContent=`第${g.day}天`;Visual.renderScene('#careArt',g,{state:g.isSick?'sick':null});$('#bathStatus').textContent=g.bathDue?'现在需要护理':`下次第${g.nextBathDay}天`;$('#illnessStatus').textContent=g.isSick?'生病中':'健康';$('#careActionsLeft').textContent=`${g.actionsLeft}/4`;$('#careCoins').textContent=`${g.coins}`;$('#careNotice').innerHTML=g.isSick?`<div class="sick-note">${g.name}正在生病。生病期间每天会继续损失健康，请尽快看病。</div>`:`<div class="healthy-note">${g.name}目前没有生病。每天结束时有4%的概率随机生病。</div>`;$('#bathBtn').disabled=!g.bathDue||g.actionsLeft<=0;$('#bathBtnHint').textContent=g.bathDue?'本次护理会消耗1次行动':'还没有到需要护理的时间';$('#doctorBtn').disabled=!g.isSick||g.actionsLeft<=0||g.coins<20}
+    function showEvent(event,after=null){Visual.renderEvent('#eventIllustration',event);$('#eventEmoji').textContent=event.emoji;$('#eventTitle').textContent=event.title;$('#eventBody').textContent=event.body;$('#effectList').innerHTML=Utils.effectText(event.effects).map(t=>`<span class="effect-chip">${t}</span>`).join('');eventCloseCallback=after;$('#eventOverlay').classList.add('show')}
     function showEventSequence(events,after=null){const queue=[...(events||[])];const next=()=>{if(!queue.length){if(after)after();return}showEvent(queue.shift(),next)};next()}
     function showDeath(name){$('#deathTitle').textContent=`${name}离开了`;$('#deathText').textContent=`${name}的健康降到了0。你没能及时挽回它的生命，这一局游戏结束。`;$('#deathOverlay').classList.add('show')}
     function closeEvent(){if(!$('#eventOverlay').classList.contains('show'))return;$('#eventOverlay').classList.remove('show');const cb=eventCloseCallback;eventCloseCallback=null;if(cb)cb()}
@@ -518,7 +745,7 @@
       $('#restartAfterDeath').addEventListener('click',()=>{$('#deathOverlay').classList.remove('show');UI.showScreen('startScreen')});
     }
     function bindModals(){$('#eventOverlay').addEventListener('click',UI.closeEvent);$('#growthClose').addEventListener('click',()=>{$('#growthOverlay').classList.remove('show');Storage.save(Game.get());UI.renderHome()});$('#abandonBtn').addEventListener('click',Abandon.open);$('#cancelAbandon').addEventListener('click',()=>$('#abandonConfirm').classList.remove('show'));$('#confirmAbandon').addEventListener('click',Abandon.confirm);$('#leaveAbandon').addEventListener('click',()=>{$('#abandonResult').classList.remove('show');UI.showScreen('startScreen')});['#abandonConfirm','#growthOverlay'].forEach(sel=>$(sel).addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('show')}))}
-    function init(){$('#logoArt').innerHTML=Art.logoSVG();UI.updateContinue();bindNavigation();bindGame();bindModals()}
+    function init(){Visual.renderCover();UI.updateContinue();bindNavigation();bindGame();bindModals()}
     return {init};
   })();
 
