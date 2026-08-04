@@ -1,0 +1,2326 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fff4e8">
+  <title>云养小猫</title>
+
+  <style>
+    :root {
+      --bg: #fff8ef;
+      --card: rgba(255, 255, 255, 0.88);
+      --text: #3d342e;
+      --muted: #82756c;
+      --orange: #ff9b58;
+      --orange-dark: #e97731;
+      --pink: #ff7897;
+      --green: #69b98a;
+      --red: #e35d6a;
+      --line: rgba(127, 93, 68, 0.14);
+      --shadow: 0 18px 55px rgba(99, 70, 49, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100svh;
+      font-family:
+        ui-rounded,
+        "SF Pro Rounded",
+        "PingFang SC",
+        "Microsoft YaHei",
+        system-ui,
+        sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, #ffe2c9 0 8%, transparent 27%),
+        radial-gradient(circle at 88% 80%, #ffd8e3 0 8%, transparent 30%),
+        linear-gradient(145deg, #fffaf3, #fff0e5);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .app {
+      width: min(100%, 760px);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        max(24px, env(safe-area-inset-bottom));
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.28s ease;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero,
+    .panel,
+    .home-card {
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      border-radius: 28px;
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 30px 22px;
+      text-align: center;
+    }
+
+    .logo-cat {
+      width: 138px;
+      height: 138px;
+      display: grid;
+      place-items: center;
+      margin: 4px auto 18px;
+      border-radius: 38px;
+      background: linear-gradient(145deg, #fff, #ffe2c5);
+      box-shadow: 0 16px 38px rgba(172, 100, 50, 0.16);
+      font-size: 76px;
+      animation: float 2.7s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-7px) rotate(2deg);
+      }
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: clamp(34px, 9vw, 52px);
+      letter-spacing: -0.05em;
+    }
+
+    h2 {
+      margin-bottom: 8px;
+      font-size: clamp(27px, 7vw, 38px);
+      letter-spacing: -0.04em;
+    }
+
+    .subtitle {
+      margin-bottom: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .section-title {
+      margin: 24px 4px 12px;
+      font-size: 18px;
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .route-card,
+    .adult-card {
+      min-height: 132px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: 0 10px 28px rgba(106, 75, 52, 0.08);
+      text-align: left;
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+    }
+
+    .route-card:active,
+    .adult-card:active,
+    .action-btn:active,
+    .primary:active,
+    .secondary:active {
+      transform: scale(0.97);
+    }
+
+    .route-card:hover,
+    .adult-card:hover {
+      border-color: rgba(233, 119, 49, 0.42);
+      box-shadow: 0 14px 34px rgba(106, 75, 52, 0.12);
+    }
+
+    .route-icon {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 33px;
+    }
+
+    .route-name {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .route-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .continue-box {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 20px;
+      background: #fff1df;
+      text-align: left;
+    }
+
+    .continue-box.show {
+      display: block;
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .primary,
+    .secondary {
+      min-height: 54px;
+      padding: 12px 16px;
+      border-radius: 17px;
+      font-weight: 900;
+    }
+
+    .primary {
+      color: #fff;
+      background: linear-gradient(135deg, #ffad6f, #ed7935);
+      box-shadow: 0 12px 26px rgba(231, 111, 49, 0.28);
+    }
+
+    .secondary {
+      color: #675b53;
+      background: #f3ece7;
+    }
+
+    .panel {
+      padding: 22px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 14px;
+      padding: 8px 11px;
+      border-radius: 13px;
+      color: #6d6159;
+      background: #f4ede8;
+      font-weight: 800;
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .adult-card {
+      width: 100%;
+      min-height: 116px;
+    }
+
+    .adult-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 7px;
+      font-weight: 900;
+    }
+
+    .personality-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .badge-spirit {
+      color: #2d7b50;
+      background: #dcf5e6;
+    }
+
+    .badge-demon {
+      color: #b25e1f;
+      background: #ffead3;
+    }
+
+    .badge-chaos {
+      color: #9b3040;
+      background: #ffe0e4;
+    }
+
+    .candidate-card {
+      text-align: center;
+    }
+
+    .candidate-cat {
+      width: 164px;
+      height: 164px;
+      display: grid;
+      place-items: center;
+      margin: 8px auto 16px;
+      border-radius: 44px;
+      background: linear-gradient(145deg, #fff, #ffe8cf);
+      box-shadow: 0 16px 36px rgba(129, 82, 47, 0.13);
+      font-size: 88px;
+    }
+
+    .origin-story {
+      margin: 14px 0;
+      padding: 14px;
+      border-radius: 18px;
+      color: #665a52;
+      background: #fff4e8;
+      line-height: 1.65;
+      text-align: left;
+    }
+
+    .candidate-meta {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+      text-align: left;
+    }
+
+    .meta-box {
+      padding: 12px;
+      border-radius: 16px;
+      background: #f8f2ed;
+    }
+
+    .meta-box small {
+      display: block;
+      margin-bottom: 4px;
+      color: #9a8d83;
+      font-weight: 800;
+    }
+
+    .meta-box strong {
+      font-size: 15px;
+    }
+
+    .name-input {
+      width: 100%;
+      min-height: 56px;
+      padding: 0 16px;
+      border: 1.5px solid var(--line);
+      border-radius: 17px;
+      outline: none;
+      background: #fff;
+      font-size: 17px;
+    }
+
+    .name-input:focus {
+      border-color: rgba(233, 119, 49, 0.55);
+      box-shadow: 0 0 0 4px rgba(255, 155, 88, 0.12);
+    }
+
+    .home-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .game-title {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .day-chip {
+      padding: 8px 11px;
+      border-radius: 999px;
+      color: #9c551f;
+      background: #fff0dd;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .home-card {
+      padding: 18px;
+    }
+
+    .cat-room {
+      position: relative;
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 24px;
+      background:
+        linear-gradient(to top, #e8cba9 0 24%, transparent 24%),
+        linear-gradient(145deg, #fff5df, #ffe5d6);
+    }
+
+    .window {
+      position: absolute;
+      top: 24px;
+      right: 28px;
+      width: 82px;
+      height: 92px;
+      border: 7px solid #fff;
+      border-radius: 15px;
+      background:
+        linear-gradient(#bfe6ff 0 58%, #d6f0b7 58%);
+      box-shadow: 0 10px 22px rgba(89, 83, 73, 0.12);
+    }
+
+    .cat-display {
+      position: relative;
+      z-index: 2;
+      margin-top: 28px;
+      font-size: 112px;
+      filter: drop-shadow(0 15px 12px rgba(87, 59, 40, 0.16));
+      transition: transform 0.2s ease;
+    }
+
+    .cat-display.bounce {
+      animation: catBounce 0.45s ease;
+    }
+
+    @keyframes catBounce {
+      0%,
+      100% {
+        transform: translateY(0) rotate(0);
+      }
+
+      40% {
+        transform: translateY(-18px) rotate(-5deg);
+      }
+
+      70% {
+        transform: translateY(-5px) rotate(4deg);
+      }
+    }
+
+    .speech {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      max-width: 56%;
+      padding: 10px 12px;
+      border-radius: 15px 15px 15px 4px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 8px 20px rgba(89, 68, 52, 0.1);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .cat-summary {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .cat-name {
+      margin: 0 0 4px;
+      font-size: 26px;
+    }
+
+    .cat-sub {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .stat-card {
+      padding: 12px;
+      border: 1px solid rgba(127, 93, 68, 0.09);
+      border-radius: 17px;
+      background: rgba(255, 255, 255, 0.78);
+    }
+
+    .stat-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .bar {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #eee5df;
+    }
+
+    .bar > span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ffb577, #f17f3b);
+      transition: width 0.25s ease;
+    }
+
+    .personality-card {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 18px;
+      background: #fff5e9;
+    }
+
+    .personality-card strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .personality-card p {
+      margin-bottom: 0;
+      color: #6f6259;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .action-btn {
+      min-height: 76px;
+      padding: 12px;
+      border-radius: 19px;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: 0 10px 25px rgba(101, 70, 48, 0.08);
+      font-weight: 900;
+      text-align: left;
+    }
+
+    .action-btn span {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 25px;
+    }
+
+    .action-btn small {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .action-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .status-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 17px;
+      background: #f7eee8;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .log-card {
+      margin-top: 14px;
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 10px 28px rgba(101, 70, 48, 0.08);
+    }
+
+    .log-card h3 {
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .log-list {
+      display: grid;
+      gap: 8px;
+      max-height: 230px;
+      overflow: auto;
+    }
+
+    .log-item {
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: #665a52;
+      background: #faf4ef;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .small-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      place-items: center;
+      padding: 18px;
+      background: rgba(45, 35, 29, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .modal.show {
+      display: grid;
+    }
+
+    .modal-card {
+      width: min(92vw, 470px);
+      padding: 24px;
+      border-radius: 26px;
+      background: #fff;
+      box-shadow: 0 25px 80px rgba(36, 28, 23, 0.28);
+      text-align: center;
+      animation: pop 0.3s ease;
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .modal-emoji {
+      margin-bottom: 10px;
+      font-size: 72px;
+    }
+
+    .modal-card p {
+      color: #6e6259;
+      line-height: 1.65;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: max(22px, env(safe-area-inset-bottom));
+      z-index: 120;
+      padding: 11px 16px;
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(55, 43, 35, 0.9);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+      font-size: 13px;
+      font-weight: 850;
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.22s ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+
+    @media (max-width: 520px) {
+      .route-grid,
+      .stats-grid,
+      .actions {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .route-card {
+        min-height: 144px;
+      }
+
+      .candidate-meta {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+
+    <!-- 开始页 -->
+    <section class="screen active" id="startScreen">
+      <div class="hero">
+        <div class="logo-cat">🐱</div>
+
+        <h1>云养小猫</h1>
+
+        <p class="subtitle">
+          从获得一只猫开始，陪它吃饭、玩耍、长大，
+          并见证它最终成为灵珠、魔丸，还是传说中的耄耋。
+        </p>
+      </div>
+
+      <div class="continue-box" id="continueBox">
+        <strong id="continueTitle">你已经有一只猫了</strong>
+        <p class="subtitle" id="continueText"></p>
+
+        <div class="button-row">
+          <button class="primary" id="continueBtn" type="button">
+            继续养猫
+          </button>
+
+          <button class="secondary" id="newGameBtn" type="button">
+            重新开始
+          </button>
+        </div>
+      </div>
+
+      <h2 class="section-title">先获得一只小猫</h2>
+
+      <div class="route-grid" id="routeGrid">
+        <button class="route-card" data-route="shelter" type="button">
+          <span class="route-icon">🏠</span>
+          <span class="route-name">救助站领养</span>
+          <span class="route-desc">
+            可以领养幼猫，也可以挑选性格已经确定的成年猫。
+          </span>
+        </button>
+
+        <button class="route-card" data-route="mother" type="button">
+          <span class="route-icon">🐈</span>
+          <span class="route-name">猫妈妈送来</span>
+          <span class="route-desc">
+            你持续投喂小区猫妈妈，某天它把一只小猫带到了你面前。
+          </span>
+        </button>
+
+        <button class="route-card" data-route="rain" type="button">
+          <span class="route-icon">🌧️</span>
+          <span class="route-name">雨天救助</span>
+          <span class="route-desc">
+            屋檐下的纸箱里传来猫叫。它可能很乖，也可能不好惹。
+          </span>
+        </button>
+
+        <button class="route-card" data-route="friend" type="button">
+          <span class="route-icon">🎁</span>
+          <span class="route-name">朋友家的幼猫</span>
+          <span class="route-desc">
+            朋友家的猫生了一窝宝宝，你可以带走其中一只。
+          </span>
+        </button>
+
+        <button class="route-card" data-route="shop" type="button">
+          <span class="route-icon">🛍️</span>
+          <span class="route-name">宠物店购买</span>
+          <span class="route-desc">
+            幼年只会是灵珠或魔丸，但长大后仍有10%概率成为耄耋。
+          </span>
+        </button>
+
+        <button class="route-card" data-route="mystery" type="button">
+          <span class="route-icon">✨</span>
+          <span class="route-name">神秘事件</span>
+          <span class="route-desc">
+            命运送来一只来历不明的猫，三种性格完全等概率。
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 救助站 -->
+    <section class="screen" id="shelterScreen">
+      <div class="panel">
+        <button class="back-link" data-back="start" type="button">
+          ← 返回
+        </button>
+
+        <h2>救助站领养</h2>
+
+        <p class="subtitle">
+          幼猫长大后性格会重新定型一次；
+          成年猫性格已经固定，并会提前公开。
+        </p>
+
+        <div class="choice-list">
+          <button class="adult-card" data-shelter="kitten" type="button">
+            <div class="adult-title">
+              <span>🐾 领养一只幼猫</span>
+              <span class="personality-badge badge-demon">
+                性格未定型
+              </span>
+            </div>
+
+            <div class="route-desc">
+              当前性格随机，成年时会再变化一次。
+            </div>
+          </button>
+
+          <button
+            class="adult-card"
+            data-adult-personality="spirit"
+            type="button"
+          >
+            <div class="adult-title">
+              <span>🐱 米粒 · 2岁</span>
+              <span class="personality-badge badge-spirit">
+                灵珠
+              </span>
+            </div>
+
+            <div class="route-desc">
+              温顺亲人，怎么摸都不容易生气，适合第一次养猫。
+            </div>
+          </button>
+
+          <button
+            class="adult-card"
+            data-adult-personality="demon"
+            type="button"
+          >
+            <div class="adult-title">
+              <span>😼 麻薯 · 3岁</span>
+              <span class="personality-badge badge-demon">
+                魔丸
+              </span>
+            </div>
+
+            <div class="route-desc">
+              喜欢推杯子和半夜跑酷，但熟悉以后会主动黏人。
+            </div>
+          </button>
+
+          <button
+            class="adult-card"
+            data-adult-personality="chaos"
+            type="button"
+          >
+            <div class="adult-title">
+              <span>👿 锅盖 · 4岁</span>
+              <span class="personality-badge badge-chaos">
+                耄耋
+              </span>
+            </div>
+
+            <div class="route-desc">
+              有攻击和严重拆家记录，不适合没有心理准备的玩家。
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 候选猫 -->
+    <section class="screen" id="candidateScreen">
+      <div class="panel candidate-card">
+        <button class="back-link" id="candidateBack" type="button">
+          ← 重新选择
+        </button>
+
+        <div class="candidate-cat" id="candidateEmoji">🐱</div>
+
+        <h2 id="candidateTitle">你遇见了一只小猫</h2>
+
+        <div class="origin-story" id="originStory"></div>
+
+        <div class="candidate-meta">
+          <div class="meta-box">
+            <small>年龄阶段</small>
+            <strong id="candidateAge"></strong>
+          </div>
+
+          <div class="meta-box">
+            <small>毛色</small>
+            <strong id="candidateCoat"></strong>
+          </div>
+
+          <div class="meta-box">
+            <small>性别</small>
+            <strong id="candidateSex"></strong>
+          </div>
+
+          <div class="meta-box">
+            <small>当前性格</small>
+            <strong id="candidatePersonality"></strong>
+          </div>
+        </div>
+
+        <input
+          class="name-input"
+          id="catNameInput"
+          maxlength="10"
+          placeholder="给它取个名字，例如：汤圆"
+        >
+
+        <div class="button-row">
+          <button class="secondary" id="rerollBtn" type="button">
+            换一只看看
+          </button>
+
+          <button class="primary" id="adoptBtn" type="button">
+            带它回家
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 养猫主页 -->
+    <section class="screen" id="homeScreen">
+      <div class="home-top">
+        <h2 class="game-title">我的猫咪房间</h2>
+        <span class="day-chip" id="dayChip">第1天</span>
+      </div>
+
+      <div class="home-card">
+        <div class="cat-room">
+          <div class="window"></div>
+          <div class="speech" id="speechBubble">喵。</div>
+          <div class="cat-display" id="catDisplay">🐱</div>
+        </div>
+
+        <div class="cat-summary">
+          <div>
+            <h2 class="cat-name" id="homeCatName">汤圆</h2>
+            <div class="cat-sub" id="homeCatSub"></div>
+          </div>
+
+          <span
+            class="personality-badge"
+            id="homePersonalityBadge"
+          ></span>
+        </div>
+
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <div class="personality-card">
+          <strong id="personalityTitle"></strong>
+          <p id="personalityDesc"></p>
+        </div>
+
+        <div class="actions">
+          <button class="action-btn" data-action="feed" type="button">
+            <span>🥣</span>
+            喂食
+            <small>提升饱腹和健康</small>
+          </button>
+
+          <button class="action-btn" data-action="pet" type="button">
+            <span>🖐️</span>
+            摸猫
+            <small>性格不同，结果不同</small>
+          </button>
+
+          <button class="action-btn" data-action="play" type="button">
+            <span>🪶</span>
+            陪玩
+            <small>消耗活力，提升感情</small>
+          </button>
+
+          <button class="action-btn" data-action="clean" type="button">
+            <span>🧹</span>
+            铲屎
+            <small>提升清洁度</small>
+          </button>
+        </div>
+
+        <div class="status-line">
+          <span id="actionPointsText">今日行动：4/4</span>
+          <span id="growthText">距离成年：6天</span>
+        </div>
+
+        <button
+          class="primary"
+          id="sleepBtn"
+          type="button"
+          style="width:100%;margin-top:12px;"
+        >
+          🌙 结束今天
+        </button>
+      </div>
+
+      <div class="log-card">
+        <h3>猫咪日记</h3>
+        <div class="log-list" id="logList"></div>
+      </div>
+
+      <div class="small-actions">
+        <button class="secondary" id="saveBtn" type="button">
+          保存进度
+        </button>
+
+        <button class="secondary" id="resetBtn" type="button">
+          删除存档
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- 成长弹窗 -->
+  <div class="modal" id="growthModal">
+    <div class="modal-card">
+      <div class="modal-emoji" id="growthEmoji">🎴</div>
+
+      <h2>性格定型</h2>
+
+      <p id="growthStory"></p>
+
+      <span
+        class="personality-badge"
+        id="growthBadge"
+      ></span>
+
+      <button
+        class="primary"
+        id="closeGrowthBtn"
+        type="button"
+        style="width:100%;margin-top:18px;"
+      >
+        接受命运
+      </button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">已保存</div>
+
+  <script>
+    const STORAGE_KEY = "cloudCatGameSave_v1";
+
+    const personalities = {
+      spirit: {
+        name: "灵珠",
+        emoji: "😺",
+        badgeClass: "badge-spirit",
+        desc:
+          "性格温顺、亲人、情绪稳定，怎么摸都不容易生气。" +
+          "亲密度增长更快，也很少拆家。"
+      },
+
+      demon: {
+        name: "魔丸",
+        emoji: "😼",
+        badgeClass: "badge-demon",
+        desc:
+          "喜欢捣乱犯贱，会推杯子、抓沙发、半夜跑酷，" +
+          "但本质上仍然喜欢玩家。"
+      },
+
+      chaos: {
+        name: "耄耋",
+        emoji: "👿",
+        badgeClass: "badge-chaos",
+        desc:
+          "绝世坏猫，极难养熟，会攻击玩家和拆家。" +
+          "亲密度与信任度都有上限。"
+      }
+    };
+
+    const routeSettings = {
+      shelterKitten: {
+        name: "救助站幼猫",
+        ageStage: "kitten",
+
+        initial: {
+          spirit: 45,
+          demon: 45,
+          chaos: 10
+        },
+
+        growth: {
+          spirit: 45,
+          demon: 45,
+          chaos: 10
+        },
+
+        story:
+          "救助站的工作人员把一只幼猫轻轻放到你面前。" +
+          "它的性格还没有完全定型，但它一直偷偷观察着你。",
+
+        base: {
+          health: 80,
+          trust: 38,
+          vitality: 72,
+          courage: 40,
+          intimacy: 28,
+          hunger: 72,
+          cleanliness: 76
+        }
+      },
+
+      shelterAdult: {
+        name: "救助站成年猫",
+        ageStage: "adult",
+        initial: null,
+        growth: null,
+
+        story:
+          "你在救助站选择了一只成年猫。" +
+          "工作人员已经把它过去的行为和性格如实告诉了你。",
+
+        base: {
+          health: 84,
+          trust: 42,
+          vitality: 68,
+          courage: 58,
+          intimacy: 24,
+          hunger: 75,
+          cleanliness: 78
+        }
+      },
+
+      mother: {
+        name: "猫妈妈送来的小猫",
+        ageStage: "kitten",
+
+        initial: {
+          spirit: 50,
+          demon: 50,
+          chaos: 0
+        },
+
+        growth: {
+          spirit: 50,
+          demon: 50,
+          chaos: 0
+        },
+
+        story:
+          "你连续投喂小区里的猫妈妈。" +
+          "今天，它把一只小猫带到你脚边，安静地看着你，" +
+          "像是在把孩子托付给你。",
+
+        base: {
+          health: 84,
+          trust: 56,
+          vitality: 74,
+          courage: 44,
+          intimacy: 42,
+          hunger: 76,
+          cleanliness: 70
+        }
+      },
+
+      rain: {
+        name: "雨天救助",
+        ageStage: "kitten",
+
+        initial: {
+          spirit: 45,
+          demon: 45,
+          chaos: 10
+        },
+
+        growth: {
+          spirit: 45,
+          demon: 45,
+          chaos: 10
+        },
+
+        story:
+          "雨夜里，屋檐下的纸箱传来微弱猫叫。" +
+          "你把浑身湿透的小猫抱回家，它紧紧抓住了你的衣角。",
+
+        base: {
+          health: 63,
+          trust: 58,
+          vitality: 58,
+          courage: 32,
+          intimacy: 46,
+          hunger: 54,
+          cleanliness: 48
+        }
+      },
+
+      friend: {
+        name: "朋友家的幼猫",
+        ageStage: "kitten",
+
+        initial: {
+          spirit: 50,
+          demon: 50,
+          chaos: 0
+        },
+
+        growth: {
+          spirit: 45,
+          demon: 45,
+          chaos: 10
+        },
+
+        story:
+          "朋友家的猫生了一窝宝宝。" +
+          "你蹲下来时，其中一只小猫率先朝你走来，踩住了你的鞋带。",
+
+        base: {
+          health: 91,
+          trust: 65,
+          vitality: 82,
+          courage: 58,
+          intimacy: 48,
+          hunger: 82,
+          cleanliness: 86
+        }
+      },
+
+      shop: {
+        name: "宠物店购买",
+        ageStage: "kitten",
+
+        initial: {
+          spirit: 50,
+          demon: 50,
+          chaos: 0
+        },
+
+        growth: {
+          spirit: 45,
+          demon: 45,
+          chaos: 10
+        },
+
+        story:
+          "你在宠物店的玻璃柜前停下脚步。" +
+          "一只小猫主动把爪子贴在玻璃上，像是已经选中了你。",
+
+        base: {
+          health: 92,
+          trust: 46,
+          vitality: 78,
+          courage: 54,
+          intimacy: 34,
+          hunger: 80,
+          cleanliness: 90
+        }
+      },
+
+      mystery: {
+        name: "神秘事件",
+        ageStage: "kitten",
+
+        initial: {
+          spirit: 1,
+          demon: 1,
+          chaos: 1
+        },
+
+        growth: {
+          spirit: 1,
+          demon: 1,
+          chaos: 1
+        },
+
+        story:
+          "深夜的自动售货机旁，一只来历不明的小猫一直盯着你。" +
+          "你转身离开，它却悄悄跟到了家门口。",
+
+        base: {
+          health: 76,
+          trust: 50,
+          vitality: 76,
+          courage: 60,
+          intimacy: 38,
+          hunger: 68,
+          cleanliness: 66
+        }
+      }
+    };
+
+    const coats = [
+      "橘白",
+      "狸花",
+      "奶牛",
+      "纯白",
+      "纯黑",
+      "三花",
+      "银渐层"
+    ];
+
+    const sexes = [
+      "妹妹",
+      "弟弟"
+    ];
+
+    const nameSuggestions = [
+      "汤圆",
+      "年糕",
+      "煤球",
+      "芝麻",
+      "奶盖",
+      "麻薯",
+      "小满",
+      "布丁"
+    ];
+
+    let candidate = null;
+    let game = null;
+
+    const $ = selector =>
+      document.querySelector(selector);
+
+    const $$ = selector =>
+      [...document.querySelectorAll(selector)];
+
+    function clamp(value, min = 0, max = 100) {
+      return Math.max(
+        min,
+        Math.min(max, value)
+      );
+    }
+
+    function randomItem(list) {
+      return list[
+        Math.floor(Math.random() * list.length)
+      ];
+    }
+
+    function rollPersonality(weights) {
+      const entries = Object.entries(weights);
+
+      const total = entries.reduce(
+        (sum, [, weight]) => sum + weight,
+        0
+      );
+
+      let roll = Math.random() * total;
+
+      for (const [key, weight] of entries) {
+        roll -= weight;
+
+        if (roll < 0) {
+          return key;
+        }
+      }
+
+      return entries[entries.length - 1][0];
+    }
+
+    function showScreen(id) {
+      $$(".screen").forEach(screen => {
+        screen.classList.toggle(
+          "active",
+          screen.id === id
+        );
+      });
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    function personalityLabel(key) {
+      return personalities[key].name;
+    }
+
+    function createCandidate(
+      routeKey,
+      forcedPersonality = null,
+      forcedName = ""
+    ) {
+      const route = routeSettings[routeKey];
+
+      const personality =
+        forcedPersonality ||
+        rollPersonality(route.initial);
+
+      candidate = {
+        routeKey,
+        routeName: route.name,
+        ageStage: route.ageStage,
+        personality,
+        coat: randomItem(coats),
+        sex: randomItem(sexes),
+
+        suggestedName:
+          forcedName ||
+          randomItem(nameSuggestions),
+
+        emoji:
+          personalities[personality].emoji,
+
+        story:
+          route.story,
+
+        rerollable:
+          routeKey !== "shelterAdult"
+      };
+
+      renderCandidate();
+      showScreen("candidateScreen");
+    }
+
+    function renderCandidate() {
+      const personality =
+        personalities[candidate.personality];
+
+      $("#candidateEmoji").textContent =
+        candidate.emoji;
+
+      $("#candidateTitle").textContent =
+        candidate.ageStage === "adult"
+          ? "你决定领养这只成年猫"
+          : "你遇见了一只小猫";
+
+      $("#originStory").textContent =
+        candidate.story;
+
+      $("#candidateAge").textContent =
+        candidate.ageStage === "adult"
+          ? "成年猫（性格固定）"
+          : "幼猫（第7天成年）";
+
+      $("#candidateCoat").textContent =
+        candidate.coat;
+
+      $("#candidateSex").textContent =
+        candidate.sex;
+
+      $("#candidatePersonality").textContent =
+        `${personality.name} · ${
+          candidate.ageStage === "adult"
+            ? "不会变化"
+            : "成年时会重新定型"
+        }`;
+
+      $("#catNameInput").value =
+        candidate.suggestedName;
+
+      $("#rerollBtn").style.display =
+        candidate.rerollable
+          ? "block"
+          : "none";
+    }
+
+    function adoptCandidate() {
+      const route =
+        routeSettings[candidate.routeKey];
+
+      const enteredName =
+        $("#catNameInput").value.trim();
+
+      const name =
+        enteredName ||
+        candidate.suggestedName;
+
+      const stats = {
+        ...route.base
+      };
+
+      if (candidate.personality === "spirit") {
+        stats.trust += 8;
+        stats.intimacy += 8;
+      }
+
+      if (candidate.personality === "demon") {
+        stats.vitality += 8;
+      }
+
+      if (candidate.personality === "chaos") {
+        stats.trust -= 10;
+        stats.intimacy -= 8;
+        stats.courage += 8;
+      }
+
+      Object.keys(stats).forEach(key => {
+        stats[key] = clamp(stats[key]);
+      });
+
+      game = {
+        version: 1,
+        name,
+        routeKey: candidate.routeKey,
+        routeName: candidate.routeName,
+        coat: candidate.coat,
+        sex: candidate.sex,
+        ageStage: candidate.ageStage,
+        personality: candidate.personality,
+        initialPersonality: candidate.personality,
+        personalityChanged: false,
+        day: 1,
+        actionsLeft: 4,
+        coins: 100,
+        houseDamage: 0,
+        stats,
+
+        logs: [
+          `第1天：${name}来到你的家。` +
+          `当前性格是“${personalityLabel(candidate.personality)}”。`
+        ]
+      };
+
+      saveGame(false);
+      renderHome();
+      showScreen("homeScreen");
+    }
+
+    function getStatMax(key) {
+      if (game.personality === "chaos") {
+        if (key === "trust") {
+          return 45;
+        }
+
+        if (key === "intimacy") {
+          return 35;
+        }
+      }
+
+      return 100;
+    }
+
+    function changeStat(key, amount) {
+      const max = getStatMax(key);
+
+      game.stats[key] = clamp(
+        game.stats[key] + amount,
+        0,
+        max
+      );
+    }
+
+    function addLog(text) {
+      game.logs.unshift(
+        `第${game.day}天：${text}`
+      );
+
+      game.logs =
+        game.logs.slice(0, 30);
+    }
+
+    function say(text) {
+      $("#speechBubble").textContent = text;
+
+      $("#catDisplay").classList.remove(
+        "bounce"
+      );
+
+      void $("#catDisplay").offsetWidth;
+
+      $("#catDisplay").classList.add(
+        "bounce"
+      );
+    }
+
+    function takeAction(action) {
+      if (!game || game.actionsLeft <= 0) {
+        showToast("今天已经没有行动次数了");
+        return;
+      }
+
+      game.actionsLeft -= 1;
+
+      const personality =
+        game.personality;
+
+      if (action === "feed") {
+        changeStat("hunger", 26);
+        changeStat("health", 3);
+
+        changeStat(
+          "intimacy",
+          personality === "spirit"
+            ? 3
+            : 1
+        );
+
+        say(
+          personality === "chaos"
+            ? "这次先不咬你。"
+            : "好吃！"
+        );
+
+        addLog(
+          `${game.name}吃完了猫粮，饱腹度上升。`
+        );
+      }
+
+      if (action === "pet") {
+        if (personality === "spirit") {
+          changeStat("trust", 7);
+          changeStat("intimacy", 8);
+
+          say("呼噜呼噜……");
+
+          addLog(
+            `${game.name}主动把脑袋凑到你手心里。`
+          );
+        }
+
+        if (personality === "demon") {
+          const prank =
+            Math.random() < 0.25;
+
+          changeStat(
+            "trust",
+            prank ? 1 : 4
+          );
+
+          changeStat(
+            "intimacy",
+            prank ? 2 : 5
+          );
+
+          if (prank) {
+            game.houseDamage = clamp(
+              game.houseDamage + 3
+            );
+
+            say("摸可以，杯子归我推。😼");
+
+            addLog(
+              `${game.name}让你摸了两下，` +
+              "随后转身把桌边的杯子推倒。"
+            );
+          } else {
+            say("只准摸三秒。");
+
+            addLog(
+              `${game.name}装作不耐烦，` +
+              "却没有真的躲开。"
+            );
+          }
+        }
+
+        if (personality === "chaos") {
+          const attack =
+            Math.random() < 0.5;
+
+          if (attack) {
+            changeStat("health", -5);
+            changeStat("trust", -2);
+
+            say("哈——！");
+
+            addLog(
+              `${game.name}突然给了你一爪。` +
+              "你的健康下降了。"
+            );
+          } else {
+            changeStat("trust", 1);
+            changeStat("intimacy", 1);
+
+            say("今天暂时允许你碰一下。");
+
+            addLog(
+              `${game.name}罕见地没有攻击你，` +
+              "但也谈不上享受。"
+            );
+          }
+        }
+      }
+
+      if (action === "play") {
+        changeStat("vitality", -14);
+
+        changeStat(
+          "intimacy",
+          personality === "spirit"
+            ? 7
+            : personality === "demon"
+              ? 6
+              : 2
+        );
+
+        changeStat("courage", 3);
+
+        if (
+          personality === "demon" &&
+          Math.random() < 0.3
+        ) {
+          game.houseDamage = clamp(
+            game.houseDamage + 6
+          );
+
+          say("玩具不错，窗帘更好玩。");
+
+          addLog(
+            `${game.name}玩得非常开心，` +
+            "顺手又抓坏了一点窗帘。"
+          );
+        } else if (
+          personality === "chaos" &&
+          Math.random() < 0.45
+        ) {
+          game.houseDamage = clamp(
+            game.houseDamage + 9
+          );
+
+          say("你的家现在是我的了。");
+
+          addLog(
+            `${game.name}无视逗猫棒，` +
+            "转而攻击了沙发。"
+          );
+        } else {
+          say("再来一次！");
+
+          addLog(
+            `你陪${game.name}玩了一会儿，` +
+            "它的心情明显变好了。"
+          );
+        }
+      }
+
+      if (action === "clean") {
+        changeStat("cleanliness", 28);
+        changeStat("health", 2);
+
+        if (
+          personality === "demon" &&
+          Math.random() < 0.3
+        ) {
+          changeStat("cleanliness", -8);
+
+          say("刚铲完？那我再刨出来。");
+
+          addLog(
+            `${game.name}等你铲完猫砂后，` +
+            "又故意把一部分刨到了地上。"
+          );
+        } else if (
+          personality === "chaos" &&
+          Math.random() < 0.4
+        ) {
+          changeStat("cleanliness", -12);
+
+          say("别碰我的领地。");
+
+          addLog(
+            `${game.name}阻止你清理猫砂盆，` +
+            "还把猫砂踢得到处都是。"
+          );
+        } else {
+          say("勉强合格。");
+
+          addLog(
+            `猫砂盆恢复了干净，` +
+            `${game.name}看起来满意了一点。`
+          );
+        }
+      }
+
+      saveGame(false);
+      renderHome();
+    }
+
+    function dailyEvent() {
+      const personality =
+        game.personality;
+
+      const random =
+        Math.random();
+
+      if (personality === "spirit") {
+        if (random < 0.28) {
+          changeStat("intimacy", 5);
+          say("我陪你。");
+
+          addLog(
+            `${game.name}察觉到你心情不好，` +
+            "安静地趴在了你身边。"
+          );
+        } else if (random < 0.45) {
+          changeStat("trust", 3);
+
+          addLog(
+            `${game.name}第一次主动睡在你的枕边。`
+          );
+        } else {
+          addLog(
+            `${game.name}安静地晒了一下午太阳，` +
+            "今天什么都没有破坏。"
+          );
+        }
+      }
+
+      if (personality === "demon") {
+        if (random < 0.32) {
+          game.houseDamage = clamp(
+            game.houseDamage + 7
+          );
+
+          game.coins = Math.max(
+            0,
+            game.coins - 4
+          );
+
+          say("啪。不是我。");
+
+          addLog(
+            `${game.name}把一个杯子推到了地上。` +
+            "维修和清理花了4金币。"
+          );
+        } else if (random < 0.55) {
+          changeStat("intimacy", 4);
+
+          say("半夜三点，开跑！");
+
+          addLog(
+            `${game.name}半夜在屋里疯狂跑酷，` +
+            "但跑累后睡在了你的脚边。"
+          );
+        } else {
+          addLog(
+            `${game.name}今天只做了几个鬼脸，` +
+            "意外地没有造成损失。"
+          );
+        }
+      }
+
+      if (personality === "chaos") {
+        if (random < 0.36) {
+          game.houseDamage = clamp(
+            game.houseDamage + 14
+          );
+
+          game.coins = Math.max(
+            0,
+            game.coins - 10
+          );
+
+          say("沙发已经被我占领。");
+
+          addLog(
+            `${game.name}严重抓坏了沙发，` +
+            "你花了10金币进行修补。"
+          );
+        } else if (random < 0.63) {
+          changeStat("health", -7);
+
+          say("别靠近。");
+
+          addLog(
+            `${game.name}在你经过时` +
+            "突然袭击了你的脚踝。"
+          );
+        } else {
+          changeStat("trust", 1);
+
+          addLog(
+            `${game.name}远远盯了你很久，` +
+            "今天居然没有发动攻击。"
+          );
+        }
+      }
+    }
+
+    function endDay() {
+      if (!game) {
+        return;
+      }
+
+      game.day += 1;
+      game.actionsLeft = 4;
+
+      changeStat("hunger", -18);
+      changeStat("cleanliness", -11);
+      changeStat("vitality", 18);
+
+      if (game.stats.hunger < 25) {
+        changeStat("health", -8);
+
+        addLog(
+          `${game.name}饿得没有精神，` +
+          "健康下降了。"
+        );
+      }
+
+      if (game.stats.cleanliness < 25) {
+        changeStat("health", -6);
+
+        addLog(
+          `环境太脏，${game.name}的健康受到了影响。`
+        );
+      }
+
+      dailyEvent();
+
+      const shouldGrow =
+        game.ageStage === "kitten" &&
+        !game.personalityChanged &&
+        game.day >= 7;
+
+      if (shouldGrow) {
+        growUp();
+      }
+
+      saveGame(false);
+      renderHome();
+    }
+
+    function growUp() {
+      const route =
+        routeSettings[game.routeKey];
+
+      const oldPersonality =
+        game.personality;
+
+      const newPersonality =
+        rollPersonality(route.growth);
+
+      game.ageStage = "adult";
+      game.personality = newPersonality;
+      game.personalityChanged = true;
+
+      const personality =
+        personalities[newPersonality];
+
+      let story = "";
+
+      if (newPersonality === "spirit") {
+        story =
+          `${game.name}长大后安静了许多。` +
+          "它开始每天主动趴在你身边。";
+      }
+
+      if (newPersonality === "demon") {
+        story =
+          "你最近发现家里的杯子总会莫名其妙掉到地上。" +
+          `监控里的${game.name}每次推完杯子，` +
+          "都会若无其事地走开。";
+      }
+
+      if (newPersonality === "chaos") {
+        story =
+          `${game.name}静静看着你。下一秒，` +
+          "它突然给了你一爪，随后转身抓坏了新沙发。" +
+          "事情开始不对劲了。";
+      }
+
+      addLog(
+        `${game.name}成年了：性格从“` +
+        `${personalityLabel(oldPersonality)}”定型为“` +
+        `${personality.name}”。`
+      );
+
+      $("#growthEmoji").textContent =
+        personality.emoji;
+
+      $("#growthStory").textContent =
+        story;
+
+      const badge =
+        $("#growthBadge");
+
+      badge.className =
+        `personality-badge ${personality.badgeClass}`;
+
+      badge.textContent =
+        `成年性格：${personality.name}`;
+
+      $("#growthModal").classList.add(
+        "show"
+      );
+    }
+
+    function renderHome() {
+      if (!game) {
+        return;
+      }
+
+      const personality =
+        personalities[game.personality];
+
+      $("#dayChip").textContent =
+        `第${game.day}天`;
+
+      $("#homeCatName").textContent =
+        game.name;
+
+      $("#homeCatSub").textContent =
+        `${game.coat} · ${game.sex} · ` +
+        `${game.ageStage === "adult" ? "成年猫" : "幼猫"} · ` +
+        `来源：${game.routeName}`;
+
+      $("#catDisplay").textContent =
+        personality.emoji;
+
+      const badge =
+        $("#homePersonalityBadge");
+
+      badge.className =
+        `personality-badge ${personality.badgeClass}`;
+
+      badge.textContent =
+        personality.name;
+
+      $("#personalityTitle").textContent =
+        `当前性格：${personality.name}`;
+
+      $("#personalityDesc").textContent =
+        personality.desc;
+
+      const statConfig = [
+        ["health", "❤️ 健康"],
+        ["trust", "🤝 信任"],
+        ["vitality", "⚡ 活力"],
+        ["courage", "🛡️ 胆量"],
+        ["intimacy", "💗 亲密"],
+        ["hunger", "🥣 饱腹"],
+        ["cleanliness", "✨ 清洁"],
+        ["houseDamage", "🏚️ 房屋损坏"]
+      ];
+
+      $("#statsGrid").innerHTML =
+        statConfig.map(([key, label]) => {
+          const value =
+            key === "houseDamage"
+              ? game.houseDamage
+              : game.stats[key];
+
+          const barValue =
+            key === "houseDamage"
+              ? value
+              : value / getStatMax(key) * 100;
+
+          return `
+            <div class="stat-card">
+              <div class="stat-head">
+                <span>${label}</span>
+                <span>${Math.round(value)}</span>
+              </div>
+
+              <div class="bar">
+                <span
+                  style="width:${clamp(barValue)}%"
+                ></span>
+              </div>
+            </div>
+          `;
+        }).join("");
+
+      $("#actionPointsText").textContent =
+        `今日行动：${game.actionsLeft}/4 · 金币：${game.coins}`;
+
+      $("#growthText").textContent =
+        game.ageStage === "adult"
+          ? "性格已经定型"
+          : `距离成年：${Math.max(0, 7 - game.day)}天`;
+
+      $$(".action-btn").forEach(button => {
+        button.disabled =
+          game.actionsLeft <= 0;
+      });
+
+      $("#logList").innerHTML =
+        game.logs.map(log => {
+          return `
+            <div class="log-item">
+              ${log}
+            </div>
+          `;
+        }).join("");
+    }
+
+    function saveGame(showMessage = true) {
+      if (!game) {
+        return;
+      }
+
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(game)
+      );
+
+      updateContinueBox();
+
+      if (showMessage) {
+        showToast("进度已保存在浏览器中");
+      }
+    }
+
+    function loadGame() {
+      try {
+        const raw =
+          localStorage.getItem(STORAGE_KEY);
+
+        if (!raw) {
+          return null;
+        }
+
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    }
+
+    function updateContinueBox() {
+      const saved =
+        loadGame();
+
+      const box =
+        $("#continueBox");
+
+      if (!saved) {
+        box.classList.remove("show");
+        return;
+      }
+
+      box.classList.add("show");
+
+      $("#continueTitle").textContent =
+        `${saved.name}正在等你回来`;
+
+      $("#continueText").textContent =
+        `第${saved.day}天 · ` +
+        `${saved.ageStage === "adult" ? "成年猫" : "幼猫"} · ` +
+        `当前性格：${personalityLabel(saved.personality)}`;
+    }
+
+    function resetGame() {
+      const confirmed =
+        confirm(
+          "确定删除当前猫咪存档吗？删除后无法恢复。"
+        );
+
+      if (!confirmed) {
+        return;
+      }
+
+      localStorage.removeItem(
+        STORAGE_KEY
+      );
+
+      game = null;
+      candidate = null;
+
+      updateContinueBox();
+      showScreen("startScreen");
+      showToast("存档已删除");
+    }
+
+    function showToast(text) {
+      const toast =
+        $("#toast");
+
+      toast.textContent =
+        text;
+
+      toast.classList.add(
+        "show"
+      );
+
+      clearTimeout(
+        showToast.timer
+      );
+
+      showToast.timer =
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 1800);
+    }
+
+    $$("[data-route]").forEach(button => {
+      button.addEventListener("click", () => {
+        const route =
+          button.dataset.route;
+
+        if (route === "shelter") {
+          showScreen("shelterScreen");
+        } else {
+          createCandidate(route);
+        }
+      });
+    });
+
+    $$("[data-back='start']").forEach(button => {
+      button.addEventListener("click", () => {
+        showScreen("startScreen");
+      });
+    });
+
+    $("[data-shelter='kitten']")
+      .addEventListener("click", () => {
+        createCandidate("shelterKitten");
+      });
+
+    $$("[data-adult-personality]")
+      .forEach(button => {
+        button.addEventListener("click", () => {
+          const key =
+            button.dataset.adultPersonality;
+
+          const names = {
+            spirit: "米粒",
+            demon: "麻薯",
+            chaos: "锅盖"
+          };
+
+          createCandidate(
+            "shelterAdult",
+            key,
+            names[key]
+          );
+        });
+      });
+
+    $("#candidateBack")
+      .addEventListener("click", () => {
+        const isShelter =
+          candidate &&
+          candidate.routeKey.startsWith("shelter");
+
+        showScreen(
+          isShelter
+            ? "shelterScreen"
+            : "startScreen"
+        );
+      });
+
+    $("#rerollBtn")
+      .addEventListener("click", () => {
+        createCandidate(
+          candidate.routeKey
+        );
+      });
+
+    $("#adoptBtn")
+      .addEventListener(
+        "click",
+        adoptCandidate
+      );
+
+    $$(".action-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        takeAction(
+          button.dataset.action
+        );
+      });
+    });
+
+    $("#sleepBtn")
+      .addEventListener(
+        "click",
+        endDay
+      );
+
+    $("#saveBtn")
+      .addEventListener("click", () => {
+        saveGame(true);
+      });
+
+    $("#resetBtn")
+      .addEventListener(
+        "click",
+        resetGame
+      );
+
+    $("#continueBtn")
+      .addEventListener("click", () => {
+        game = loadGame();
+
+        if (!game) {
+          return;
+        }
+
+        renderHome();
+        showScreen("homeScreen");
+      });
+
+    $("#newGameBtn")
+      .addEventListener("click", () => {
+        const confirmed =
+          confirm(
+            "开始新游戏会删除现在的存档，确定吗？"
+          );
+
+        if (confirmed) {
+          localStorage.removeItem(
+            STORAGE_KEY
+          );
+
+          game = null;
+          updateContinueBox();
+        }
+      });
+
+    $("#closeGrowthBtn")
+      .addEventListener("click", () => {
+        $("#growthModal")
+          .classList.remove("show");
+
+        renderHome();
+        saveGame(false);
+      });
+
+    updateContinueBox();
+  </script>
+</body>
+</html>
