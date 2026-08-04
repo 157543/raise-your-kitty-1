@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fff4e8">
-  <title>云养小猫 · 写实视觉升级版</title>
+  <title>云养小猫 · 本地资源缓存版</title>
   <style>
     :root{
       --bg:#fff8ef;--card:rgba(255,255,255,.9);--text:#3e342e;--muted:#82756c;
@@ -57,7 +57,13 @@
     .care-entry{position:absolute;left:12px;top:12px;z-index:4;padding:8px 12px;border-radius:999px;color:#6b5143;background:rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(72,52,39,.13);font-size:12px;font-weight:900}.care-entry.alert{color:#9d3c47;background:#fff0f2;animation:pulse 1.4s ease-in-out infinite}@keyframes pulse{50%{transform:scale(1.05)}}
     .care-status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.care-status{padding:14px;border-radius:18px;background:#f8f2ed}.care-status small{display:block;margin-bottom:5px;color:#96877d;font-weight:800}.care-status strong{font-size:15px}.care-actions{display:grid;gap:12px;margin-top:16px}.care-action{min-height:78px;padding:15px;border-radius:20px;text-align:left;color:var(--text);background:rgba(255,255,255,.9);box-shadow:0 10px 26px rgba(101,70,48,.09);font-weight:900}.care-action span{display:block;margin-bottom:5px;font-size:27px}.care-action small{color:var(--muted);font-weight:700}.care-action:disabled{opacity:.45;cursor:not-allowed}.sick-note{margin-top:12px;padding:13px;border-radius:17px;color:#8c3d49;background:#fff0f2;font-size:13px;line-height:1.6}.healthy-note{margin-top:12px;padding:13px;border-radius:17px;color:#367451;background:#eaf7ef;font-size:13px;line-height:1.6}.choice-buttons{display:grid;gap:10px;margin-top:16px}.danger-button{min-height:52px;padding:12px 16px;border-radius:17px;color:#fff;background:linear-gradient(135deg,#c96a72,#9f3f49);font-weight:900}.death-card{border:2px solid rgba(125,91,75,.2);background:linear-gradient(160deg,#fff,#f3eee9)}
     .abandon-corner{position:fixed;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:50;display:none;padding:6px 10px;border:1px solid rgba(151,71,71,.16);border-radius:999px;color:#9b4d4d;background:rgba(255,247,247,.82);box-shadow:0 7px 20px rgba(101,52,52,.1);font-size:11px;font-weight:850;opacity:.74}.abandon-corner.show{display:block}
-    .overlay{display:none;position:fixed;inset:0;z-index:100;place-items:center;padding:18px;background:rgba(45,35,29,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.overlay.show{display:grid}.modal-card{width:min(92vw,470px);padding:23px;border-radius:26px;background:#fff;box-shadow:0 25px 80px rgba(36,28,23,.3);text-align:center;animation:pop .26s ease}@keyframes pop{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}.event-card{pointer-events:none}.event-emoji{font-size:64px;margin-bottom:8px}.event-card h2{font-size:28px}.event-body{color:#6d6057;line-height:1.7}.effect-list{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-top:14px}.effect-chip{padding:6px 9px;border-radius:999px;background:#f6eee8;color:#6c5b50;font-size:12px;font-weight:850}.tap-hint{margin-top:15px;color:#a39287;font-size:12px}.abandon-result.shame{border:2px solid rgba(194,65,78,.35);background:linear-gradient(160deg,#fff,#fff1f2)}.abandon-result.mercy{border:2px solid rgba(119,104,90,.24);background:linear-gradient(160deg,#fff,#f7f3ef)}.quote{margin:14px 0 0;padding:14px;border-radius:17px;color:#5f5048;background:rgba(255,255,255,.76);line-height:1.75;text-align:left}.toast{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));z-index:130;padding:11px 16px;border-radius:999px;color:#fff;background:rgba(55,43,35,.9);font-size:13px;font-weight:850;transform:translate(-50%,18px);opacity:0;pointer-events:none;transition:.22s}.toast.show{transform:translate(-50%,0);opacity:1}
+    .overlay{display:none;position:fixed;inset:0;z-index:100;place-items:center;padding:18px;background:rgba(45,35,29,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.overlay.show{display:grid}.modal-card{width:min(92vw,470px);padding:23px;border-radius:26px;background:#fff;box-shadow:0 25px 80px rgba(36,28,23,.3);text-align:center;animation:pop .26s ease}@keyframes pop{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}.event-card{pointer-events:none}.event-emoji{font-size:64px;margin-bottom:8px}.event-card h2{font-size:28px}.event-body{color:#6d6057;line-height:1.7}.effect-list{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-top:14px}.effect-chip{padding:6px 9px;border-radius:999px;background:#f6eee8;color:#6c5b50;font-size:12px;font-weight:850}.tap-hint{margin-top:15px;color:#a39287;font-size:12px}.abandon-result.shame{border:2px solid rgba(194,65,78,.35);background:linear-gradient(160deg,#fff,#fff1f2)}.abandon-result.mercy{border:2px solid rgba(119,104,90,.24);background:linear-gradient(160deg,#fff,#f7f3ef)}.quote{margin:14px 0 0;padding:14px;border-radius:17px;color:#5f5048;background:rgba(255,255,255,.76);line-height:1.75;text-align:left}.asset-loading{position:fixed;inset:0;z-index:220;display:none;place-items:center;padding:24px;background:rgba(255,248,239,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}.asset-loading.show{display:grid}.asset-loading-card{width:min(88vw,360px);padding:24px;border-radius:26px;background:#fff;box-shadow:0 22px 70px rgba(72,49,34,.22);text-align:center}.asset-loading-spinner{width:46px;height:46px;margin:0 auto 14px;border:4px solid #f2dfd1;border-top-color:#ef7f3c;border-radius:50%;animation:assetSpin .75s linear infinite}@keyframes assetSpin{to{transform:rotate(360deg)}}.asset-loading-title{font-size:18px;font-weight:900;margin-bottom:7px}.asset-loading-text{color:#81736a;font-size:13px;line-height:1.6}.asset-loading-bar{height:8px;margin-top:16px;overflow:hidden;border-radius:999px;background:#f0e5de}.asset-loading-bar span{display:block;width:35%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ffb276,#ef7f3c);animation:assetBar 1.15s ease-in-out infinite}@keyframes assetBar{0%{transform:translateX(-120%)}100%{transform:translateX(390%)}}.toast{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));z-index:130;padding:11px 16px;border-radius:999px;color:#fff;background:rgba(55,43,35,.9);font-size:13px;font-weight:850;transform:translate(-50%,18px);opacity:0;pointer-events:none;transition:.22s}.toast.show{transform:translate(-50%,0);opacity:1}
+
+    .asset-mode-entry{width:100%;margin-top:14px;min-height:48px;padding:11px 15px;border-radius:17px;color:#6b5b51;background:rgba(255,255,255,.86);box-shadow:0 10px 26px rgba(90,62,44,.09);font-weight:900}
+    .asset-setup-card{text-align:left}.asset-setup-card h2{text-align:center}.asset-setup-card .event-emoji{text-align:center}.setup-step[hidden]{display:none!important}.setup-options{display:grid;gap:12px;margin-top:18px}.setup-option{width:100%;min-height:88px;padding:16px;border:1px solid var(--line);border-radius:21px;color:var(--text);background:#fff;text-align:left;box-shadow:0 10px 26px rgba(96,68,49,.08)}.setup-option strong{display:block;margin-bottom:5px;font-size:16px}.setup-option small{display:block;color:var(--muted);line-height:1.55}.setup-option .setup-icon{float:left;margin-right:12px;font-size:30px}.setup-option.image-choice{background:linear-gradient(145deg,#fff8ef,#ffe7d4)}
+    .breed-choice-list{display:grid;gap:10px;margin-top:16px}.breed-choice{width:100%;min-height:56px;padding:12px 14px;border:1px solid var(--line);border-radius:17px;color:var(--text);background:#fff;text-align:left;font-weight:900}.breed-choice span{float:right;padding:4px 8px;border-radius:999px;font-size:11px}.breed-choice .ready{color:#2f7750;background:#e1f5e8}.breed-choice .developing{color:#8a6753;background:#f4ece6}.breed-choice:disabled{opacity:.72}.breed-notice{display:none;margin-top:12px;padding:12px;border-radius:16px;color:#775d4d;background:#fff2df;line-height:1.6;font-size:13px}.breed-notice.show{display:block}
+    .download-emoji{font-size:58px;text-align:center;animation:downloadBounce 1.25s ease-in-out infinite}@keyframes downloadBounce{50%{transform:translateY(-6px) rotate(3deg)}}.download-title{text-align:center;font-size:22px;font-weight:900;margin:8px 0}.download-text{text-align:center;color:var(--muted);line-height:1.65}.download-progress{height:11px;margin-top:18px;overflow:hidden;border-radius:999px;background:#f0e5de}.download-progress span{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ffb276,#ef7f3c);transition:width .25s ease}.download-count{margin-top:9px;color:#8a7b71;text-align:center;font-size:12px;font-weight:900}.download-actions{display:none;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.download-actions.show{display:grid}
+    .asset-background-status{position:fixed;left:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:54;display:none;max-width:min(76vw,330px);padding:9px 12px;border-radius:999px;color:#67584e;background:rgba(255,255,255,.93);box-shadow:0 10px 30px rgba(79,55,39,.15);font-size:12px;font-weight:850}.asset-background-status.show{display:block}.asset-background-status.done{color:#2f7750;background:rgba(235,249,241,.95)}
     @media(max-width:520px){.logo{height:190px}.route-card{min-height:145px}.candidate-meta,.info-grid{grid-template-columns:1fr 1fr}.room-caption{max-width:78%}}
   </style>
 </head>
@@ -65,6 +71,7 @@
   <main class="app">
     <section class="screen active" id="startScreen">
       <div class="hero"><div class="logo" id="logoArt"></div><h1>云养小猫</h1><p class="subtitle">获得一只猫，陪它生活、长大，并让真实房间与猫咪画面记录每一次变化。</p></div>
+      <button class="asset-mode-entry" id="assetSettingsBtn">🎨 画面模式：尚未选择</button>
       <div class="continue-box" id="continueBox"><strong id="continueTitle"></strong><p class="subtitle" id="continueText"></p><div class="button-row"><button class="primary" id="continueBtn">继续养猫</button><button class="secondary" id="newGameBtn">重新开始</button></div></div>
       <h2 class="section-title">先获得一只小猫</h2>
       <div class="route-grid">
@@ -142,6 +149,52 @@
       <button class="primary" id="restartAfterDeath" style="width:100%;margin-top:18px">重新开始游戏</button>
     </div>
   </div>
+
+  <div class="overlay" id="assetSetupOverlay" aria-modal="true" role="dialog">
+    <div class="modal-card asset-setup-card">
+      <div class="setup-step" id="assetModeStep">
+        <div class="event-emoji">🐾</div>
+        <h2>选择游戏画面模式</h2>
+        <p class="event-body">第一次打开时由你决定是否下载 WebP 图片。以后可以在开始界面的“画面模式”中重新选择。</p>
+        <div class="setup-options">
+          <button class="setup-option" id="noImageModeBtn"><span class="setup-icon">⚡</span><strong>不加载图片，直接玩</strong><small>不会请求任何猫咪、房间或事件图片，使用内置的轻量矢量画面。</small></button>
+          <button class="setup-option image-choice" id="imageModeBtn"><span class="setup-icon">🖼️</span><strong>下载图片，体验完整画面</strong><small>先选择喜欢的品种，再下载4张房间图和该品种幼猫的6种状态。</small></button>
+        </div>
+      </div>
+
+      <div class="setup-step" id="assetBreedStep" hidden>
+        <div class="event-emoji">🐱</div>
+        <h2>先选择喜欢的品种</h2>
+        <p class="event-body">这里只显示文字，不会提前请求 GitHub 上的图片。选定后，新游戏会优先出现这个品种。</p>
+        <div class="breed-choice-list" id="breedChoiceList"></div>
+        <div class="breed-notice" id="breedNotice"></div>
+        <button class="secondary" id="breedBackBtn" style="width:100%;margin-top:14px">← 返回画面模式</button>
+      </div>
+
+      <div class="setup-step" id="assetDownloadStep" hidden>
+        <div class="download-emoji" id="downloadEmoji">🐾</div>
+        <div class="download-title" id="downloadTitle">正在把小猫接回家</div>
+        <div class="download-text" id="downloadText">正在准备房间和猫咪图片，请稍等一下。</div>
+        <div class="download-progress"><span id="downloadProgressBar"></span></div>
+        <div class="download-count" id="downloadCount">0 / 10</div>
+        <div class="download-actions" id="downloadActions">
+          <button class="secondary" id="downloadNoImageBtn">不用图片了</button>
+          <button class="primary" id="downloadRetryBtn">重新下载</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="asset-loading" id="assetLoading" aria-live="polite" aria-busy="true">
+    <div class="asset-loading-card">
+      <div class="asset-loading-spinner"></div>
+      <div class="asset-loading-title">正在准备小猫</div>
+      <div class="asset-loading-text" id="assetLoadingText">正在加载房间和当前猫咪的全部状态，首次进入会稍慢一些。</div>
+      <div class="asset-loading-bar"><span></span></div>
+    </div>
+  </div>
+
+  <div class="asset-background-status" id="assetBackgroundStatus"></div>
   <div class="toast" id="toast"></div>
 
   <script>
@@ -157,7 +210,7 @@
     品种键：orange tabby tuxedo white black calico silver
     状态键：idle happy sleepy angry sick mischievous
 
-    图片尚未上传时，系统自动使用原矢量占位图。
+    每个年龄阶段有6种状态。图片尚未上传或选择无图片模式时，系统使用内置矢量画面。
   */
   /* =========================
      1. 配置数据模块
@@ -169,13 +222,13 @@
       chaos:{name:"耄耋",desc:"绝世坏猫，极难养熟，会攻击玩家和拆家。信任与亲密存在上限。"}
     };
     const breeds = {
-      orange:{name:"橘白田园猫",base:"#d98b3e",light:"#fff6e8",stripe:"#9a5526"},
-      tabby:{name:"狸花猫",base:"#77685b",light:"#e8ded2",stripe:"#3f3832"},
-      tuxedo:{name:"奶牛猫",base:"#242528",light:"#fffdf7",stripe:"#111214"},
-      white:{name:"纯白田园猫",base:"#f8f5ee",light:"#ffffff",stripe:"#d8d4ca"},
-      black:{name:"纯黑田园猫",base:"#25262a",light:"#4b4d52",stripe:"#111216"},
-      calico:{name:"三花猫",base:"#fff5e8",light:"#ffffff",stripe:"#29282a",patch:"#d67a32"},
-      silver:{name:"银渐层",base:"#c9cbd0",light:"#f7f7f7",stripe:"#74777d"}
+      orange:{name:"橘白田园猫",imageReady:true,base:"#d98b3e",light:"#fff6e8",stripe:"#9a5526"},
+      tabby:{name:"狸花猫",imageReady:true,base:"#77685b",light:"#e8ded2",stripe:"#3f3832"},
+      tuxedo:{name:"奶牛猫",imageReady:false,base:"#242528",light:"#fffdf7",stripe:"#111214"},
+      white:{name:"纯白田园猫",imageReady:false,base:"#f8f5ee",light:"#ffffff",stripe:"#d8d4ca"},
+      black:{name:"纯黑田园猫",imageReady:false,base:"#25262a",light:"#4b4d52",stripe:"#111216"},
+      calico:{name:"三花猫",imageReady:false,base:"#fff5e8",light:"#ffffff",stripe:"#29282a",patch:"#d67a32"},
+      silver:{name:"银渐层",imageReady:false,base:"#c9cbd0",light:"#f7f7f7",stripe:"#74777d"}
     };
     const routes = {
       shelterKitten:{name:"救助站幼猫",ageStage:"kitten",initial:{spirit:45,demon:45,chaos:10},growth:{spirit:45,demon:45,chaos:10},story:"救助站工作人员把一只幼猫轻轻放到你面前。它的性格还没有完全定型，却一直偷偷观察着你。",base:{health:80,trust:38,vitality:72,courage:40,intimacy:28,hunger:72,cleanliness:76}},
@@ -209,7 +262,7 @@
      某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
   ========================= */
   const ASSETS = Object.freeze({
-    version: "real-v3-webp-cache",
+    version: "local-cache-v1-webp-20260805",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",
@@ -235,6 +288,139 @@
       work: "assets/events/work.webp"
     }
   });
+
+  /* =========================
+     2.6 图片模式与本地资源缓存模块
+
+     不使用账号注册。用户打开链接后，网页在后台把 WebP 文件保存到
+     当前网站专属的 Cache Storage 中；无图片模式不会发出任何图片请求。
+  ========================= */
+  const AssetManager = (() => {
+    const PREF_KEY="cloudCatAssetPreference_v1";
+    const CACHE_PREFIX="cloud-cat-webp-";
+    const CACHE_NAME=`${CACHE_PREFIX}${ASSETS.version}`;
+    let preference=null;
+    let runtimeMode="unknown";
+    let backgroundPromise=null;
+
+    function validBreed(key){return !!(key&&CONFIG.breeds[key]&&CONFIG.breeds[key].imageReady)}
+    function availableBreeds(){return Object.keys(CONFIG.breeds).filter(validBreed)}
+    function allBreeds(){return Object.keys(CONFIG.breeds)}
+
+    function init(){
+      try{
+        const saved=JSON.parse(localStorage.getItem(PREF_KEY)||"null");
+        if(saved?.mode==="none"){
+          preference={mode:"none"};runtimeMode="none";
+        }else if(saved?.mode==="images"&&validBreed(saved.breed)){
+          preference={mode:"images",breed:saved.breed};runtimeMode="images";
+        }
+      }catch(error){preference=null;runtimeMode="unknown"}
+      purgeOldCaches();
+      return preference;
+    }
+
+    async function purgeOldCaches(){
+      if(!("caches" in window))return;
+      try{
+        const names=await caches.keys();
+        await Promise.all(names.filter(name=>name.startsWith(CACHE_PREFIX)&&name!==CACHE_NAME).map(name=>caches.delete(name)));
+      }catch(error){}
+    }
+
+    function getPreference(){return preference?{...preference}:null}
+    function imagesEnabled(){return runtimeMode==="images"}
+    function preferredBreed(){return imagesEnabled()&&validBreed(preference?.breed)?preference.breed:null}
+    function beginImageSetup(breed){if(!validBreed(breed))throw new Error("该品种图片尚未开放");preference={mode:"images",breed};runtimeMode="images"}
+    function commitImageMode(breed){beginImageSetup(breed);localStorage.setItem(PREF_KEY,JSON.stringify(preference));return getPreference()}
+    function useNoImages(){preference={mode:"none"};runtimeMode="none";localStorage.setItem(PREF_KEY,JSON.stringify(preference));return getPreference()}
+
+    function versionedUrl(path){
+      const url=new URL(path,location.href);
+      url.searchParams.set("assetv",ASSETS.version);
+      return url.href;
+    }
+
+    async function openCache(){return "caches" in window?caches.open(CACHE_NAME):null}
+
+    async function isCached(path){
+      if(!path||!("caches" in window))return false;
+      try{const cache=await openCache();return !!(await cache.match(versionedUrl(path)))}catch(error){return false}
+    }
+
+    async function fetchAsset(path,{retries=2}={}){
+      if(!imagesEnabled()||!path||!path.toLowerCase().endsWith(".webp"))return {ok:false,path,reason:"disabled"};
+      const url=versionedUrl(path);
+      let cache=null;
+      try{
+        cache=await openCache();
+        if(cache){
+          const hit=await cache.match(url);
+          if(hit)return {ok:true,path,url,response:hit.clone(),fromCache:true};
+        }
+      }catch(error){}
+
+      let lastError=null;
+      for(let attempt=0;attempt<=retries;attempt++){
+        try{
+          const response=await fetch(url,{cache:"no-store",credentials:"same-origin"});
+          if(!response.ok)throw new Error(`HTTP ${response.status}`);
+          const type=(response.headers.get("content-type")||"").toLowerCase();
+          if(type&&!type.includes("image/webp")&&!type.includes("application/octet-stream"))throw new Error("返回的不是 WebP 图片");
+          if(cache){try{await cache.put(url,response.clone())}catch(error){}}
+          return {ok:true,path,url,response:response.clone(),fromCache:false};
+        }catch(error){lastError=error;if(attempt<retries)await new Promise(resolve=>setTimeout(resolve,450*(attempt+1)))}
+      }
+      return {ok:false,path,url,reason:lastError?.message||"下载失败"};
+    }
+
+    async function cachePaths(paths,onProgress=null,concurrency=2){
+      const queue=[...new Set((paths||[]).filter(path=>typeof path==="string"&&path.toLowerCase().endsWith(".webp")))];
+      const total=queue.length;
+      let cursor=0,completed=0;
+      const results=new Array(total);
+      const worker=async()=>{
+        while(true){
+          const index=cursor++;
+          if(index>=total)return;
+          const path=queue[index];
+          const result=await fetchAsset(path);
+          results[index]=result;
+          completed++;
+          if(onProgress)onProgress({completed,total,path,ok:result.ok,fromCache:!!result.fromCache});
+        }
+      };
+      await Promise.all(Array.from({length:Math.max(1,Math.min(concurrency,total||1))},worker));
+      const failed=results.filter(result=>result&&!result.ok);
+      return {ok:failed.length===0,total,completed,failed,results};
+    }
+
+    function catPaths(breed,age){return ASSETS.catStates.map(state=>`assets/cats/${breed}/${age}/${state}.webp`)}
+    function scenePaths(){return Object.values(ASSETS.rooms)}
+    function initialPack(breed){return [...scenePaths(),...catPaths(breed,"kitten")]}
+    function gamePack(game){return [...scenePaths(),...catPaths(game.breedKey,game.ageStage||"kitten")]}
+    function breedPack(breed){return [...catPaths(breed,"kitten"),...catPaths(breed,"adult")]}
+
+    async function prepareInitial(breed,onProgress){beginImageSetup(breed);return cachePaths(initialPack(breed),onProgress,2)}
+    async function ensureGamePack(game,onProgress){if(!imagesEnabled()||!game)return {ok:true,total:0,completed:0,failed:[]};return cachePaths(gamePack(game),onProgress,2)}
+    async function ensureAge(breed,age,onProgress){if(!imagesEnabled()||!validBreed(breed))return {ok:true,total:0,completed:0,failed:[]};return cachePaths(catPaths(breed,age),onProgress,2)}
+
+    function backgroundPaths(currentBreed){
+      const paths=[];
+      if(validBreed(currentBreed))paths.push(...catPaths(currentBreed,"adult"));
+      availableBreeds().filter(breed=>breed!==currentBreed).forEach(breed=>paths.push(...breedPack(breed)));
+      return [...new Set(paths)];
+    }
+
+    function startBackgroundDownload(currentBreed,onProgress){
+      if(!imagesEnabled())return Promise.resolve({ok:true,total:0,completed:0,failed:[]});
+      if(backgroundPromise)return backgroundPromise;
+      backgroundPromise=cachePaths(backgroundPaths(currentBreed),onProgress,2).finally(()=>{backgroundPromise=null});
+      return backgroundPromise;
+    }
+
+    return {init,getPreference,imagesEnabled,preferredBreed,beginImageSetup,commitImageMode,useNoImages,availableBreeds,allBreeds,validBreed,fetchAsset,isCached,cachePaths,catPaths,scenePaths,initialPack,gamePack,breedPack,prepareInitial,ensureGamePack,ensureAge,startBackgroundDownload};
+  })();
 
   /* =========================
      3. 存档模块
@@ -296,311 +482,121 @@
      所有照片统一使用 WebP
   ========================= */
   const Visual = (() => {
-    const {$} = Utils;
-    const imageCache = new Map();
+    const {$}=Utils;
+    const imageCache=new Map();
+    const objectUrls=new Set();
 
-    function roomLevel(damage=0){
-      if(damage<15)return "clean";
-      if(damage<40)return "light";
-      if(damage<70)return "heavy";
-      return "destroyed";
+    function resetCache(){
+      imageCache.clear();
+      objectUrls.forEach(url=>URL.revokeObjectURL(url));
+      objectUrls.clear();
     }
 
-    function stateFor(game,override=null){
-      if(override)return override;
-      if(game.isSick)return "sick";
-      if(game.mood==="angry")return "angry";
-      if(game.mood==="sleepy")return "sleepy";
-      if(game.mood==="happy")return "happy";
-      if(game.personality==="demon"&&game.houseDamage>=15)return "mischievous";
-      return "idle";
-    }
+    function roomLevel(damage=0){if(damage<15)return "clean";if(damage<40)return "light";if(damage<70)return "heavy";return "destroyed"}
+    function stateFor(game,override=null){if(override)return override;if(game.isSick)return "sick";if(game.mood==="angry")return "angry";if(game.mood==="sleepy")return "sleepy";if(game.mood==="happy")return "happy";if(game.personality==="demon"&&game.houseDamage>=15)return "mischievous";return "idle"}
+    function roomPath(game){return ASSETS.rooms[roomLevel(game.houseDamage||0)]}
+    function catPath(game,stateOverride=null,ageOverride=null){const state=stateFor(game,stateOverride);const age=ageOverride||game.ageStage||"kitten";return `assets/cats/${game.breedKey||"orange"}/${age}/${state}.webp`}
 
-    function roomPath(game){
-      return ASSETS.rooms[roomLevel(game.houseDamage||0)];
-    }
-
-    function catPath(game,stateOverride=null,ageOverride=null){
-      const state=stateFor(game,stateOverride);
-      const age=ageOverride||game.ageStage||"kitten";
-      return `assets/cats/${game.breedKey||"orange"}/${age}/${state}.webp`;
-    }
-
-    function versioned(path){
-      if(!path)return "";
-      const separator=path.includes("?")?"&":"?";
-      return `${path}${separator}v=${encodeURIComponent(ASSETS.version)}`;
-    }
-
-    function loadImage(path,priority="auto"){
-      if(!path)return Promise.resolve({ok:false,path:"",url:""});
-      if(imageCache.has(path))return imageCache.get(path);
-
-      const promise=new Promise(resolve=>{
-        const image=new Image();
-        const url=versioned(path);
-        let settled=false;
-
-        image.decoding="async";
-        image.loading="eager";
+    function decodeUrl(url,priority="auto"){
+      return new Promise(resolve=>{
+        const image=new Image();let settled=false;
+        image.decoding="async";image.loading="eager";
         if("fetchPriority" in image)image.fetchPriority=priority;
-
-        const finish=async ok=>{
-          if(settled)return;
-          settled=true;
-          if(ok&&typeof image.decode==="function"){
-            try{await image.decode()}catch(error){}
-          }
-          resolve({ok,path,url});
-        };
-
+        const finish=async ok=>{if(settled)return;settled=true;if(ok&&typeof image.decode==="function"){try{await image.decode()}catch(error){}}resolve(ok)};
         image.addEventListener("load",()=>finish(true),{once:true});
         image.addEventListener("error",()=>finish(false),{once:true});
         image.src=url;
-
-        if(image.complete){
-          queueMicrotask(()=>finish(image.naturalWidth>0));
-        }
+        if(image.complete)queueMicrotask(()=>finish(image.naturalWidth>0));
       });
+    }
 
-      imageCache.set(path,promise);
+    function loadImage(path,priority="auto"){
+      if(!AssetManager.imagesEnabled()||!path)return Promise.resolve({ok:false,path:"",url:""});
+      const key=`${ASSETS.version}|${path}`;
+      if(imageCache.has(key))return imageCache.get(key);
+      const promise=(async()=>{
+        const asset=await AssetManager.fetchAsset(path);
+        if(!asset.ok)return {ok:false,path,url:""};
+        try{
+          const blob=await asset.response.blob();
+          const objectUrl=URL.createObjectURL(blob);objectUrls.add(objectUrl);
+          const ok=await decodeUrl(objectUrl,priority);
+          if(ok)return {ok:true,path,url:objectUrl,fromCache:asset.fromCache};
+          URL.revokeObjectURL(objectUrl);objectUrls.delete(objectUrl);
+        }catch(error){}
+        return {ok:false,path,url:""};
+      })();
+      imageCache.set(key,promise);
       return promise;
     }
 
     function readyImage(className,result,alt=""){
-      const image=document.createElement("img");
-      image.className=`${className} loaded`;
-      image.alt=alt;
-      image.decoding="sync";
-      image.loading="eager";
-      if("fetchPriority" in image)image.fetchPriority="high";
-      image.src=result.url;
-      return image;
+      const image=document.createElement("img");image.className=`${className} loaded`;image.alt=alt;image.decoding="sync";image.loading="eager";if("fetchPriority" in image)image.fetchPriority="high";image.src=result.url;return image;
     }
 
     function buildStage(game,state,roomResult,catResult,options={}){
       const stage=document.createElement("div");
-      const requestedRoom=roomPath(game);
-      const requestedCat=catPath(game,state);
-
-      stage.className=`visual-stage state-${state}`;
-      stage.dataset.roomPath=requestedRoom;
-      stage.dataset.catPath=requestedCat;
-      stage.dataset.ready="1";
-
-      const roomFallback=document.createElement("div");
-      roomFallback.className="visual-room-fallback";
-      roomFallback.innerHTML=Art.roomSVG(game,true,true);
-      stage.appendChild(roomFallback);
-
-      if(roomResult.ok){
-        stage.appendChild(readyImage("visual-room-photo",roomResult,"房间背景"));
-        stage.classList.add("room-loaded");
-      }
-
-      const shadow=document.createElement("div");
-      shadow.className="visual-cat-shadow";
-      stage.appendChild(shadow);
-
-      const catFallback=document.createElement("div");
-      catFallback.className="visual-cat-fallback";
-      catFallback.innerHTML=Art.catSVG({...game,mood:state==="mischievous"?"happy":state});
-      stage.appendChild(catFallback);
-
-      if(catResult.ok){
-        stage.appendChild(readyImage("visual-cat-photo",catResult,"猫咪"));
-        stage.classList.add("cat-loaded");
-      }
-
-      const light=document.createElement("div");
-      light.className="visual-light";
-      stage.appendChild(light);
-
-      const vignette=document.createElement("div");
-      vignette.className="visual-vignette";
-      stage.appendChild(vignette);
-
-      if(options.showAssetHint&&(!roomResult.ok||!catResult.ok)){
-        const hint=document.createElement("div");
-        hint.className="asset-hint";
-        hint.textContent="相应的 WebP 素材上传后会自动显示";
-        stage.appendChild(hint);
-      }
-
+      const requestedRoom=roomPath(game),requestedCat=catPath(game,state);
+      stage.className=`visual-stage state-${state}`;stage.dataset.roomPath=requestedRoom;stage.dataset.catPath=requestedCat;stage.dataset.ready="1";
+      const roomFallback=document.createElement("div");roomFallback.className="visual-room-fallback";roomFallback.innerHTML=Art.roomSVG(game,true,true);stage.appendChild(roomFallback);
+      if(roomResult.ok){stage.appendChild(readyImage("visual-room-photo",roomResult,"房间背景"));stage.classList.add("room-loaded")}
+      const shadow=document.createElement("div");shadow.className="visual-cat-shadow";stage.appendChild(shadow);
+      const catFallback=document.createElement("div");catFallback.className="visual-cat-fallback";catFallback.innerHTML=Art.catSVG({...game,mood:state==="mischievous"?"happy":state});stage.appendChild(catFallback);
+      if(catResult.ok){stage.appendChild(readyImage("visual-cat-photo",catResult,"猫咪"));stage.classList.add("cat-loaded")}
+      const light=document.createElement("div");light.className="visual-light";stage.appendChild(light);
+      const vignette=document.createElement("div");vignette.className="visual-vignette";stage.appendChild(vignette);
+      if(options.showAssetHint&&AssetManager.imagesEnabled()&&(!roomResult.ok||!catResult.ok)){const hint=document.createElement("div");hint.className="asset-hint";hint.textContent="该 WebP 素材尚未准备完成";stage.appendChild(hint)}
       return stage;
     }
 
-    function fallbackStage(game,state,options={}){
-      const missing={ok:false,path:"",url:""};
-      const stage=buildStage(game,state,missing,missing,options);
-      stage.dataset.ready="0";
-      return stage;
-    }
+    function fallbackStage(game,state,options={}){const missing={ok:false,path:"",url:""};const stage=buildStage(game,state,missing,missing,options);stage.dataset.ready="0";return stage}
 
     async function renderScene(target,game,options={}){
-      const element=typeof target==="string"?$(target):target;
-      if(!element||!game)return null;
-
-      const state=stateFor(game,options.state||null);
-      const requestedRoom=roomPath(game);
-      const requestedCat=catPath(game,state);
-      const current=element.querySelector(".visual-stage");
-
-      if(
-        current&&
-        current.dataset.ready==="1"&&
-        current.dataset.roomPath===requestedRoom&&
-        current.dataset.catPath===requestedCat
-      ){
-        return current;
+      const element=typeof target==="string"?$(target):target;if(!element||!game)return null;
+      const state=stateFor(game,options.state||null),requestedRoom=roomPath(game),requestedCat=catPath(game,state),current=element.querySelector(".visual-stage");
+      if(current&&current.dataset.ready==="1"&&current.dataset.roomPath===requestedRoom&&current.dataset.catPath===requestedCat)return current;
+      const token=(element.__visualRenderToken||0)+1;element.__visualRenderToken=token;
+      if(!current)element.replaceChildren(fallbackStage(game,state,options));
+      if(!AssetManager.imagesEnabled()||!AssetManager.validBreed(game.breedKey)){
+        if(element.__visualRenderToken===token)element.replaceChildren(fallbackStage(game,state,options));
+        return element.querySelector(".visual-stage");
       }
-
-      const token=(element.__visualRenderToken||0)+1;
-      element.__visualRenderToken=token;
-
-      /* 第一次进入时才显示占位图。切换状态时保留旧实拍图，直到新图解码完成。 */
-      if(!current){
-        element.replaceChildren(fallbackStage(game,state,options));
-      }
-
-      const [roomResult,catResult]=await Promise.all([
-        loadImage(requestedRoom,"high"),
-        loadImage(requestedCat,"high")
-      ]);
-
+      const [roomResult,catResult]=await Promise.all([loadImage(requestedRoom,"high"),loadImage(requestedCat,"high")]);
       if(element.__visualRenderToken!==token)return null;
-
-      const nextStage=buildStage(game,state,roomResult,catResult,options);
-      element.replaceChildren(nextStage);
-      return nextStage;
+      const nextStage=buildStage(game,state,roomResult,catResult,options);element.replaceChildren(nextStage);return nextStage;
     }
 
     async function renderCover(){
-      const box=$("#logoArt");
-      if(!box)return;
-
-      box.innerHTML="";
-      box.classList.remove("has-cover");
-
-      const fallback=document.createElement("div");
-      fallback.className="cover-fallback";
-      fallback.innerHTML=Art.logoSVG();
-      box.appendChild(fallback);
-
-      const result=await loadImage(ASSETS.cover,"high");
-      if(!result.ok)return;
-
-      box.appendChild(readyImage("cover-photo",result,"游戏封面"));
-      box.classList.add("has-cover");
+      const box=$("#logoArt");if(!box)return;
+      box.innerHTML="";box.classList.remove("has-cover");
+      const fallback=document.createElement("div");fallback.className="cover-fallback";fallback.innerHTML=Art.logoSVG();box.appendChild(fallback);
+      /* 封面不属于首批必需资源，保持内置图形，避免额外网络请求。 */
     }
 
-    function eventState(event){
-      const text=`${event.title||""} ${event.body||""}`;
-      if(/生病|病情|应激|发热/.test(text))return "sick";
-      if(/攻击|出爪|哈气|警告|不许碰|伏击/.test(text))return "angry";
-      if(/推翻|破坏|抓坏|撕裂|跑酷|偷走|捣乱|快递箱/.test(text))return "mischievous";
-      if(/睡|困/.test(text))return "sleepy";
-      if(/开心|呼噜|蹭|顺利|陪伴|礼物|治愈/.test(text))return "happy";
-      return null;
-    }
-
-    function eventKey(event){
-      const text=`${event.title||""} ${event.body||""}`;
-      if(/成年|性格定型/.test(text))return "grow";
-      if(/看病|治疗|医生|医院/.test(text))return "doctor";
-      if(/洗护非常顺利|表现很乖/.test(text))return "bathGood";
-      if(/洗澡|洗护|剪指甲|挣扎/.test(text))return "bathStruggle";
-      if(/生病|病情|应激|发热/.test(text))return "sick";
-      if(/攻击|出爪|脚踝|哈气/.test(text))return "attack";
-      if(/打工/.test(text))return "work";
-      if(/推翻|杯子|抓坏|撕裂|破坏/.test(text))return "damage";
-      if(/喂|吃饭|猫粮|食盆|碗/.test(text))return /推翻|掀|撒|倒/.test(text)?"feedSpill":"feed";
-      if(/摸|蹭|肚皮|呼噜/.test(text))return "pet";
-      return null;
-    }
+    function eventState(event){const text=`${event.title||""} ${event.body||""}`;if(/生病|病情|应激|发热/.test(text))return "sick";if(/攻击|出爪|哈气|警告|不许碰|伏击/.test(text))return "angry";if(/推翻|破坏|抓坏|撕裂|跑酷|偷走|捣乱|快递箱/.test(text))return "mischievous";if(/睡|困/.test(text))return "sleepy";if(/开心|呼噜|蹭|顺利|陪伴|礼物|治愈/.test(text))return "happy";return null}
+    function eventKey(event){const text=`${event.title||""} ${event.body||""}`;if(/成年|性格定型/.test(text))return "grow";if(/看病|治疗|医生|医院/.test(text))return "doctor";if(/洗护非常顺利|表现很乖/.test(text))return "bathGood";if(/洗澡|洗护|剪指甲|挣扎/.test(text))return "bathStruggle";if(/生病|病情|应激|发热/.test(text))return "sick";if(/攻击|出爪|脚踝|哈气/.test(text))return "attack";if(/打工/.test(text))return "work";if(/推翻|杯子|抓坏|撕裂|破坏/.test(text))return "damage";if(/喂|吃饭|猫粮|食盆|碗/.test(text))return /推翻|掀|撒|倒/.test(text)?"feedSpill":"feed";if(/摸|蹭|肚皮|呼噜/.test(text))return "pet";return null}
 
     async function renderEvent(target,event){
-      const element=typeof target==="string"?$(target):target;
-      const game=Game.get();
-      if(!element)return;
-
-      const token=(element.__eventRenderToken||0)+1;
-      element.__eventRenderToken=token;
-      element.classList.remove("event-photo-mode");
-
-      /* 先显示已经预载的对应猫状态，事件插图加载成功后再无缝替换。 */
-      if(game){
-        await renderScene(element,game,{state:event.visual?.catState||eventState(event)});
-      }else{
-        element.innerHTML="";
-      }
-
-      if(element.__eventRenderToken!==token)return;
-
-      const key=event.visual?.eventKey||eventKey(event);
-      const explicit=event.visual?.eventImage;
-      const path=explicit||(key?ASSETS.eventImages[key]:null);
-      if(!path)return;
-
-      const result=await loadImage(path,"high");
+      const element=typeof target==="string"?$(target):target,game=Game.get();if(!element)return;
+      const token=(element.__eventRenderToken||0)+1;element.__eventRenderToken=token;element.classList.remove("event-photo-mode");
+      if(game)await renderScene(element,game,{state:event.visual?.catState||eventState(event)});else element.innerHTML="";
+      if(element.__eventRenderToken!==token||!AssetManager.imagesEnabled())return;
+      const key=event.visual?.eventKey||eventKey(event),explicit=event.visual?.eventImage,path=explicit||(key?ASSETS.eventImages[key]:null);
+      if(!path||!(await AssetManager.isCached(path)))return;
+      const result=await loadImage(path,"low");
       if(element.__eventRenderToken!==token||!result.ok)return;
-
-      element.replaceChildren(readyImage("event-photo",result,event.title||"事件插图"));
-      element.classList.add("event-photo-mode");
-    }
-
-    function warm(paths,delay=0){
-      setTimeout(()=>{
-        [...new Set(paths.filter(Boolean))].forEach(path=>{
-          loadImage(path,"low");
-        });
-      },delay);
+      element.replaceChildren(readyImage("event-photo",result,event.title||"事件插图"));element.classList.add("event-photo-mode");
     }
 
     function preload(game){
-      if(!game)return Promise.resolve();
-
-      const currentRoom=roomPath(game);
-      const currentCat=catPath(game);
-      const currentAge=game.ageStage||"kitten";
-      const otherAge=currentAge==="kitten"?"adult":"kitten";
-
-      const priority=Promise.all([
-        loadImage(currentRoom,"high"),
-        loadImage(currentCat,"high")
-      ]);
-
-      /* 当前年龄的全部状态优先预载，保证互动弹窗即时切换。 */
-      warm([
-        ...Object.values(ASSETS.rooms),
-        ...ASSETS.catStates.map(state=>catPath(game,state,currentAge)),
-        ASSETS.cover
-      ],0);
-
-      /* 后台预载另一年龄，避免第7天成年时闪烁。 */
-      warm(
-        ASSETS.catStates.map(state=>catPath(game,state,otherAge)),
-        900
-      );
-
-      return priority;
+      if(!game||!AssetManager.imagesEnabled()||!AssetManager.validBreed(game.breedKey))return Promise.resolve([]);
+      const age=game.ageStage||"kitten";
+      const paths=[roomPath(game),...ASSETS.catStates.map(state=>catPath(game,state,age))];
+      return Promise.all([...new Set(paths)].map(path=>loadImage(path,"high")));
     }
 
-    function preloadStatic(){
-      warm([ASSETS.cover,...Object.values(ASSETS.rooms)],0);
-    }
-
-    return {
-      renderScene,
-      renderCover,
-      renderEvent,
-      preload,
-      preloadStatic,
-      loadImage,
-      stateFor,
-      roomPath,
-      catPath
-    };
+    function preloadStatic(){return Promise.resolve([])}
+    return {renderScene,renderCover,renderEvent,preload,preloadStatic,loadImage,stateFor,roomPath,catPath,resetCache};
   })();
 
   /* =========================
@@ -778,7 +774,7 @@
   const Game = (() => {
     let game=null,candidate=null;
     function get(){return game}function set(v){game=v}function getCandidate(){return candidate}
-    function createCandidate(routeKey,forcedPersonality=null,forcedName=""){const route=CONFIG.routes[routeKey];candidate={routeKey,routeName:route.name,ageStage:route.ageStage,personality:forcedPersonality||Utils.roll(route.initial),breedKey:Utils.pick(Object.keys(CONFIG.breeds)),sex:Utils.pick(CONFIG.sexes),suggestedName:forcedName||Utils.pick(CONFIG.names),story:route.story,rerollable:routeKey!=="shelterAdult"};return candidate}
+    function createCandidate(routeKey,forcedPersonality=null,forcedName=""){const route=CONFIG.routes[routeKey];const preferred=AssetManager.preferredBreed();candidate={routeKey,routeName:route.name,ageStage:route.ageStage,personality:forcedPersonality||Utils.roll(route.initial),breedKey:preferred||Utils.pick(Object.keys(CONFIG.breeds)),sex:Utils.pick(CONFIG.sexes),suggestedName:forcedName||Utils.pick(CONFIG.names),story:route.story,rerollable:routeKey!=="shelterAdult"};return candidate}
     function adopt(name){const c=candidate,r=CONFIG.routes[c.routeKey],stats={...r.base};if(c.personality==="spirit"){stats.trust+=8;stats.intimacy+=8}if(c.personality==="demon")stats.vitality+=8;if(c.personality==="chaos"){stats.trust-=10;stats.intimacy-=8;stats.courage+=8}Object.keys(stats).forEach(k=>stats[k]=Utils.clamp(stats[k]));game={version:2,name:name||c.suggestedName,routeKey:c.routeKey,routeName:c.routeName,breedKey:c.breedKey,sex:c.sex,ageStage:c.ageStage,personality:c.personality,initialPersonality:c.personality,personalityChanged:false,day:1,actionsLeft:4,coins:100,houseDamage:0,mood:"neutral",isSick:false,treatmentCost:null,bathDue:false,lastBathDay:null,nextBathDay:["shop","friend"].includes(c.routeKey)?10:5,stats,logs:[`第1天：${name||c.suggestedName}来到你的家。`]};Storage.save(game);return game}
     function rollTreatmentCost(){return Math.floor(Math.random()*201)+100}
     function becomeSick(){if(!game)return null;game.isSick=true;if(!Number.isInteger(game.treatmentCost)||game.treatmentCost<100||game.treatmentCost>300)game.treatmentCost=rollTreatmentCost();return game.treatmentCost}
@@ -864,22 +860,35 @@
   ========================= */
   const UI = (() => {
     const {$,$$,clamp}=Utils;let eventCloseCallback=null;
+    function showAssetLoading(text="正在加载房间和猫咪素材……"){
+      const overlay=$("#assetLoading");
+      if(!overlay)return;
+      $("#assetLoadingText").textContent=text;
+      overlay.classList.add("show");
+    }
+    function hideAssetLoading(){
+      const overlay=$("#assetLoading");
+      if(overlay)overlay.classList.remove("show");
+    }
+    function updateAssetModeButton(){const pref=AssetManager.getPreference();const text=!pref?"尚未选择":pref.mode==="none"?"轻量无图片":`完整图片 · ${CONFIG.breeds[pref.breed]?.name||"已选择"}`;$("#assetSettingsBtn").textContent=`🎨 画面模式：${text}`}
+    function updateBackgroundStatus(progress,finished=false){const box=$("#assetBackgroundStatus");if(!box)return;if(finished){box.textContent=progress?.failed?.length?`⚠️ 有${progress.failed.length}张图片未成功，下次进入会继续尝试`:`✅ 其他可用品种已保存到本机`;box.classList.add("show","done");setTimeout(()=>box.classList.remove("show"),3200);return}box.classList.remove("done");box.classList.add("show");box.textContent=`🐾 后台准备其他猫咪 ${progress.completed}/${progress.total}`}
+
     function showScreen(id){$$('.screen').forEach(s=>s.classList.toggle('active',s.id===id));const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&['homeScreen','attributeScreen','careScreen'].includes(id));window.scrollTo({top:0,behavior:'smooth'})}
-    function renderCandidate(){const c=Game.getCandidate();Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=CONFIG.breeds[c.breedKey].name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none'}
+    function renderCandidate(){const c=Game.getCandidate();Visual.preload(c);Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=CONFIG.breeds[c.breedKey].name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none'}
     function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥣 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
     function damageLabel(d){return d<15?'房间完好':d<40?'轻微破坏':d<70?'明显破坏':'惨不忍睹'}
     function renderHome(){const g=Game.get();if(!g)return;$('#dayChip').textContent=`第${g.day}天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · 来源：${g.routeName}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careBtn').textContent=g.isSick?'🏥 小猫生病了':g.bathDue?'🛁 需要护理':'🛁 护理与看病';$('#compactStats').innerHTML=statCards(g,['health','hunger','cleanliness','intimacy']);$('#actionPointsText').textContent=`今日行动：${g.actionsLeft}/4 · 金币：${g.coins}`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年：${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(b=>b.disabled=g.actionsLeft<=0);$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('')}
     function roomCaption(g){if(g.isSick)return `${g.name}生病了，看起来没有精神。`;if(g.mood==='angry')return `${g.name}现在看起来不太高兴。`;if(g.mood==='sleepy')return `${g.name}困了，正准备找地方睡觉。`;if(g.mood==='happy')return `${g.name}心情很好，尾巴轻轻晃着。`;if(g.stats.hunger<25)return `${g.name}正在等你放饭。`;return `${g.name}在房间里观察你。`}
     function renderAttributes(){const g=Game.get(),p=CONFIG.personalities[g.personality];$('#attributeDay').textContent=`第${g.day}天`;$('#attributeName').textContent=`${g.name}的档案`;Visual.renderScene('#attributeArt',g);$('#attributeInfo').innerHTML=`<div class="info-box"><small>品种</small><strong>${CONFIG.breeds[g.breedKey].name}</strong></div><div class="info-box"><small>性别</small><strong>${g.sex}</strong></div><div class="info-box"><small>年龄</small><strong>${g.ageStage==='adult'?'成年猫':'幼猫'}</strong></div><div class="info-box"><small>获得方式</small><strong>${g.routeName}</strong></div><div class="info-box"><small>初始性格</small><strong>${CONFIG.personalities[g.initialPersonality].name}</strong></div><div class="info-box"><small>房屋损坏</small><strong>${Math.round(g.houseDamage)}%</strong></div>`;$('#attributeStats').innerHTML=statCards(g,['health','trust','vitality','courage','intimacy','hunger','cleanliness']);$('#attributePersonality').textContent=`当前性格：${p.name}`;$('#attributePersonalityDesc').textContent=p.desc}
     function renderCare(){const g=Game.get();if(!g)return;const cost=g.isSick?(Number.isInteger(g.treatmentCost)?g.treatmentCost:Game.becomeSick()):null;$('#careDay').textContent=`第${g.day}天`;Visual.renderScene('#careArt',g,{state:g.isSick?'sick':null});$('#bathStatus').textContent=g.bathDue?'现在需要护理':`下次第${g.nextBathDay}天`;$('#illnessStatus').textContent=g.isSick?`生病中 · 治疗${cost}金币`:'健康';$('#careActionsLeft').textContent=`${g.actionsLeft}/4`;$('#careCoins').textContent=`${g.coins}`;$('#careNotice').innerHTML=g.isSick?`<div class="sick-note">${g.name}正在生病。生病期间每天会继续损失健康，本次治疗费用为${cost}金币，请尽快看病。</div>`:`<div class="healthy-note">${g.name}目前没有生病。每天结束时有4%的概率随机生病，每次治疗费用会在100～300金币之间随机生成。</div>`;$('#bathBtn').disabled=!g.bathDue||g.actionsLeft<=0;$('#bathBtnHint').textContent=g.bathDue?'本次护理会消耗1次行动':'还没有到需要护理的时间';$('#doctorBtnHint').textContent=g.isSick?`本次治疗需要${cost}金币，并消耗1次行动`:'每次生病的治疗费在100～300金币之间随机生成';$('#doctorBtn').disabled=!g.isSick||g.actionsLeft<=0||g.coins<cost}
-    function showEvent(event,after=null){Visual.renderEvent('#eventIllustration',event);$('#eventEmoji').textContent=event.emoji;$('#eventTitle').textContent=event.title;$('#eventBody').textContent=event.body;$('#effectList').innerHTML=Utils.effectText(event.effects).map(t=>`<span class="effect-chip">${t}</span>`).join('');eventCloseCallback=after;$('#eventOverlay').classList.add('show')}
+    function showEvent(event,after=null){$('#eventIllustration').replaceChildren();Visual.renderEvent('#eventIllustration',event);$('#eventEmoji').textContent=event.emoji;$('#eventTitle').textContent=event.title;$('#eventBody').textContent=event.body;$('#effectList').innerHTML=Utils.effectText(event.effects).map(t=>`<span class="effect-chip">${t}</span>`).join('');eventCloseCallback=after;$('#eventOverlay').classList.add('show')}
     function showEventSequence(events,after=null){const queue=[...(events||[])];const next=()=>{if(!queue.length){if(after)after();return}showEvent(queue.shift(),next)};next()}
     function showDeath(name){$('#deathTitle').textContent=`${name}离开了`;$('#deathText').textContent=`${name}的健康降到了0。你没能及时挽回它的生命，这一局游戏结束。`;$('#deathOverlay').classList.add('show')}
     function closeEvent(){if(!$('#eventOverlay').classList.contains('show'))return;$('#eventOverlay').classList.remove('show');const cb=eventCloseCallback;eventCloseCallback=null;if(cb)cb()}
     function showGrowth(growth){$('#growthEmoji').textContent=growth.next==='spirit'?'💗':growth.next==='demon'?'😼':'🌫️';$('#growthBody').textContent=`${growth.story} 成年性格：${CONFIG.personalities[growth.next].name}`;$('#growthOverlay').classList.add('show')}
     function updateContinue(){const g=Storage.load();$('#continueBox').classList.toggle('show',!!g);if(g){$('#continueTitle').textContent=`${g.name}正在等你回来`;$('#continueText').textContent=`第${g.day}天 · ${g.ageStage==='adult'?'成年猫':'幼猫'} · ${CONFIG.breeds[g.breedKey].name}`}}
     function toast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),1700)}
-    return {showScreen,renderCandidate,renderHome,renderAttributes,renderCare,showEvent,showEventSequence,closeEvent,showGrowth,showDeath,updateContinue,toast};
+    return {showAssetLoading,hideAssetLoading,updateAssetModeButton,updateBackgroundStatus,showScreen,renderCandidate,renderHome,renderAttributes,renderCare,showEvent,showEventSequence,closeEvent,showGrowth,showDeath,updateContinue,toast};
   })();
 
   /* =========================
@@ -897,27 +906,132 @@
   ========================= */
   const App = (() => {
     const {$,$$}=Utils;
+    let pendingBreed=null;
+
+    function showSetupStep(step){
+      [["#assetModeStep","mode"],["#assetBreedStep","breed"],["#assetDownloadStep","download"]].forEach(([selector,name])=>$(selector).hidden=name!==step);
+    }
+    function openAssetSetup(){
+      $("#breedNotice").classList.remove("show");
+      showSetupStep("mode");
+      $("#assetSetupOverlay").classList.add("show");
+    }
+    function closeAssetSetup(){$("#assetSetupOverlay").classList.remove("show");UI.updateAssetModeButton()}
+
+    function renderBreedChoices(){
+      $("#breedChoiceList").innerHTML=AssetManager.allBreeds().map(key=>{const breed=CONFIG.breeds[key];return `<button class="breed-choice" data-image-breed="${key}">${breed.name}<span class="${breed.imageReady?"ready":"developing"}">${breed.imageReady?"可下载":"开发中"}</span></button>`}).join("");
+      $$('[data-image-breed]').forEach(button=>button.addEventListener('click',()=>chooseBreed(button.dataset.imageBreed)));
+    }
+
+    function chooseBreed(breedKey){
+      const breed=CONFIG.breeds[breedKey];
+      if(!breed?.imageReady){const notice=$("#breedNotice");notice.textContent=`🐾 ${breed?.name||"这个品种"}的 WebP 图片还在开发中，暂时不能选择。你可以先体验橘白猫或狸花猫。`;notice.classList.add("show");return}
+      $("#breedNotice").classList.remove("show");
+      pendingBreed=breedKey;
+      runInitialDownload(breedKey);
+    }
+
+    function downloadMessage(completed,total){
+      const ratio=total?completed/total:0;
+      if(completed===0)return ["🐾","正在把小猫接回家","先确认回家的路线，一张图片也不会漏掉。"];
+      if(ratio<.26)return ["🧶","正在整理猫咪玩具","毛线球已经滚到沙发下面了……"];
+      if(ratio<.51)return ["🥣","正在准备饭盆和小鱼干","小猫已经开始闻到晚饭的味道。"];
+      if(ratio<.76)return ["🛋️","正在检查房间和沙发","先看看哪些地方可能会被它抓坏。"];
+      if(ratio<1)return ["🏠","新家马上准备完成","最后几张 WebP 正在保存到你的浏览器。"];
+      return ["😺","准备完成","房间和幼猫的6种状态已经保存好了。"];
+    }
+
+    function updateDownloadProgress({completed,total}){
+      const [emoji,title,text]=downloadMessage(completed,total);
+      $("#downloadEmoji").textContent=emoji;$("#downloadTitle").textContent=title;$("#downloadText").textContent=text;
+      $("#downloadProgressBar").style.width=`${total?Math.round(completed/total*100):0}%`;$("#downloadCount").textContent=`${completed} / ${total}`;
+    }
+
+    async function runInitialDownload(breedKey){
+      pendingBreed=breedKey;showSetupStep("download");$("#downloadActions").classList.remove("show");
+      updateDownloadProgress({completed:0,total:AssetManager.initialPack(breedKey).length});
+      Visual.resetCache();
+      const result=await AssetManager.prepareInitial(breedKey,updateDownloadProgress);
+      if(result.ok){
+        AssetManager.commitImageMode(breedKey);Visual.resetCache();updateDownloadProgress({completed:result.total,total:result.total});
+        $("#downloadText").textContent=`${CONFIG.breeds[breedKey].name}幼猫6种状态和全部基础场景已经保存到本机。`;
+        setTimeout(()=>{closeAssetSetup();Visual.renderCover();UI.toast("图片模式已准备完成")},450);
+      }else{
+        $("#downloadEmoji").textContent="🙀";$("#downloadTitle").textContent="有些图片没有下载成功";
+        $("#downloadText").textContent=`成功准备 ${result.total-result.failed.length}/${result.total} 项。可能是当前网络暂时无法访问 GitHub 图片，请重试或先使用无图片模式。`;
+        $("#downloadActions").classList.add("show");
+      }
+    }
+
+    function chooseNoImages(){AssetManager.useNoImages();Visual.resetCache();closeAssetSetup();Visual.renderCover();UI.renderHome();UI.toast("已切换为不加载图片")}
+
     function createAndShow(route,forced=null,name=''){Game.createCandidate(route,forced,name);UI.renderCandidate();UI.showScreen('candidateScreen')}
-    function bindNavigation(){$$('[data-route]').forEach(b=>b.addEventListener('click',()=>b.dataset.route==='shelter'?UI.showScreen('shelterScreen'):createAndShow(b.dataset.route)));$$('[data-go]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.go==='homeScreen')UI.renderHome();UI.showScreen(b.dataset.go)}));$('[data-shelter="kitten"]').addEventListener('click',()=>createAndShow('shelterKitten'));$$('[data-adult]').forEach(b=>b.addEventListener('click',()=>createAndShow('shelterAdult',b.dataset.adult,{spirit:'米粒',demon:'麻薯',chaos:'锅盖'}[b.dataset.adult])));$('#candidateBack').addEventListener('click',()=>UI.showScreen(Game.getCandidate().routeKey.startsWith('shelter')?'shelterScreen':'startScreen'));$('#rerollBtn').addEventListener('click',()=>createAndShow(Game.getCandidate().routeKey));$('#attributeBtn').addEventListener('click',()=>{UI.renderAttributes();UI.showScreen('attributeScreen')});$('#careBtn').addEventListener('click',()=>{UI.renderCare();UI.showScreen('careScreen')})}
-    function endGameIfDead(){const g=Game.get();if(!g||!Game.isDead())return false;const name=g.name;Storage.clear();Game.set(null);UI.updateContinue();UI.showDeath(name);return true}
+
+    function startBackgroundAssets(game){
+      if(!game||!AssetManager.imagesEnabled())return;
+      AssetManager.startBackgroundDownload(game.breedKey,progress=>UI.updateBackgroundStatus(progress)).then(result=>UI.updateBackgroundStatus(result,true));
+    }
+
+    async function prepareGameVisuals(game,text){
+      if(!AssetManager.imagesEnabled())return;
+      if(!AssetManager.validBreed(game?.breedKey)){UI.toast(`${CONFIG.breeds[game?.breedKey]?.name||"该品种"}图片仍在开发中，先使用内置画面`);return;}
+      UI.showAssetLoading(text);
+      try{
+        await AssetManager.ensureGamePack(game,progress=>{$("#assetLoadingText").textContent=`正在准备 ${CONFIG.breeds[game.breedKey].name} ${progress.completed}/${progress.total}`});
+        Visual.resetCache();
+        await Visual.preload(game);
+      }finally{UI.hideAssetLoading()}
+    }
+
+    function bindAssetSetup(){
+      renderBreedChoices();
+      $("#assetSettingsBtn").addEventListener("click",openAssetSetup);
+      $("#noImageModeBtn").addEventListener("click",chooseNoImages);
+      $("#imageModeBtn").addEventListener("click",()=>{showSetupStep("breed");$("#breedNotice").classList.remove("show")});
+      $("#breedBackBtn").addEventListener("click",()=>showSetupStep("mode"));
+      $("#downloadNoImageBtn").addEventListener("click",chooseNoImages);
+      $("#downloadRetryBtn").addEventListener("click",()=>pendingBreed&&runInitialDownload(pendingBreed));
+    }
+
+    function bindNavigation(){
+      $$('[data-route]').forEach(button=>button.addEventListener('click',()=>button.dataset.route==='shelter'?UI.showScreen('shelterScreen'):createAndShow(button.dataset.route)));
+      $$('[data-go]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.go==='homeScreen')UI.renderHome();UI.showScreen(button.dataset.go)}));
+      $('[data-shelter="kitten"]').addEventListener('click',()=>createAndShow('shelterKitten'));
+      $$('[data-adult]').forEach(button=>button.addEventListener('click',()=>createAndShow('shelterAdult',button.dataset.adult,{spirit:'米粒',demon:'麻薯',chaos:'锅盖'}[button.dataset.adult])));
+      $('#candidateBack').addEventListener('click',()=>UI.showScreen(Game.getCandidate().routeKey.startsWith('shelter')?'shelterScreen':'startScreen'));
+      $('#rerollBtn').addEventListener('click',()=>createAndShow(Game.getCandidate().routeKey));
+      $('#attributeBtn').addEventListener('click',()=>{UI.renderAttributes();UI.showScreen('attributeScreen')});
+      $('#careBtn').addEventListener('click',()=>{UI.renderCare();UI.showScreen('careScreen')});
+    }
+
+    function endGameIfDead(){const game=Game.get();if(!game||!Game.isDead())return false;const name=game.name;Storage.clear();Game.set(null);UI.updateContinue();UI.showDeath(name);return true}
+
     function bindGame(){
-      $('#adoptBtn').addEventListener('click',()=>{Game.adopt($('#catNameInput').value.trim());UI.renderHome();UI.updateContinue();UI.showScreen('homeScreen')});
-      $$('.action-btn[data-action]').forEach(b=>b.addEventListener('click',()=>{const result=Game.action(b.dataset.action);if(!result){UI.toast('今天已经没有行动次数了');return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})}));
+      $('#adoptBtn').addEventListener('click',async()=>{const game=Game.adopt($('#catNameInput').value.trim());await prepareGameVisuals(game,'正在准备这只猫的六种状态，完成后互动切换会更流畅。');UI.renderHome();UI.updateContinue();UI.showScreen('homeScreen');startBackgroundAssets(game)});
+      $$('.action-btn[data-action]').forEach(button=>button.addEventListener('click',()=>{const result=Game.action(button.dataset.action);if(!result){UI.toast('今天已经没有行动次数了');return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})}));
       $('#workBtn').addEventListener('click',()=>{const result=Game.work();if(!result){UI.toast('今天已经没有行动次数了');return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})});
       $('#cleanRoomBtn').addEventListener('click',()=>{const result=Game.cleanRoom();if(result.error){UI.toast(result.error);return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})});
-      $('#sleepBtn').addEventListener('click',()=>{const result=Game.endDay();UI.renderHome();UI.showEventSequence(result.events,()=>{if(result.death){endGameIfDead();return}if(result.growth){UI.renderHome();UI.showGrowth(result.growth)}})});
+      $('#sleepBtn').addEventListener('click',async()=>{const result=Game.endDay();const game=Game.get();if(result.growth&&AssetManager.imagesEnabled()){UI.showAssetLoading('小猫正在长大，正在准备成年后的6种形态……');try{await AssetManager.ensureAge(game.breedKey,'adult',progress=>{$('#assetLoadingText').textContent=`正在准备成年猫 ${progress.completed}/${progress.total}`});Visual.resetCache();await Visual.preload(game)}finally{UI.hideAssetLoading()}}UI.renderHome();UI.showEventSequence(result.events,()=>{if(result.death){endGameIfDead();return}if(result.growth){UI.renderHome();UI.showGrowth(result.growth)}})});
       $('#bathBtn').addEventListener('click',()=>{const result=Care.bath();if(result.error){UI.toast(result.error);return}UI.renderCare();UI.renderHome();if(result.choice){$('#bathChoiceText').textContent=result.event.body;$('#bathChoiceOverlay').classList.add('show');return}UI.showEvent(result.event,()=>{if(result.death)endGameIfDead();else UI.renderCare()})});
       $('#doctorBtn').addEventListener('click',()=>{const result=Care.doctor();if(result.error){UI.toast(result.error);return}UI.renderCare();UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead();else UI.renderCare()})});
       $('#forceBathBtn').addEventListener('click',()=>{const result=Care.resolveChaos(true);$('#bathChoiceOverlay').classList.remove('show');UI.renderCare();UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead();else UI.renderCare()})});
       $('#giveUpBathBtn').addEventListener('click',()=>{const result=Care.resolveChaos(false);$('#bathChoiceOverlay').classList.remove('show');UI.renderCare();UI.renderHome();UI.showEvent(result.event,()=>UI.renderCare())});
       $('#saveBtn').addEventListener('click',()=>{Storage.save(Game.get());UI.toast('进度已保存')});
       $('#resetBtn').addEventListener('click',()=>{if(confirm('确定删除当前存档吗？')){Storage.clear();Game.set(null);UI.updateContinue();UI.showScreen('startScreen')}});
-      $('#continueBtn').addEventListener('click',()=>{Game.set(Storage.load());UI.renderHome();UI.showScreen('homeScreen')});
+      $('#continueBtn').addEventListener('click',async()=>{const game=Storage.load();Game.set(game);await prepareGameVisuals(game,'正在读取房间和猫咪素材……');UI.renderHome();UI.showScreen('homeScreen');startBackgroundAssets(game)});
       $('#newGameBtn').addEventListener('click',()=>{if(confirm('开始新游戏会删除当前存档，确定吗？')){Storage.clear();Game.set(null);UI.updateContinue()}});
       $('#restartAfterDeath').addEventListener('click',()=>{$('#deathOverlay').classList.remove('show');UI.showScreen('startScreen')});
     }
-    function bindModals(){$('#eventOverlay').addEventListener('click',UI.closeEvent);$('#growthClose').addEventListener('click',()=>{$('#growthOverlay').classList.remove('show');Storage.save(Game.get());UI.renderHome()});$('#abandonBtn').addEventListener('click',Abandon.open);$('#cancelAbandon').addEventListener('click',()=>$('#abandonConfirm').classList.remove('show'));$('#confirmAbandon').addEventListener('click',Abandon.confirm);$('#leaveAbandon').addEventListener('click',()=>{$('#abandonResult').classList.remove('show');UI.showScreen('startScreen')});['#abandonConfirm','#growthOverlay'].forEach(sel=>$(sel).addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.classList.remove('show')}))}
-    function init(){Visual.preloadStatic();Visual.renderCover();const saved=Storage.load();if(saved)Visual.preload(saved);UI.updateContinue();bindNavigation();bindGame();bindModals()}
+
+    function bindModals(){$('#eventOverlay').addEventListener('click',UI.closeEvent);$('#growthClose').addEventListener('click',()=>{$('#growthOverlay').classList.remove('show');Storage.save(Game.get());UI.renderHome()});$('#abandonBtn').addEventListener('click',Abandon.open);$('#cancelAbandon').addEventListener('click',()=>$('#abandonConfirm').classList.remove('show'));$('#confirmAbandon').addEventListener('click',Abandon.confirm);$('#leaveAbandon').addEventListener('click',()=>{$('#abandonResult').classList.remove('show');UI.showScreen('startScreen')});['#abandonConfirm','#growthOverlay'].forEach(selector=>$(selector).addEventListener('click',event=>{if(event.target===event.currentTarget)event.currentTarget.classList.remove('show')}))}
+
+    async function init(){
+      const pref=AssetManager.init();
+      await Visual.renderCover();
+      UI.updateContinue();UI.updateAssetModeButton();
+      bindAssetSetup();bindNavigation();bindGame();bindModals();
+      if(!pref)openAssetSetup();
+    }
     return {init};
   })();
 
