@@ -29,6 +29,7 @@
     .home-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.home-top h2{margin:0;font-size:23px}.top-buttons{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}.day-chip,.tiny-btn{padding:8px 11px;border-radius:999px;font-size:12px;font-weight:900}.day-chip{color:#9c551f;background:#fff0dd}.tiny-btn{color:#665a52;background:rgba(255,255,255,.84);box-shadow:0 8px 22px rgba(93,66,47,.09)}
     .home-card{padding:16px}.room-frame{position:relative;overflow:hidden;border-radius:24px;background:#f5e8d6;aspect-ratio:16/10}#roomArt{position:absolute;inset:0}.room-frame svg{width:100%;height:100%;display:block}.room-caption{position:absolute;left:12px;bottom:12px;max-width:72%;padding:9px 12px;border-radius:14px 14px 14px 4px;background:rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(72,52,39,.12);font-size:13px;line-height:1.4}.room-damage-label{position:absolute;right:12px;top:12px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.86);font-size:12px;font-weight:900;color:#805f4e}
     .cat-summary{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-top:14px}.cat-name{margin:0 0 4px;font-size:27px}.cat-sub{color:var(--muted);font-size:13px;line-height:1.5}.stats-compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}.stat-card{padding:11px;border:1px solid rgba(127,93,68,.09);border-radius:16px;background:rgba(255,255,255,.78)}.stat-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:7px;font-size:12px;font-weight:850}.bar{height:8px;overflow:hidden;border-radius:999px;background:#eee5df}.bar span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ffb577,#f17f3b);transition:width .25s}
+    .daily-task-card{margin-top:14px;padding:15px;border:1px solid rgba(209,143,69,.18);border-radius:20px;background:linear-gradient(145deg,#fff9e9,#fff0d5);box-shadow:0 10px 26px rgba(123,86,50,.08)}.daily-task-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.daily-task-name{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:950}.daily-task-emoji{font-size:25px}.daily-task-reward{padding:6px 9px;border-radius:999px;color:#985716;background:#ffe5b9;font-size:12px;font-weight:950;white-space:nowrap}.daily-task-desc{margin-top:7px;color:#75675e;font-size:13px;line-height:1.55}.daily-task-progress{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:11px;color:#7d6c60;font-size:12px;font-weight:850}.daily-task-card .bar{margin-top:7px}.task-claim-btn{width:100%;min-height:44px;margin-top:12px;border-radius:14px;color:#fff;background:linear-gradient(135deg,#ffb276,#ef7f3c);font-weight:950;box-shadow:0 9px 20px rgba(231,111,49,.2)}.task-claim-btn:disabled{color:#9c8f85;background:#eee7e1;box-shadow:none;cursor:default}.daily-task-card.claimed{background:linear-gradient(145deg,#eff9f2,#e2f3e8);border-color:rgba(67,139,91,.2)}.daily-task-card.claimed .daily-task-reward{color:#34724b;background:#d8efdf}
     .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.action-btn{min-height:76px;padding:12px;border-radius:19px;color:var(--text);background:rgba(255,255,255,.88);box-shadow:0 10px 25px rgba(101,70,48,.08);font-weight:900;text-align:left}.action-btn span{display:block;margin-bottom:4px;font-size:25px}.action-btn small{color:var(--muted);font-weight:700}.action-btn:disabled{opacity:.44}.action-btn.work-action{grid-column:1/-1;background:linear-gradient(135deg,rgba(255,247,224,.96),rgba(255,232,198,.96));border:1px solid rgba(202,135,66,.16)}.action-btn.room-clean-action{grid-column:1/-1;background:linear-gradient(135deg,rgba(235,250,242,.97),rgba(210,239,224,.97));border:1px solid rgba(74,151,105,.18)}.status-line{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px;padding:11px 13px;border-radius:17px;background:#f7eee8;font-size:13px;font-weight:850}.log-card{margin-top:14px;padding:16px}.log-card h3{margin-bottom:10px;font-size:16px}.log-list{display:grid;gap:8px;max-height:235px;overflow:auto}.log-item{padding:10px 12px;border-radius:14px;color:#665a52;background:#faf4ef;font-size:13px;line-height:1.55}.small-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
     .attribute-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.attribute-art{height:245px;margin:14px 0;border-radius:24px;overflow:hidden;background:#fff3df}.attribute-art svg{width:100%;height:100%}.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.info-box{padding:13px;border-radius:17px;background:#f8f2ed}.info-box small{display:block;color:#988a80;font-weight:800;margin-bottom:5px}.personality-detail{margin-top:14px;padding:16px;border-radius:20px;background:#fff1df}.personality-detail h3{margin-bottom:7px}.personality-detail p{margin:0;color:#6c5f56;line-height:1.65;font-size:14px}
     /* 写实图片分层系统：图片不存在时自动退回原矢量画面 */
@@ -96,7 +97,7 @@
 
     <section class="screen" id="homeScreen">
       <div class="home-top"><h2>我的猫咪房间</h2><div class="top-buttons"><button class="tiny-btn" id="mallBtn">🛒 商场</button><button class="tiny-btn" id="attributeBtn">查看属性</button><span class="day-chip" id="dayChip"></span></div></div>
-      <div class="home-card"><div class="room-frame" id="roomFrame"><div id="roomArt"></div><button class="care-entry" id="careBtn">🛁 护理与看病</button><div class="room-caption" id="roomCaption"></div><div class="room-damage-label" id="damageLabel"></div></div><div class="cat-summary"><div><h2 class="cat-name" id="homeCatName"></h2><div class="cat-sub" id="homeCatSub"></div></div></div><div class="stats-compact" id="compactStats"></div><div class="actions"><button class="action-btn" data-action="feed"><span>🥣</span>喂食<small>提升饱腹与健康</small></button><button class="action-btn" data-action="pet"><span>🖐️</span>摸猫<small>结果取决于性格</small></button><button class="action-btn" data-action="play"><span>🪶</span>陪玩<small>消耗活力并增进感情</small></button><button class="action-btn" data-action="clean"><span>🧹</span>铲屎<small>改善清洁与健康</small></button><button class="action-btn room-clean-action" id="cleanRoomBtn"><span>🧽</span>打扫房间<small>消耗1次行动，房屋损坏度减少25%</small></button><button class="action-btn work-action" id="workBtn"><span>💼</span>打工赚钱<small>消耗1次行动，获得12金币；小猫会独自在家</small></button></div><div class="status-line"><span id="actionPointsText"></span><span id="growthText"></span></div><button class="primary" id="sleepBtn" style="width:100%;margin-top:12px">🌙 结束今天</button></div>
+      <div class="home-card"><div class="room-frame" id="roomFrame"><div id="roomArt"></div><button class="care-entry" id="careBtn">🛁 护理与看病</button><div class="room-caption" id="roomCaption"></div><div class="room-damage-label" id="damageLabel"></div></div><div class="cat-summary"><div><h2 class="cat-name" id="homeCatName"></h2><div class="cat-sub" id="homeCatSub"></div></div></div><div class="stats-compact" id="compactStats"></div><div class="daily-task-card" id="dailyTaskCard"><div class="daily-task-head"><div class="daily-task-name"><span class="daily-task-emoji" id="dailyTaskEmoji">📋</span><span id="dailyTaskName">今日任务</span></div><span class="daily-task-reward" id="dailyTaskReward">奖励</span></div><div class="daily-task-desc" id="dailyTaskDesc"></div><div class="daily-task-progress"><span id="dailyTaskProgressText"></span><span id="dailyTaskStatus"></span></div><div class="bar"><span id="dailyTaskProgressBar" style="width:0%"></span></div><button class="task-claim-btn" id="taskClaimBtn" disabled>完成后领取</button></div><div class="actions"><button class="action-btn" data-action="feed"><span>🥣</span>喂食<small>提升饱腹与健康</small></button><button class="action-btn" data-action="pet"><span>🖐️</span>摸猫<small>结果取决于性格</small></button><button class="action-btn" data-action="play"><span>🪶</span>陪玩<small>消耗活力并增进感情</small></button><button class="action-btn" data-action="clean"><span>🧹</span>铲屎<small>改善清洁与健康</small></button><button class="action-btn room-clean-action" id="cleanRoomBtn"><span>🧽</span>打扫房间<small>消耗1次行动，房屋损坏度减少25%</small></button><button class="action-btn work-action" id="workBtn"><span>💼</span>打工赚钱<small>消耗1次行动，获得12金币；小猫会独自在家</small></button></div><div class="status-line"><span id="actionPointsText"></span><span id="growthText"></span></div><button class="primary" id="sleepBtn" style="width:100%;margin-top:12px">🌙 结束今天</button></div>
       <div class="log-card"><h3>猫咪日记</h3><div class="log-list" id="logList"></div></div><div class="small-actions"><button class="secondary" id="saveBtn">保存进度</button><button class="secondary" id="resetBtn">删除存档</button></div>
     </section>
 
@@ -138,13 +139,13 @@
             <span class="mall-item-emoji">🍗</span>
             <div class="mall-item-title"><span>猫条</span><span class="mall-price">5金币</span></div>
             <div class="mall-item-desc">香香软软的小零食，适合快速垫一垫肚子。</div>
-            <span class="mall-effect">饱腹 +20</span>
+            <span class="mall-effect">饱腹 +20 · 亲密 +2</span>
           </button>
           <button class="mall-item" data-mall-item="can">
             <span class="mall-item-emoji">🥫</span>
             <div class="mall-item-title"><span>猫罐头</span><span class="mall-price">10金币</span></div>
             <div class="mall-item-desc">分量更足的主食罐头，能一次补充大量饱腹。</div>
-            <span class="mall-effect">饱腹 +50</span>
+            <span class="mall-effect">饱腹 +50 · 亲密 +5</span>
           </button>
         </div>
         <div class="mall-note" id="mallNote"></div>
@@ -291,7 +292,7 @@
      某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
   ========================= */
   const ASSETS = Object.freeze({
-    version: "local-cache-v4-webp-20260805-mall1",
+    version: "local-cache-v5-webp-20260805-daily-task1",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",
@@ -740,12 +741,15 @@
   const Economy = (() => {
     function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 
-    function dailyIncome(){
+    function dailyIncome(personality){
+      const amount={spirit:10,demon:15,chaos:20}[personality]||10;
+      const personalityName=CONFIG.personalities[personality]?.name||"灵珠";
       return {
         emoji:"💰",
-        title:"每日收入到账",
-        body:"今天的固定生活收入已经到账。",
-        effects:{coins:10}
+        title:"每日养猫金币到账",
+        body:`${personalityName}的每日养成金币已经到账，今天获得${amount}金币。`,
+        effects:{coins:amount},
+        amount
       };
     }
 
@@ -806,18 +810,122 @@
   })();
 
   /* =========================
+     5.6 每日任务模块
+  ========================= */
+  const TaskSystem = (() => {
+    const definitions={
+      feedOnce:{emoji:"🥣",name:"今日加餐",desc:"使用普通喂食照顾小猫1次。",reward:8,target:1},
+      hunger50:{emoji:"🍽️",name:"吃饱饱",desc:"今天累计为小猫增加50点饱腹。",reward:12,target:50},
+      cleanLitter:{emoji:"🧹",name:"猫砂管理员",desc:"清理猫砂盆1次。",reward:10,target:1},
+      cleanRoom:{emoji:"🧽",name:"整洁小屋",desc:"打扫房间1次。",reward:12,target:1},
+      petTwice:{emoji:"🖐️",name:"摸摸脑袋",desc:"今天摸猫2次。",reward:10,target:2},
+      playOnce:{emoji:"🪶",name:"陪它玩一会儿",desc:"陪小猫玩耍1次。",reward:10,target:1},
+      uniqueThree:{emoji:"🎈",name:"今日陪伴",desc:"完成3种不同的照顾或互动。",reward:15,target:3},
+      health90:{emoji:"💚",name:"元气满满",desc:"让小猫的健康达到90。",reward:12,target:90},
+      all80:{emoji:"🌟",name:"幸福小猫",desc:"让饱腹、清洁和健康同时达到80以上。",reward:20,target:3},
+      shopOnce:{emoji:"🛒",name:"小小采购",desc:"在商场购买并喂食1件商品。",reward:10,target:1}
+    };
+
+    function feasible(game,id){
+      if(id==="cleanRoom")return game.houseDamage>0;
+      if(id==="hunger50")return game.stats.hunger<=50;
+      if(id==="health90")return game.stats.health>=70&&game.stats.health<90;
+      if(id==="all80"){const values=[game.stats.health,game.stats.hunger,game.stats.cleanliness];return Math.min(...values)>=60&&!values.every(v=>v>=80)}
+      return true;
+    }
+
+    function create(game){
+      const ids=Object.keys(definitions).filter(id=>feasible(game,id));
+      const id=Utils.pick(ids.length?ids:Object.keys(definitions));
+      game.dailyTask={id,day:game.day,progress:0,seen:[],completed:false,claimed:false};
+      refresh(game);
+      return game.dailyTask;
+    }
+
+    function ensure(game){
+      if(!game)return null;
+      if(!game.dailyTask||game.dailyTask.day!==game.day||!definitions[game.dailyTask.id])return create(game);
+      game.dailyTask.progress=Number(game.dailyTask.progress)||0;
+      game.dailyTask.seen=Array.isArray(game.dailyTask.seen)?game.dailyTask.seen:[];
+      game.dailyTask.completed=!!game.dailyTask.completed;
+      game.dailyTask.claimed=!!game.dailyTask.claimed;
+      refresh(game);
+      return game.dailyTask;
+    }
+
+    function current(game){
+      const task=ensure(game),def=definitions[task.id];
+      if(task.id==="health90")return Math.min(def.target,Math.round(game.stats.health));
+      if(task.id==="all80")return [game.stats.health,game.stats.hunger,game.stats.cleanliness].filter(v=>v>=80).length;
+      if(task.id==="uniqueThree")return task.seen.length;
+      return Math.min(def.target,Math.round(task.progress));
+    }
+
+    function refresh(game){
+      if(!game?.dailyTask)return false;
+      const task=game.dailyTask,def=definitions[task.id];
+      if(!def)return false;
+      const was=task.completed;
+      let value;
+      if(task.id==="health90")value=game.stats.health;
+      else if(task.id==="all80")value=[game.stats.health,game.stats.hunger,game.stats.cleanliness].filter(v=>v>=80).length;
+      else if(task.id==="uniqueThree")value=task.seen.length;
+      else value=task.progress;
+      task.completed=was||value>=def.target;
+      if(!was&&task.completed&&game.logs){game.logs.unshift(`第${game.day}天：今日任务“${def.name}”已完成，可以领取${def.reward}金币。`);game.logs=game.logs.slice(0,40)}
+      return !was&&task.completed;
+    }
+
+    function record(game,{type,hungerGain=0}={}){
+      const task=ensure(game);
+      if(task.claimed)return false;
+      switch(task.id){
+        case "feedOnce": if(type==="feed")task.progress++; break;
+        case "hunger50": task.progress+=Math.max(0,hungerGain); break;
+        case "cleanLitter": if(type==="clean")task.progress++; break;
+        case "cleanRoom": if(type==="cleanRoom")task.progress++; break;
+        case "petTwice": if(type==="pet")task.progress++; break;
+        case "playOnce": if(type==="play")task.progress++; break;
+        case "uniqueThree": if(["feed","pet","play","clean","cleanRoom","shop"].includes(type)&&!task.seen.includes(type))task.seen.push(type); break;
+        case "shopOnce": if(type==="shop")task.progress++; break;
+      }
+      return refresh(game);
+    }
+
+    function view(game){
+      const task=ensure(game),def=definitions[task.id],rawValue=current(game),value=task.completed?def.target:rawValue;
+      const progressText=task.id==="all80"?`${value}/3项达标`:task.id==="health90"?`健康 ${value}/${def.target}`:`进度 ${value}/${def.target}`;
+      return {...def,id:task.id,value,progressText,completed:task.completed,claimed:task.claimed,percent:task.completed?100:Math.min(100,Math.round(value/def.target*100))};
+    }
+
+    function claim(game){
+      const task=ensure(game),def=definitions[task.id];
+      refresh(game);
+      if(task.claimed)return {error:"今天的任务奖励已经领取过了"};
+      if(!task.completed)return {error:"今日任务还没有完成"};
+      task.claimed=true;
+      game.coins+=def.reward;
+      const event={emoji:"🎉",title:"今日任务完成",body:`你完成了“${def.name}”。${game.name}开心地围着你转了一圈，你获得${def.reward}金币。`,effects:{coins:def.reward},visual:{catState:"happy"}};
+      game.logs.unshift(`第${game.day}天：领取每日任务“${def.name}”奖励，获得${def.reward}金币。`);game.logs=game.logs.slice(0,40);
+      return {event};
+    }
+
+    return {ensure,create,refresh,record,view,claim};
+  })();
+
+  /* =========================
      6. 游戏状态模块
   ========================= */
   const Game = (() => {
     let game=null,candidate=null;
-    function get(){return game}function set(v){game=v}function getCandidate(){return candidate}
+    function get(){return game}function set(v){game=v;if(game)TaskSystem.ensure(game)}function getCandidate(){return candidate}
     function breedAllowedForRoute(breedKey,routeKey){const breed=CONFIG.breeds[breedKey];return !!breed&&(!breed.shopOnly||routeKey==="shop")}
     function allowedBreedsForRoute(routeKey){return Object.keys(CONFIG.breeds).filter(key=>breedAllowedForRoute(key,routeKey))}
     function personalityForBreed(breedKey,fallback){return CONFIG.breeds[breedKey]?.forcedPersonality||fallback}
     function storyForBreed(routeKey,breedKey){if(routeKey==="shop"&&breedKey==="americanSilver")return "宠物店的玻璃柜里，这只美短银虎斑一看见你就主动靠近，圆圆的眼睛一直追着你的手。店员说，它从小就格外亲人。";return CONFIG.routes[routeKey].story}
     function createCandidate(routeKey,forcedPersonality=null,forcedName="",forcedBreed=null){const route=CONFIG.routes[routeKey],allowed=allowedBreedsForRoute(routeKey),breedKey=forcedBreed&&allowed.includes(forcedBreed)?forcedBreed:Utils.pick(allowed),routePersonality=forcedPersonality||(route.initial?Utils.roll(route.initial):"spirit");candidate={routeKey,routeName:route.name,ageStage:route.ageStage,routePersonality,personality:personalityForBreed(breedKey,routePersonality),breedKey,sex:Utils.pick(CONFIG.sexes),suggestedName:forcedName||Utils.pick(CONFIG.names),story:storyForBreed(routeKey,breedKey),rerollable:routeKey!=="shelterAdult"};return candidate}
     function setCandidateBreed(breedKey){if(candidate&&breedAllowedForRoute(breedKey,candidate.routeKey)){candidate.breedKey=breedKey;candidate.personality=personalityForBreed(breedKey,candidate.routePersonality||candidate.personality);candidate.story=storyForBreed(candidate.routeKey,breedKey)}return candidate}
-    function adopt(name){const c=candidate,r=CONFIG.routes[c.routeKey],personality=personalityForBreed(c.breedKey,c.personality),stats={...r.base};if(personality==="spirit"){stats.trust+=8;stats.intimacy+=8}if(personality==="demon")stats.vitality+=8;if(personality==="chaos"){stats.trust-=10;stats.intimacy-=8;stats.courage+=8}Object.keys(stats).forEach(k=>stats[k]=Utils.clamp(stats[k]));game={version:3,name:name||c.suggestedName,routeKey:c.routeKey,routeName:c.routeName,breedKey:c.breedKey,sex:c.sex,ageStage:c.ageStage,personality,initialPersonality:personality,personalityChanged:false,day:1,actionsLeft:4,coins:100,houseDamage:0,mood:"neutral",isSick:false,treatmentCost:null,bathDue:false,lastBathDay:null,nextBathDay:["shop","friend"].includes(c.routeKey)?10:5,stats,logs:[`第1天：${name||c.suggestedName}来到你的家。`]};Storage.save(game);return game}
+    function adopt(name){const c=candidate,r=CONFIG.routes[c.routeKey],personality=personalityForBreed(c.breedKey,c.personality),stats={...r.base};if(personality==="spirit"){stats.trust+=8;stats.intimacy+=8}if(personality==="demon")stats.vitality+=8;if(personality==="chaos"){stats.trust-=10;stats.intimacy-=8;stats.courage+=8}Object.keys(stats).forEach(k=>stats[k]=Utils.clamp(stats[k]));game={version:4,name:name||c.suggestedName,routeKey:c.routeKey,routeName:c.routeName,breedKey:c.breedKey,sex:c.sex,ageStage:c.ageStage,personality,initialPersonality:personality,personalityChanged:false,day:1,actionsLeft:4,coins:100,houseDamage:0,mood:"neutral",isSick:false,treatmentCost:null,bathDue:false,lastBathDay:null,nextBathDay:["shop","friend"].includes(c.routeKey)?10:5,stats,logs:[`第1天：${name||c.suggestedName}来到你的家。`]};TaskSystem.create(game);Storage.save(game);return game}
     function rollTreatmentCost(){return Math.floor(Math.random()*201)+100}
     function becomeSick(){if(!game)return null;game.isSick=true;if(!Number.isInteger(game.treatmentCost)||game.treatmentCost<100||game.treatmentCost>300)game.treatmentCost=rollTreatmentCost();return game.treatmentCost}
     function maxFor(key){if(game.personality==="chaos"&&key==="trust")return 45;if(game.personality==="chaos"&&key==="intimacy")return 35;return 100}
@@ -825,11 +933,11 @@
     function apply(effects){Object.entries(effects||{}).forEach(([k,v])=>change(k,v))}
     function log(text){game.logs.unshift(`第${game.day}天：${text}`);game.logs=game.logs.slice(0,40)}
     function isDead(){return !!game&&game.stats.health<=0}
-    function action(actionKey){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=game.breedKey==="americanSilver"&&game.stats.hunger<70&&actionKey==="pet"?{emoji:"🐱",title:"一看见你就开始撒娇",body:`${game.name}一看见你就喵喵叫，还主动抬起头去蹭你的手。它越蹭越起劲，前爪都快离开地面，像是马上就要站起来抱住你。`,effects:{trust:2,intimacy:4},visual:{catState:"happy"}}:EventSystem.getAction(game.personality,actionKey);apply(event.effects);game.mood=event.visual?.catState||((event.effects.health<0||event.effects.trust<0)?"angry":actionKey==="play"||actionKey==="feed"?"happy":"neutral");log(event.body);Storage.save(game);return {event,death:isDead()}}
-    function work(){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=Economy.work(game.personality,game.name);apply(event.effects);game.mood=event.effects.damage?"angry":"neutral";log(event.body);Storage.save(game);return {event,death:isDead()}}
+    function action(actionKey){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const hungerBefore=game.stats.hunger;const event=game.breedKey==="americanSilver"&&game.stats.hunger<70&&actionKey==="pet"?{emoji:"🐱",title:"一看见你就开始撒娇",body:`${game.name}一看见你就喵喵叫，还主动抬起头去蹭你的手。它越蹭越起劲，前爪都快离开地面，像是马上就要站起来抱住你。`,effects:{trust:2,intimacy:4},visual:{catState:"happy"}}:EventSystem.getAction(game.personality,actionKey);apply(event.effects);const hungerGain=Math.max(0,game.stats.hunger-hungerBefore);TaskSystem.record(game,{type:actionKey,hungerGain});TaskSystem.refresh(game);game.mood=event.visual?.catState||((event.effects.health<0||event.effects.trust<0)?"angry":actionKey==="play"||actionKey==="feed"?"happy":"neutral");log(event.body);Storage.save(game);return {event,death:isDead()}}
+    function work(){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=Economy.work(game.personality,game.name);apply(event.effects);TaskSystem.refresh(game);game.mood=event.effects.damage?"angry":"neutral";log(event.body);Storage.save(game);return {event,death:isDead()}}
     const mallItems={
-      catStrip:{name:"猫条",emoji:"🍗",price:5,hunger:20},
-      can:{name:"猫罐头",emoji:"🥫",price:10,hunger:50}
+      catStrip:{name:"猫条",emoji:"🍗",price:5,hunger:20,intimacy:2},
+      can:{name:"猫罐头",emoji:"🥫",price:10,hunger:50,intimacy:5}
     };
     function buyFood(itemKey){
       if(!game)return {error:"没有小猫"};
@@ -837,12 +945,13 @@
       if(!item)return {error:"商品不存在"};
       if(game.stats.hunger>=100)return {error:`${game.name}现在已经吃得很饱了`};
       if(game.coins<item.price)return {error:`金币不足，还需要${item.price-game.coins}金币`};
-      const before=game.stats.hunger;
-      change("coins",-item.price);change("hunger",item.hunger);
-      const gained=Math.round(game.stats.hunger-before);
+      const hungerBefore=game.stats.hunger,intimacyBefore=game.stats.intimacy;
+      change("coins",-item.price);change("hunger",item.hunger);change("intimacy",item.intimacy);
+      const gained=Math.round(game.stats.hunger-hungerBefore),intimacyGained=Math.round(game.stats.intimacy-intimacyBefore);
+      TaskSystem.record(game,{type:"shop",hungerGain:gained});TaskSystem.refresh(game);
       game.mood="happy";
-      const event={emoji:item.emoji,title:`${game.name}吃掉了${item.name}`,body:`你花了${item.price}金币买下${item.name}。${game.name}闻到香味立刻凑了过来，很快就吃得干干净净。`,effects:{coins:-item.price,hunger:gained},visual:{catState:"happy"}};
-      log(`你在商场购买${item.name}喂给${game.name}，饱腹增加${gained}。`);Storage.save(game);
+      const event={emoji:item.emoji,title:`${game.name}吃掉了${item.name}`,body:`你花了${item.price}金币买下${item.name}。${game.name}闻到香味立刻凑了过来，很快就吃得干干净净，也和你更亲近了。`,effects:{coins:-item.price,hunger:gained,intimacy:intimacyGained},visual:{catState:"happy"}};
+      log(`你在商场购买${item.name}喂给${game.name}，饱腹增加${gained}，亲密增加${intimacyGained}。`);Storage.save(game);
       return {event,death:false};
     }
     function cleanRoom(){
@@ -854,7 +963,13 @@
       game.houseDamage=Utils.clamp(game.houseDamage-25);
       const reduced=Math.round(before-game.houseDamage);
       const event={emoji:"🧽",title:"房间打扫完成",body:`你花时间收拾了散落的猫粮、猫砂和被弄乱的物品，房屋损坏度降低了${reduced}%。`,effects:{damage:-reduced}};
-      log(event.body);Storage.save(game);return {event,death:isDead()};
+      TaskSystem.record(game,{type:"cleanRoom"});TaskSystem.refresh(game);log(event.body);Storage.save(game);return {event,death:isDead()};
+    }
+    function claimDailyTask(){
+      if(!game)return {error:"没有小猫"};
+      const result=TaskSystem.claim(game);
+      if(result.error)return result;
+      game.mood="happy";Storage.save(game);return result;
     }
     function endDay(){
       game.day++;game.actionsLeft=4;const events=[];
@@ -864,7 +979,7 @@
 
       const dayEvent=EventSystem.getDay(game.personality);apply(dayEvent.effects);game.mood=dayEvent.effects.health<0||dayEvent.effects.damage>10?"angry":"sleepy";log(dayEvent.body);events.push(dayEvent);
 
-      const incomeEvent=Economy.dailyIncome();apply(incomeEvent.effects);log("每日固定收入到账，获得10金币。");events.push(incomeEvent);
+      const incomeEvent=Economy.dailyIncome(game.personality);apply(incomeEvent.effects);log(`每日养猫金币到账，获得${incomeEvent.amount}金币。`);events.push(incomeEvent);
 
       const rewardEvent=Economy.randomReward(game.name);if(rewardEvent){apply(rewardEvent.effects);log(rewardEvent.body);events.push(rewardEvent)}
 
@@ -873,10 +988,11 @@
 
       if(!game.bathDue&&game.day>=game.nextBathDay){game.bathDue=true;const bathEvent={emoji:"🛁",title:"该洗澡并剪指甲了",body:`${game.name}已经到需要护理的时间。请从房间图片上的“护理与看病”入口处理。`,effects:{}};events.push(bathEvent);log(bathEvent.body)}
       let growth=null;if(game.ageStage==="kitten"&&!game.personalityChanged&&game.day>=7)growth=grow();
+      TaskSystem.create(game);log(`新的每日任务：${TaskSystem.view(game).name}。`);
       Storage.save(game);return {events,growth,death:isDead()}
     }
     function grow(){const old=game.personality;const next=personalityForBreed(game.breedKey,Utils.roll(CONFIG.routes[game.routeKey].growth));game.ageStage="adult";game.personality=next;game.personalityChanged=true;game.mood=next==="chaos"?"angry":"neutral";const story=next==="spirit"?`${game.name}长大后安静了许多，开始每天主动趴在你身边。`:next==="demon"?`你发现家里的杯子总会莫名其妙掉到地上。监控里的${game.name}每次推完都会若无其事地走开。`:`${game.name}静静看着你。下一秒，它突然给了你一爪，随后转身抓坏了新沙发。`;log(`${game.name}成年了，性格从“${CONFIG.personalities[old].name}”定型为“${CONFIG.personalities[next].name}”。`);return {old,next,story}}
-    return {get,set,getCandidate,createCandidate,setCandidateBreed,breedAllowedForRoute,allowedBreedsForRoute,adopt,maxFor,change,apply,log,isDead,action,work,buyFood,cleanRoom,endDay,becomeSick};
+    return {get,set,getCandidate,createCandidate,setCandidateBreed,breedAllowedForRoute,allowedBreedsForRoute,adopt,maxFor,change,apply,log,isDead,action,work,buyFood,cleanRoom,claimDailyTask,endDay,becomeSick};
   })();
 
   /* =========================
@@ -937,11 +1053,12 @@
     function renderCandidate(){const c=Game.getCandidate(),breed=CONFIG.breeds[c.breedKey];Visual.preload(c);Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=breed.name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${breed.forcedPersonality?'品种固定性格':c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;const select=$('#candidateBreedSelect'),allowed=Game.allowedBreedsForRoute(c.routeKey);select.innerHTML=allowed.map(key=>{const item=CONFIG.breeds[key];return `<option value="${key}" ${key===c.breedKey?'selected':''}>${item.name}${item.shopOnly?'（宠物店限定）':''}${item.imageReady?'':'（图片开发中）'}</option>`}).join('');if(breed.shopOnly)$('#candidateBreedHint').textContent='美短银虎斑仅可在宠物店获得，性格100%固定为灵珠。当前图片尚未完成时会使用内置轻量画面。';else $('#candidateBreedHint').textContent=breed.imageReady?'这个品种已有 WebP 图片；如果尚未缓存，系统会在领养前自动准备。':'该品种 WebP 图片仍在开发中，目前会使用内置轻量画面。';$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none'}
     function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥣 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
     function damageLabel(d){return d<15?'房间完好':d<40?'轻微破坏':d<70?'明显破坏':'惨不忍睹'}
-    function renderHome(){const g=Game.get();if(!g)return;$('#dayChip').textContent=`第${g.day}天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · 来源：${g.routeName}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careBtn').textContent=g.isSick?'🏥 小猫生病了':g.bathDue?'🛁 需要护理':'🛁 护理与看病';$('#compactStats').innerHTML=statCards(g,['health','hunger','cleanliness','intimacy']);$('#actionPointsText').textContent=`今日行动：${g.actionsLeft}/4 · 金币：${g.coins}`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年：${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(b=>b.disabled=g.actionsLeft<=0);$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('')}
+    function renderDailyTask(g){const task=TaskSystem.view(g),card=$('#dailyTaskCard'),button=$('#taskClaimBtn');$('#dailyTaskEmoji').textContent=task.emoji;$('#dailyTaskName').textContent=task.name;$('#dailyTaskReward').textContent=`奖励 ${task.reward}金币`;$('#dailyTaskDesc').textContent=task.desc;$('#dailyTaskProgressText').textContent=task.progressText;$('#dailyTaskStatus').textContent=task.claimed?'已领取':task.completed?'已完成':'进行中';$('#dailyTaskProgressBar').style.width=`${task.percent}%`;card.classList.toggle('claimed',task.claimed);button.disabled=!task.completed||task.claimed;button.textContent=task.claimed?'今日奖励已领取':task.completed?'领取任务奖励':'完成后领取'}
+    function renderHome(){const g=Game.get();if(!g)return;TaskSystem.ensure(g);TaskSystem.refresh(g);$('#dayChip').textContent=`第${g.day}天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · 来源：${g.routeName}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careBtn').textContent=g.isSick?'🏥 小猫生病了':g.bathDue?'🛁 需要护理':'🛁 护理与看病';$('#compactStats').innerHTML=statCards(g,['health','hunger','cleanliness','intimacy']);renderDailyTask(g);$('#actionPointsText').textContent=`今日行动：${g.actionsLeft}/4 · 金币：${g.coins}`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年：${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(b=>b.disabled=g.actionsLeft<=0);$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('');Storage.save(g)}
     function roomCaption(g){if(g.isSick)return `${g.name}生病了，看起来没有精神。`;if(g.mood==='angry')return `${g.name}现在看起来不太高兴。`;if(g.mood==='sleepy')return `${g.name}困了，正准备找地方睡觉。`;if(g.mood==='happy')return `${g.name}心情很好，尾巴轻轻晃着。`;if(g.stats.hunger<25)return `${g.name}正在等你放饭。`;return `${g.name}在房间里观察你。`}
     function renderAttributes(){const g=Game.get(),p=CONFIG.personalities[g.personality];$('#attributeDay').textContent=`第${g.day}天`;$('#attributeName').textContent=`${g.name}的档案`;Visual.renderScene('#attributeArt',g);$('#attributeInfo').innerHTML=`<div class="info-box"><small>品种</small><strong>${CONFIG.breeds[g.breedKey].name}</strong></div><div class="info-box"><small>性别</small><strong>${g.sex}</strong></div><div class="info-box"><small>年龄</small><strong>${g.ageStage==='adult'?'成年猫':'幼猫'}</strong></div><div class="info-box"><small>获得方式</small><strong>${g.routeName}</strong></div><div class="info-box"><small>初始性格</small><strong>${CONFIG.personalities[g.initialPersonality].name}</strong></div><div class="info-box"><small>房屋损坏</small><strong>${Math.round(g.houseDamage)}%</strong></div>`;$('#attributeStats').innerHTML=statCards(g,['health','trust','vitality','courage','intimacy','hunger','cleanliness']);$('#attributePersonality').textContent=`当前性格：${p.name}`;$('#attributePersonalityDesc').textContent=p.desc}
     function renderCare(){const g=Game.get();if(!g)return;const cost=g.isSick?(Number.isInteger(g.treatmentCost)?g.treatmentCost:Game.becomeSick()):null;$('#careDay').textContent=`第${g.day}天`;Visual.renderScene('#careArt',g,{state:g.isSick?'sick':null});$('#bathStatus').textContent=g.bathDue?'现在需要护理':`下次第${g.nextBathDay}天`;$('#illnessStatus').textContent=g.isSick?`生病中 · 治疗${cost}金币`:'健康';$('#careActionsLeft').textContent=`${g.actionsLeft}/4`;$('#careCoins').textContent=`${g.coins}`;$('#careNotice').innerHTML=g.isSick?`<div class="sick-note">${g.name}正在生病。生病期间每天会继续损失健康，本次治疗费用为${cost}金币，请尽快看病。</div>`:`<div class="healthy-note">${g.name}目前没有生病。每天结束时有4%的概率随机生病，每次治疗费用会在100～300金币之间随机生成。</div>`;$('#bathBtn').disabled=!g.bathDue||g.actionsLeft<=0;$('#bathBtnHint').textContent=g.bathDue?'本次护理会消耗1次行动':'还没有到需要护理的时间';$('#doctorBtnHint').textContent=g.isSick?`本次治疗需要${cost}金币，并消耗1次行动`:'每次生病的治疗费在100～300金币之间随机生成';$('#doctorBtn').disabled=!g.isSick||g.actionsLeft<=0||g.coins<cost}
-    function renderMall(){const g=Game.get();if(!g)return;$('#mallCoins').textContent=`金币：${g.coins}`;const hunger=Math.round(g.stats.hunger);$('#mallSummary').innerHTML=`<strong>🥣 ${g.name}当前饱腹：${hunger}/100</strong><div class="bar"><span style="width:${clamp(hunger)}%"></span></div>`;const full=g.stats.hunger>=100;$('#mallNote').textContent=full?`${g.name}现在已经吃饱了，饱腹下降后再来购买。`:`购买后会立即喂给${g.name}，不消耗行动次数；所有性格都会吃，饱腹最高为100。`;$$('[data-mall-item]').forEach(button=>{const price=button.dataset.mallItem==='catStrip'?5:10;button.disabled=full||g.coins<price})}
+    function renderMall(){const g=Game.get();if(!g)return;$('#mallCoins').textContent=`金币：${g.coins}`;const hunger=Math.round(g.stats.hunger);$('#mallSummary').innerHTML=`<strong>🥣 ${g.name}当前饱腹：${hunger}/100</strong><div class="bar"><span style="width:${clamp(hunger)}%"></span></div>`;const full=g.stats.hunger>=100;$('#mallNote').textContent=full?`${g.name}现在已经吃饱了，饱腹下降后再来购买。`:`购买后会立即喂给${g.name}，不消耗行动次数；所有性格都会吃，并增加亲密度，饱腹最高为100。`;$$('[data-mall-item]').forEach(button=>{const price=button.dataset.mallItem==='catStrip'?5:10;button.disabled=full||g.coins<price})}
     function showEvent(event,after=null){$('#eventIllustration').replaceChildren();Visual.renderEvent('#eventIllustration',event);$('#eventEmoji').textContent=event.emoji;$('#eventTitle').textContent=event.title;$('#eventBody').textContent=event.body;$('#effectList').innerHTML=Utils.effectText(event.effects).map(t=>`<span class="effect-chip">${t}</span>`).join('');eventCloseCallback=after;$('#eventOverlay').classList.add('show')}
     function showEventSequence(events,after=null){const queue=[...(events||[])];const next=()=>{if(!queue.length){if(after)after();return}showEvent(queue.shift(),next)};next()}
     function showDeath(name){$('#deathTitle').textContent=`${name}离开了`;$('#deathText').textContent=`${name}的健康降到了0。你没能及时挽回它的生命，这一局游戏结束。`;$('#deathOverlay').classList.add('show')}
@@ -1073,6 +1190,7 @@
       $('#adoptBtn').addEventListener('click',async()=>{const game=Game.adopt($('#catNameInput').value.trim());await prepareGameVisuals(game,'正在准备这只猫的六种状态，完成后互动切换会更流畅。');UI.renderHome();UI.updateContinue();UI.showScreen('homeScreen');startBackgroundAssets(game)});
       $$('.action-btn[data-action]').forEach(button=>button.addEventListener('click',()=>{const result=Game.action(button.dataset.action);if(!result){UI.toast('今天已经没有行动次数了');return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})}));
       $('#workBtn').addEventListener('click',()=>{const result=Game.work();if(!result){UI.toast('今天已经没有行动次数了');return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})});
+      $('#taskClaimBtn').addEventListener('click',()=>{const result=Game.claimDailyTask();if(result.error){UI.toast(result.error);return}UI.renderHome();UI.showEvent(result.event)});
       $$('[data-mall-item]').forEach(button=>button.addEventListener('click',()=>{const result=Game.buyFood(button.dataset.mallItem);if(result.error){UI.toast(result.error);return}UI.renderMall();UI.renderHome();UI.showEvent(result.event)}));
       $('#cleanRoomBtn').addEventListener('click',()=>{const result=Game.cleanRoom();if(result.error){UI.toast(result.error);return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})});
       $('#sleepBtn').addEventListener('click',async()=>{const result=Game.endDay();const game=Game.get();if(result.growth&&AssetManager.imagesEnabled()){UI.showAssetLoading('小猫正在长大，正在准备成年后的6种形态……');try{await AssetManager.ensureAge(game.breedKey,'adult',progress=>{$('#assetLoadingText').textContent=`正在准备成年猫 ${progress.completed}/${progress.total}`});Visual.resetCache();await Visual.preload(game)}finally{UI.hideAssetLoading()}}UI.renderHome();UI.showEventSequence(result.events,()=>{if(result.death){endGameIfDead();return}if(result.growth){UI.renderHome();UI.showGrowth(result.growth)}})});
