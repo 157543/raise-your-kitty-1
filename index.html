@@ -4,9 +4,30 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fff4e8">
-  <title>云养小猫 · 横屏游戏版 V2</title>
+  <title>云养小猫 · 横屏游戏版 V2.2</title>
+  <script>
+    (()=>{
+      const root=document.documentElement;
+      const syncGameViewport=()=>{
+        const vv=window.visualViewport;
+        const width=Math.round(vv?.width||window.innerWidth||document.documentElement.clientWidth||0);
+        const height=Math.round(vv?.height||window.innerHeight||document.documentElement.clientHeight||0);
+        if(width>0) root.style.setProperty('--game-viewport-width',`${width}px`);
+        if(height>0) root.style.setProperty('--game-viewport-height',`${height}px`);
+        const shortSide=Math.min(window.screen?.width||width,window.screen?.height||height);
+        const touchCapable=('ontouchstart' in window)||(navigator.maxTouchPoints||0)>0;
+        root.classList.toggle('phone-landscape',Boolean(touchCapable&&shortSide<=560&&width>height));
+      };
+      syncGameViewport();
+      window.addEventListener('resize',syncGameViewport,{passive:true});
+      window.addEventListener('orientationchange',()=>setTimeout(syncGameViewport,80),{passive:true});
+      window.visualViewport?.addEventListener('resize',syncGameViewport,{passive:true});
+      window.visualViewport?.addEventListener('scroll',syncGameViewport,{passive:true});
+    })();
+  </script>
   <style>
     :root{
+      --game-viewport-height:100dvh;--game-viewport-width:100vw;
       --bg:#fff8ef;--card:rgba(255,255,255,.9);--text:#3e342e;--muted:#82756c;
       --orange:#ef7f3c;--orange2:#ffb276;--line:rgba(126,91,65,.14);
       --shadow:0 18px 55px rgba(92,64,45,.14);--danger:#a84e55;
@@ -73,9 +94,9 @@
        横屏全场景游戏主界面
     ========================= */
     body.game-home-active{overflow:hidden;background:#1d1815}
-    body.game-home-active .app{width:100%;height:100svh;min-height:100svh;max-width:none;padding:0;margin:0}
+    body.game-home-active .app{width:100%;height:var(--game-viewport-height,100dvh);min-height:var(--game-viewport-height,100dvh);max-width:none;padding:0;margin:0;position:fixed;inset:0}
     body.game-home-active #homeScreen.active{display:block;width:100%;height:100%;padding:0;animation:none}
-    .game-shell{width:100%;height:100%;position:relative;overflow:hidden;background:#251d18}
+    .game-shell{width:100%;height:var(--game-viewport-height,100dvh);position:relative;overflow:hidden;background:#251d18}
     .game-scene{position:relative;width:100%;height:100%;overflow:hidden;border:0;border-radius:0;background:#211a16;aspect-ratio:auto;isolation:isolate}
     .game-scene>#roomArt{position:absolute;inset:0;z-index:0}
     .game-scene .visual-room-photo{object-position:center center}
@@ -91,7 +112,7 @@
     .game-hud-stats{min-width:0;display:grid;grid-template-columns:repeat(8,minmax(60px,1fr));gap:5px;padding:6px;border:1px solid rgba(255,255,255,.16);border-radius:23px;background:rgba(41,31,24,.72);box-shadow:0 10px 30px rgba(0,0,0,.2);backdrop-filter:blur(13px)}
     .hud-stat{min-width:0;min-height:47px;display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:6px;align-items:center;padding:5px 7px;border-radius:16px;color:#fff;background:rgba(255,255,255,.055)}
     .hud-stat-icon{grid-row:1/3;font-size:20px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))}.hud-stat-label{overflow:hidden;color:rgba(255,255,255,.84);font-size:10px;font-weight:850;white-space:nowrap;text-overflow:ellipsis}.hud-stat-value{font-size:13px;font-weight:950;white-space:nowrap}.hud-stat.warning{background:rgba(168,67,62,.28)}
-    .game-hud-tools{display:flex;gap:7px}.hud-icon-button{position:relative;width:52px;height:52px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);border-radius:19px;color:#fff;background:rgba(42,32,25,.8);box-shadow:0 10px 28px rgba(0,0,0,.22);backdrop-filter:blur(13px);font-size:23px}.hud-icon-button:active{transform:scale(.94)}
+    .game-hud-tools{display:flex;gap:7px}.mobile-more-only{display:none}.hud-icon-button{position:relative;width:52px;height:52px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.18);border-radius:19px;color:#fff;background:rgba(42,32,25,.8);box-shadow:0 10px 28px rgba(0,0,0,.22);backdrop-filter:blur(13px);font-size:23px}.hud-icon-button:active{transform:scale(.94)}
     .hud-notice-dot{position:absolute;right:4px;top:4px;width:11px;height:11px;border:2px solid rgba(42,32,25,.9);border-radius:50%;background:#ff4f5f;opacity:0;transform:scale(.5);transition:.2s}.hud-notice-dot.show{opacity:1;transform:scale(1)}
 
     .game-side-rail{position:absolute;z-index:18;left:max(14px,env(safe-area-inset-left));top:50%;display:grid;gap:9px;transform:translateY(-42%)}
@@ -109,7 +130,7 @@
     .game-action-dock .action-btn span{grid-row:1/3;margin:0;font-size:31px}.game-action-dock .action-btn strong{font-size:15px;white-space:nowrap}.game-action-dock .action-btn small{color:#796654;font-size:10px;white-space:nowrap}.game-action-dock .action-btn b{font-size:inherit}.game-action-dock .action-btn.end-day-action{background:linear-gradient(155deg,rgba(247,225,205,.96),rgba(203,166,129,.92))}.game-action-dock .action-btn:disabled{opacity:.42;transform:none}
 
     .hud-drawer-scrim{position:absolute;inset:0;z-index:29;background:rgba(16,11,8,.38);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:.22s}.hud-drawer-scrim.show{opacity:1;visibility:visible}
-    .hud-drawer{position:absolute;z-index:30;right:max(14px,env(safe-area-inset-right));top:78px;bottom:105px;width:min(390px,42vw);padding:16px;border:1px solid rgba(255,255,255,.42);border-radius:24px;color:var(--text);background:rgba(255,252,247,.95);box-shadow:0 24px 70px rgba(0,0,0,.32);backdrop-filter:blur(18px);overflow:auto;opacity:0;visibility:hidden;transform:translateX(24px) scale(.98);transition:.23s}.hud-drawer.show{opacity:1;visibility:visible;transform:none}.hud-drawer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.hud-drawer-head h3{margin:0;font-size:20px}.hud-drawer-close{width:36px;height:36px;border-radius:13px;color:#6b5b50;background:#eee5df;font-size:24px}.hud-drawer .daily-task-card{margin:0}.hud-drawer .log-list{max-height:none}.hud-drawer .small-actions{position:sticky;bottom:0;padding-top:10px;background:linear-gradient(transparent,rgba(255,252,247,.98) 28%)}
+    .hud-drawer{position:absolute;z-index:30;right:max(14px,env(safe-area-inset-right));top:78px;bottom:105px;width:min(390px,42vw);padding:16px;border:1px solid rgba(255,255,255,.42);border-radius:24px;color:var(--text);background:rgba(255,252,247,.95);box-shadow:0 24px 70px rgba(0,0,0,.32);backdrop-filter:blur(18px);overflow:auto;opacity:0;visibility:hidden;transform:translateX(24px) scale(.98);transition:.23s}.hud-drawer.show{opacity:1;visibility:visible;transform:none}.hud-drawer-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}.hud-drawer-head h3{margin:0;font-size:20px}.hud-drawer-close{width:36px;height:36px;border-radius:13px;color:#6b5b50;background:#eee5df;font-size:24px}.hud-drawer .daily-task-card{margin:0}.hud-drawer .log-list{max-height:none}.hud-drawer .small-actions{position:sticky;bottom:0;padding-top:10px;background:linear-gradient(transparent,rgba(255,252,247,.98) 28%)}.more-menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.more-menu-button{min-width:0;min-height:70px;display:flex;align-items:center;gap:10px;padding:12px;border:1px solid rgba(124,90,65,.12);border-radius:18px;color:var(--text);background:#fff8f0;text-align:left;font-weight:900}.more-menu-button span{font-size:25px}.more-menu-button strong{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.more-menu-button.danger{color:#9f3f49;background:#fff0f2}.more-menu-button:disabled{opacity:.4}
 
     /* 第二版：房间内面板、快捷喂食与即时反馈 */
     .game-overlay-screen{position:fixed!important;inset:0;z-index:75;padding:max(68px,calc(env(safe-area-inset-top) + 58px)) max(18px,env(safe-area-inset-right)) max(84px,calc(env(safe-area-inset-bottom) + 72px)) max(18px,env(safe-area-inset-left));place-items:center;background:rgba(18,12,9,.46);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);overflow:hidden}
@@ -130,18 +151,120 @@
     body.game-home-active .asset-background-status{bottom:105px}
 
     @media (orientation:portrait) and (max-width:1000px){body.game-home-active .rotate-game-prompt{display:grid}body.game-home-active .game-shell{visibility:hidden}}
-    @media (max-width:1050px),(max-height:600px){
-      .game-top-hud{gap:6px}.game-day-badge{min-height:46px;padding:0 11px;border-radius:18px}.game-day-badge span{font-size:19px}.game-day-badge strong{font-size:15px}
-      .game-hud-stats{grid-template-columns:repeat(8,minmax(39px,1fr));gap:3px;padding:4px;border-radius:17px}.hud-stat{min-height:38px;display:flex;flex-direction:column;justify-content:center;gap:0;padding:3px}.hud-stat-icon{font-size:16px}.hud-stat-label{display:none}.hud-stat-value{font-size:10px}
-      .hud-icon-button{width:42px;height:42px;border-radius:15px;font-size:19px}.game-hud-tools{gap:4px}
-      .game-side-rail{left:max(7px,env(safe-area-inset-left));gap:5px}.game-side-button{width:116px;min-height:40px;padding:6px 8px;border-radius:14px}.game-side-button span{font-size:18px}.game-side-button strong{font-size:10px}
-      .game-action-dock{bottom:max(5px,env(safe-area-inset-bottom));width:min(82vw,800px);gap:4px}.game-action-dock .action-btn{min-height:62px;padding:5px 7px;border-radius:15px;column-gap:4px}.game-action-dock .action-btn span{font-size:24px}.game-action-dock .action-btn strong{font-size:11px}.game-action-dock .action-btn small{font-size:8px}
-      .game-cat-card{left:max(8px,env(safe-area-inset-left));bottom:72px;max-width:220px;padding:6px 10px;border-radius:13px}.game-cat-card .cat-name{font-size:15px}.game-cat-card .cat-sub{font-size:8px}
-      .game-bottom-status{right:max(8px,env(safe-area-inset-right));bottom:70px;font-size:8px}.game-bottom-status span{padding:4px 7px}.game-scene .room-caption{bottom:22%;font-size:9px;padding:5px 8px}.game-scene .room-damage-label{top:57px;font-size:8px;padding:4px 7px}
-      .game-scene .visual-cat-photo{bottom:10%;width:min(35vw,350px);max-height:65%}.game-scene .visual-cat-fallback{bottom:9%;width:min(35vw,340px);height:61%}.hud-drawer{top:59px;bottom:73px;width:min(340px,55vw);padding:11px;border-radius:18px}.hud-drawer-head h3{font-size:16px}
-      body.game-home-active .asset-background-status{bottom:74px}
+
+    /* 平板与较矮桌面：仅做温和压缩，不改变完整布局 */
+    @media (max-width:1050px) and (min-height:600px){
+      .game-top-hud{gap:7px}.game-day-badge{min-height:50px;padding:0 13px;border-radius:19px}.game-day-badge span{font-size:21px}.game-day-badge strong{font-size:16px}
+      .game-hud-stats{grid-template-columns:repeat(8,minmax(43px,1fr));gap:4px;padding:5px;border-radius:18px}.hud-stat{min-height:41px;padding:4px}.hud-stat-icon{font-size:17px}.hud-stat-label{display:none}.hud-stat-value{font-size:11px}
+      .hud-icon-button{width:45px;height:45px;border-radius:16px;font-size:20px}.game-hud-tools{gap:5px}
+      .game-side-button{width:128px;min-height:45px}.game-action-dock{width:min(86vw,900px)}
     }
-    @media (min-aspect-ratio:19/9) and (max-height:520px){.game-scene .visual-cat-photo{width:min(31vw,330px)}.game-scene .visual-cat-fallback{width:min(30vw,320px)}.game-side-button{width:102px}.game-action-dock{width:min(78vw,760px)}}
+
+    /* 手机横屏：独立紧凑布局。所有区域用网格和预留空间，禁止互相覆盖。 */
+    @media (orientation:landscape) and (max-height:599px){
+      body.game-home-active{height:var(--game-viewport-height,100dvh);min-height:var(--game-viewport-height,100dvh);overscroll-behavior:none}
+      body.game-home-active .app,body.game-home-active #homeScreen.active,.game-shell,.game-scene{height:var(--game-viewport-height,100dvh);min-height:var(--game-viewport-height,100dvh)}
+      .game-top-hud{left:max(6px,env(safe-area-inset-left));right:max(6px,env(safe-area-inset-right));top:max(4px,env(safe-area-inset-top));gap:4px;grid-template-columns:auto minmax(0,1fr) auto}
+      .game-day-badge{min-height:40px;padding:0 9px;border-radius:15px;gap:5px}.game-day-badge span{font-size:16px}.game-day-badge strong{font-size:13px}
+      .game-hud-stats{grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding:3px;border-radius:15px}
+      .game-hud-stats .hud-stat:nth-child(5),.game-hud-stats .hud-stat:nth-child(6),.game-hud-stats .hud-stat:nth-child(7){display:none}
+      .hud-stat{min-width:0;min-height:34px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:1fr;gap:3px;padding:2px 4px;border-radius:11px}
+      .hud-stat-icon{grid-row:auto;font-size:14px}.hud-stat-label{display:none}.hud-stat-value{overflow:hidden;font-size:9px;text-overflow:ellipsis}
+      .game-hud-tools{gap:3px}.hud-icon-button{width:37px;height:37px;border-radius:13px;font-size:17px}
+      #logHudBtn,#hudSettingsBtn{display:none}.mobile-more-only{display:grid}
+      .game-side-rail{display:none}
+      .game-scene .room-damage-label{top:max(47px,calc(env(safe-area-inset-top) + 43px));right:max(7px,env(safe-area-inset-right));padding:3px 6px;font-size:8px}
+      .game-cat-card{left:max(7px,env(safe-area-inset-left));bottom:64px;max-width:min(33vw,190px);padding:5px 8px;border-radius:11px}.game-cat-card .cat-name{font-size:13px}.game-cat-card .cat-sub{font-size:7px}
+      .game-bottom-status{right:max(7px,env(safe-area-inset-right));bottom:62px;gap:3px;font-size:7px}.game-bottom-status span{padding:3px 6px}
+      .game-scene .room-caption{bottom:20%;max-width:34%;padding:4px 7px;border-radius:10px;font-size:8px;line-height:1.25}
+      .game-action-dock{left:max(6px,env(safe-area-inset-left));right:max(6px,env(safe-area-inset-right));bottom:max(4px,env(safe-area-inset-bottom));width:auto;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;transform:none}
+      .game-action-dock .action-btn{position:relative;min-width:0;min-height:55px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;padding:4px 3px;border-radius:13px;text-align:center;overflow:hidden}
+      .game-action-dock .action-btn span{grid-row:auto;margin:0;font-size:20px;line-height:1}.game-action-dock .action-btn strong{max-width:100%;overflow:hidden;font-size:9px;line-height:1.05;white-space:nowrap;text-overflow:ellipsis}
+      .game-action-dock .action-btn small{position:absolute;right:3px;top:3px;display:grid;place-items:center;min-width:15px;height:15px;padding:0 3px;border-radius:999px;color:#fff;background:rgba(73,55,42,.72);font-size:0;line-height:1}.game-action-dock .action-btn small b{font-size:8px}.game-action-dock .end-day-action small{display:none}
+      .game-scene .visual-cat-photo{bottom:13%;width:min(31vw,255px);max-height:59%}.game-scene .visual-cat-fallback{bottom:12%;width:min(31vw,250px);height:57%}.game-scene .visual-cat-shadow{bottom:13%;width:min(21vw,190px)}
+      .hud-drawer{left:max(6px,env(safe-area-inset-left));right:max(6px,env(safe-area-inset-right));top:max(5px,env(safe-area-inset-top));bottom:max(5px,env(safe-area-inset-bottom));width:auto;padding:11px;border-radius:16px;transform:translateY(10px) scale(.99)}.hud-drawer.show{transform:none}.hud-drawer-head{margin-bottom:7px}.hud-drawer-head h3{font-size:15px}.hud-drawer-close{width:32px;height:32px;border-radius:11px;font-size:21px}
+      .more-menu-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.more-menu-button{min-height:55px;padding:8px;border-radius:14px;gap:7px}.more-menu-button span{font-size:20px}.more-menu-button strong{font-size:10px}
+      .game-overlay-screen{padding:max(5px,env(safe-area-inset-top)) max(5px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left));align-items:stretch}
+      .game-overlay-screen>.panel{width:100%;max-height:100%;padding:11px;border-radius:16px}.game-overlay-screen .attribute-art{display:none}.game-overlay-screen .mall-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.game-overlay-screen .mall-item{min-height:120px}
+      .feed-choice{min-height:54px;padding:7px 9px;border-radius:13px}.feed-choice-emoji{font-size:22px}.feed-choice strong{font-size:12px}.feed-choice small{font-size:9px}.feed-choice-price{font-size:9px}
+      .game-feedback-layer{bottom:25%;width:min(360px,50vw);height:120px}.floating-effect{padding:5px 8px;font-size:10px}.feedback-burst{font-size:30px}
+      body.game-home-active .abandon-corner{display:none}body.game-home-active .asset-background-status{display:none}
+    }
+
+    /* 极矮窗口：进一步收紧，并主动隐藏次要文字，保证按钮绝不覆盖。 */
+    @media (orientation:landscape) and (max-height:429px){
+      .game-day-badge{min-height:35px;padding:0 7px}.game-day-badge span{display:none}.game-day-badge strong{font-size:11px}
+      .game-hud-stats{padding:2px}.hud-stat{min-height:30px}.hud-stat-icon{font-size:12px}.hud-stat-value{font-size:8px}
+      .hud-icon-button{width:33px;height:33px;border-radius:11px;font-size:15px}
+      .game-scene .room-damage-label{top:max(41px,calc(env(safe-area-inset-top) + 37px))}
+      .game-action-dock .action-btn{min-height:49px;border-radius:11px}.game-action-dock .action-btn span{font-size:18px}.game-action-dock .action-btn strong{font-size:8px}
+      .game-cat-card{bottom:57px;max-width:145px}.game-cat-card .cat-sub{display:none}.game-bottom-status{bottom:55px}.game-bottom-status #growthText{display:none}
+      .game-scene .visual-cat-photo{bottom:14%;width:min(29vw,225px);max-height:56%}.game-scene .visual-cat-fallback{bottom:13%;width:min(29vw,220px);height:54%}
+      .game-scene .room-caption{bottom:19%;font-size:7px}.more-menu-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+
+
+    /* iPhone/Android 内置浏览器有时会把横屏页面伪装成平板宽度。
+       通过 JS 识别真实手机短边，强制启用紧凑手机布局。 */
+    html.phone-landscape body.game-home-active{height:var(--game-viewport-height,100dvh);min-height:var(--game-viewport-height,100dvh);overscroll-behavior:none}
+    html.phone-landscape body.game-home-active .app,html.phone-landscape body.game-home-active #homeScreen.active,html.phone-landscape .game-shell,html.phone-landscape .game-scene{height:var(--game-viewport-height,100dvh);min-height:var(--game-viewport-height,100dvh)}
+    html.phone-landscape .game-top-hud{left:max(6px,env(safe-area-inset-left));right:max(6px,env(safe-area-inset-right));top:max(4px,env(safe-area-inset-top));gap:4px;grid-template-columns:auto minmax(0,1fr) auto}
+    html.phone-landscape .game-day-badge{min-height:35px;padding:0 7px;border-radius:13px;gap:4px}
+    html.phone-landscape .game-day-badge span{display:none}
+    html.phone-landscape .game-day-badge strong{font-size:11px}
+    html.phone-landscape .game-hud-stats{grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;padding:2px;border-radius:14px}
+    html.phone-landscape .game-hud-stats .hud-stat:nth-child(5),html.phone-landscape .game-hud-stats .hud-stat:nth-child(6),html.phone-landscape .game-hud-stats .hud-stat:nth-child(7){display:none}
+    html.phone-landscape .hud-stat{min-width:0;min-height:30px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:1fr;gap:2px;padding:2px 3px;border-radius:10px}
+    html.phone-landscape .hud-stat-icon{grid-row:auto;font-size:12px}
+    html.phone-landscape .hud-stat-label{display:none}
+    html.phone-landscape .hud-stat-value{overflow:hidden;font-size:8px;text-overflow:ellipsis}
+    html.phone-landscape .game-hud-tools{gap:3px}
+    html.phone-landscape .hud-icon-button{width:33px;height:33px;border-radius:11px;font-size:15px}
+    html.phone-landscape #logHudBtn,html.phone-landscape #hudSettingsBtn{display:none}
+    html.phone-landscape .mobile-more-only{display:grid}
+    html.phone-landscape .game-side-rail{display:none}
+    html.phone-landscape .game-scene .room-damage-label{top:max(41px,calc(env(safe-area-inset-top) + 37px));right:max(7px,env(safe-area-inset-right));padding:3px 6px;font-size:8px}
+    html.phone-landscape .game-cat-card{left:max(7px,env(safe-area-inset-left));bottom:57px;max-width:145px;padding:5px 8px;border-radius:11px}
+    html.phone-landscape .game-cat-card .cat-name{font-size:13px}
+    html.phone-landscape .game-cat-card .cat-sub{display:none}
+    html.phone-landscape .game-bottom-status{right:max(7px,env(safe-area-inset-right));bottom:55px;gap:3px;font-size:7px}
+    html.phone-landscape .game-bottom-status span{padding:3px 6px}
+    html.phone-landscape .game-bottom-status #growthText{display:none}
+    html.phone-landscape .game-scene .room-caption{bottom:19%;max-width:34%;padding:4px 7px;border-radius:10px;font-size:7px;line-height:1.2}
+    html.phone-landscape .game-action-dock{left:max(6px,env(safe-area-inset-left));right:max(6px,env(safe-area-inset-right));bottom:max(4px,env(safe-area-inset-bottom));width:auto;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px;transform:none}
+    html.phone-landscape .game-action-dock .action-btn{position:relative;min-width:0;min-height:49px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;padding:3px;border-radius:11px;text-align:center;overflow:hidden}
+    html.phone-landscape .game-action-dock .action-btn span{grid-row:auto;margin:0;font-size:18px;line-height:1}
+    html.phone-landscape .game-action-dock .action-btn strong{max-width:100%;overflow:hidden;font-size:8px;line-height:1.05;white-space:nowrap;text-overflow:ellipsis}
+    html.phone-landscape .game-action-dock .action-btn small{position:absolute;right:3px;top:3px;display:grid;place-items:center;min-width:15px;height:15px;padding:0 3px;border-radius:999px;color:#fff;background:rgba(73,55,42,.72);font-size:0;line-height:1}
+    html.phone-landscape .game-action-dock .action-btn small b{font-size:8px}
+    html.phone-landscape .game-action-dock .end-day-action small{display:none}
+    html.phone-landscape .game-scene .visual-cat-photo{bottom:14%;width:min(29vw,225px);max-height:56%}
+    html.phone-landscape .game-scene .visual-cat-fallback{bottom:13%;width:min(29vw,220px);height:54%}
+    html.phone-landscape .game-scene .visual-cat-shadow{bottom:13%;width:min(20vw,170px)}
+    html.phone-landscape .hud-drawer{left:max(6px,env(safe-area-inset-left));right:max(6px,env(safe-area-inset-right));top:max(5px,env(safe-area-inset-top));bottom:max(5px,env(safe-area-inset-bottom));width:auto;padding:11px;border-radius:16px;transform:translateY(10px) scale(.99)}
+    html.phone-landscape .hud-drawer.show{transform:none}
+    html.phone-landscape .hud-drawer-head{margin-bottom:7px}
+    html.phone-landscape .hud-drawer-head h3{font-size:15px}
+    html.phone-landscape .hud-drawer-close{width:32px;height:32px;border-radius:11px;font-size:21px}
+    html.phone-landscape .more-menu-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+    html.phone-landscape .more-menu-button{min-height:55px;padding:8px;border-radius:14px;gap:7px}
+    html.phone-landscape .more-menu-button span{font-size:20px}
+    html.phone-landscape .more-menu-button strong{font-size:10px}
+    html.phone-landscape .game-overlay-screen{padding:max(5px,env(safe-area-inset-top)) max(5px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left));align-items:stretch;height:var(--game-viewport-height,100dvh)}
+    html.phone-landscape .game-overlay-screen>.panel{width:100%;max-height:100%;padding:11px;border-radius:16px}
+    html.phone-landscape .game-overlay-screen .attribute-art{display:none}
+    html.phone-landscape .game-overlay-screen .mall-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+    html.phone-landscape .game-overlay-screen .mall-item{min-height:120px}
+    html.phone-landscape .feed-choice{min-height:54px;padding:7px 9px;border-radius:13px}
+    html.phone-landscape .feed-choice-emoji{font-size:22px}
+    html.phone-landscape .feed-choice strong{font-size:12px}
+    html.phone-landscape .feed-choice small,html.phone-landscape .feed-choice-price{font-size:9px}
+    html.phone-landscape .game-feedback-layer{bottom:25%;width:min(360px,50vw);height:120px}
+    html.phone-landscape .floating-effect{padding:5px 8px;font-size:10px}
+    html.phone-landscape .feedback-burst{font-size:30px}
+    html.phone-landscape body.game-home-active .abandon-corner,html.phone-landscape body.game-home-active .asset-background-status{display:none}
+
+    @media (min-aspect-ratio:21/9) and (max-height:599px){.game-scene .visual-cat-photo{width:min(27vw,245px)}.game-scene .visual-cat-fallback{width:min(27vw,240px)}}
 
   </style>
 </head>
@@ -191,6 +314,7 @@
               <button class="hud-icon-button" id="logHudBtn" aria-label="猫咪日记">📖</button>
               <button class="hud-icon-button" id="mallBtn" aria-label="商场">🛒</button>
               <button class="hud-icon-button" id="hudSettingsBtn" aria-label="设置">⚙️</button>
+              <button class="hud-icon-button mobile-more-only" id="moreHudBtn" aria-label="更多功能">☰</button>
             </div>
           </header>
 
@@ -240,6 +364,17 @@
               <button class="feed-choice" id="feedNormalBtn"><span class="feed-choice-emoji">🥣</span><strong>普通喂食</strong><small>消耗1次行动，效果会受到猫咪性格影响</small><span class="feed-choice-price">1次行动</span></button>
               <button class="feed-choice" data-mall-item="catStrip"><span class="feed-choice-emoji">🍗</span><strong>猫条</strong><small>饱腹 +20 · 亲密 +2，不消耗行动</small><span class="feed-choice-price">5金币</span></button>
               <button class="feed-choice" data-mall-item="can"><span class="feed-choice-emoji">🥫</span><strong>猫罐头</strong><small>饱腹 +50 · 亲密 +5，不消耗行动</small><span class="feed-choice-price">10金币</span></button>
+            </div>
+          </aside>
+          <aside class="hud-drawer" id="moreDrawer" aria-hidden="true">
+            <div class="hud-drawer-head"><h3>☰ 更多功能</h3><button class="hud-drawer-close" data-close-drawer>×</button></div>
+            <div class="more-menu-grid">
+              <button class="more-menu-button" id="moreCareBtn"><span>🩺</span><strong>护理与看病</strong></button>
+              <button class="more-menu-button" id="moreAttributeBtn"><span>📊</span><strong>属性详情</strong></button>
+              <button class="more-menu-button" id="moreCleanBtn"><span>🧽</span><strong>打扫房间</strong></button>
+              <button class="more-menu-button" id="moreLogBtn"><span>📖</span><strong>猫咪日记</strong></button>
+              <button class="more-menu-button" id="moreSettingsBtn"><span>⚙️</span><strong>画面设置</strong></button>
+              <button class="more-menu-button danger" id="moreAbandonBtn"><span>🚪</span><strong>弃养</strong></button>
             </div>
           </aside>
         </div>
@@ -437,7 +572,7 @@
      某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
   ========================= */
   const ASSETS = Object.freeze({
-    version: "local-cache-v7-webp-20260805-landscape-v2",
+    version: "local-cache-v9-webp-20260805-landscape-v2-2-phone",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",
@@ -1215,7 +1350,7 @@
     }
     function damageLabel(d){return d<15?'房间完好':d<40?'轻微破坏':d<70?'明显破坏':'惨不忍睹'}
     function renderDailyTask(g){const task=TaskSystem.view(g),card=$('#dailyTaskCard'),button=$('#taskClaimBtn');$('#dailyTaskEmoji').textContent=task.emoji;$('#dailyTaskName').textContent=task.name;$('#dailyTaskReward').textContent=`奖励 ${task.reward}金币`;$('#dailyTaskDesc').textContent=task.desc;$('#dailyTaskProgressText').textContent=task.progressText;$('#dailyTaskStatus').textContent=task.claimed?'已领取':task.completed?'已完成':'进行中';$('#dailyTaskProgressBar').style.width=`${task.percent}%`;card.classList.toggle('claimed',task.claimed);button.disabled=!task.completed||task.claimed;button.textContent=task.claimed?'今日奖励已领取':task.completed?'领取任务奖励':'完成后领取'}
-    function renderHome(){const g=Game.get();if(!g)return;TaskSystem.ensure(g);TaskSystem.refresh(g);$('#dayChip').textContent=`第 ${g.day} 天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · ${CONFIG.personalities[g.personality].name}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careLabel').textContent=g.isSick?'小猫生病了':g.bathDue?'需要护理':'护理与看病';$('#compactStats').innerHTML=hudStats(g);renderDailyTask(g);const task=TaskSystem.view(g);$('#taskDot').classList.toggle('show',task.completed&&!task.claimed);$('#actionPointsText').textContent=`今日行动 ${g.actionsLeft}/4`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年 ${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(button=>{button.disabled=(button.id!=='sleepBtn'&&button.dataset.action!=='feed'&&g.actionsLeft<=0)});$$('.action-remaining').forEach(el=>el.textContent=g.actionsLeft);if($('#feedNormalBtn'))$('#feedNormalBtn').disabled=g.actionsLeft<=0;$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;$('#cleanRoomLabel').textContent=g.houseDamage>0?`打扫房间 -25%`:'房间很干净';$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('');renderMall();Storage.save(g)}
+    function renderHome(){const g=Game.get();if(!g)return;TaskSystem.ensure(g);TaskSystem.refresh(g);$('#dayChip').textContent=`第 ${g.day} 天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · ${CONFIG.personalities[g.personality].name}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careLabel').textContent=g.isSick?'小猫生病了':g.bathDue?'需要护理':'护理与看病';$('#compactStats').innerHTML=hudStats(g);renderDailyTask(g);const task=TaskSystem.view(g);$('#taskDot').classList.toggle('show',task.completed&&!task.claimed);$('#actionPointsText').textContent=`今日行动 ${g.actionsLeft}/4`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年 ${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(button=>{button.disabled=(button.id!=='sleepBtn'&&button.dataset.action!=='feed'&&g.actionsLeft<=0)});$$('.action-remaining').forEach(el=>el.textContent=g.actionsLeft);if($('#feedNormalBtn'))$('#feedNormalBtn').disabled=g.actionsLeft<=0;$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;if($('#moreCleanBtn'))$('#moreCleanBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;$('#cleanRoomLabel').textContent=g.houseDamage>0?`打扫房间 -25%`:'房间很干净';$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('');renderMall();Storage.save(g)}
     function roomCaption(g){if(g.isSick)return `${g.name}生病了，看起来没有精神。`;if(g.mood==='angry')return `${g.name}现在看起来不太高兴。`;if(g.mood==='sleepy')return `${g.name}困了，正准备找地方睡觉。`;if(g.mood==='happy')return `${g.name}心情很好，尾巴轻轻晃着。`;if(g.stats.hunger<25)return `${g.name}正在等你放饭。`;return `${g.name}在房间里观察你。`}
     function renderAttributes(){const g=Game.get(),p=CONFIG.personalities[g.personality];$('#attributeDay').textContent=`第${g.day}天`;$('#attributeName').textContent=`${g.name}的档案`;Visual.renderScene('#attributeArt',g);$('#attributeInfo').innerHTML=`<div class="info-box"><small>品种</small><strong>${CONFIG.breeds[g.breedKey].name}</strong></div><div class="info-box"><small>性别</small><strong>${g.sex}</strong></div><div class="info-box"><small>年龄</small><strong>${g.ageStage==='adult'?'成年猫':'幼猫'}</strong></div><div class="info-box"><small>获得方式</small><strong>${g.routeName}</strong></div><div class="info-box"><small>初始性格</small><strong>${CONFIG.personalities[g.initialPersonality].name}</strong></div><div class="info-box"><small>房屋损坏</small><strong>${Math.round(g.houseDamage)}%</strong></div>`;$('#attributeStats').innerHTML=statCards(g,['health','trust','vitality','courage','intimacy','hunger','cleanliness']);$('#attributePersonality').textContent=`当前性格：${p.name}`;$('#attributePersonalityDesc').textContent=p.desc}
     function renderCare(){const g=Game.get();if(!g)return;const cost=g.isSick?(Number.isInteger(g.treatmentCost)?g.treatmentCost:Game.becomeSick()):null;$('#careDay').textContent=`第${g.day}天`;Visual.renderScene('#careArt',g,{state:g.isSick?'sick':null});$('#bathStatus').textContent=g.bathDue?'现在需要护理':`下次第${g.nextBathDay}天`;$('#illnessStatus').textContent=g.isSick?`生病中 · 治疗${cost}金币`:'健康';$('#careActionsLeft').textContent=`${g.actionsLeft}/4`;$('#careCoins').textContent=`${g.coins}`;$('#careNotice').innerHTML=g.isSick?`<div class="sick-note">${g.name}正在生病。生病期间每天会继续损失健康，本次治疗费用为${cost}金币，请尽快看病。</div>`:`<div class="healthy-note">${g.name}目前没有生病。每天结束时有4%的概率随机生病，每次治疗费用会在100～300金币之间随机生成。</div>`;$('#bathBtn').disabled=!g.bathDue||g.actionsLeft<=0;$('#bathBtnHint').textContent=g.bathDue?'本次护理会消耗1次行动':'还没有到需要护理的时间';$('#doctorBtnHint').textContent=g.isSick?`本次治疗需要${cost}金币，并消耗1次行动`:'每次生病的治疗费在100～300金币之间随机生成';$('#doctorBtn').disabled=!g.isSick||g.actionsLeft<=0||g.coins<cost}
@@ -1366,6 +1501,13 @@
       const feedDockButton=$('.action-btn[data-action="feed"]');if(feedDockButton)feedDockButton.addEventListener('click',event=>{event.stopImmediatePropagation();UI.renderMall();toggleHudDrawer('feedDrawer')});
       $('#taskHudBtn').addEventListener('click',()=>toggleHudDrawer('taskDrawer'));
       $('#logHudBtn').addEventListener('click',()=>toggleHudDrawer('logDrawer'));
+      $('#moreHudBtn')?.addEventListener('click',()=>toggleHudDrawer('moreDrawer'));
+      $('#moreCareBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#careBtn').click()});
+      $('#moreAttributeBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#attributeBtn').click()});
+      $('#moreCleanBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#cleanRoomBtn').click()});
+      $('#moreLogBtn')?.addEventListener('click',()=>toggleHudDrawer('logDrawer'));
+      $('#moreSettingsBtn')?.addEventListener('click',()=>{closeHudDrawers();openAssetSetup()});
+      $('#moreAbandonBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#abandonBtn').click()});
       $('#hudDrawerScrim').addEventListener('click',closeHudDrawers);
       $$('[data-close-drawer]').forEach(button=>button.addEventListener('click',closeHudDrawers));
       $$('.game-overlay-screen').forEach(screen=>screen.addEventListener('click',event=>{if(event.target===screen){UI.renderHome();UI.showScreen('homeScreen')}}));
