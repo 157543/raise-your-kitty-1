@@ -79,7 +79,7 @@
         <button class="route-card" data-route="mother"><span class="route-icon">🐈</span><span class="route-name">猫妈妈送来</span><span class="route-desc">持续投喂猫妈妈后，它把一只小猫带到了你面前。</span></button>
         <button class="route-card" data-route="rain"><span class="route-icon">🌧️</span><span class="route-name">雨天救助</span><span class="route-desc">纸箱里的小猫可能很乖，也可能非常不好惹。</span></button>
         <button class="route-card" data-route="friend"><span class="route-icon">🎁</span><span class="route-name">朋友家的幼猫</span><span class="route-desc">朋友家的猫生了一窝宝宝，你可以带走其中一只。</span></button>
-        <button class="route-card" data-route="shop"><span class="route-icon">🛍️</span><span class="route-name">宠物店购买</span><span class="route-desc">幼年只有灵珠或魔丸，成年仍可能成为耄耋。</span></button>
+        <button class="route-card" data-route="shop"><span class="route-icon">🛍️</span><span class="route-name">宠物店购买</span><span class="route-desc">幼年只有灵珠或魔丸；美短银虎斑为宠物店限定，并且100%是灵珠。</span></button>
         <button class="route-card" data-route="mystery"><span class="route-icon">✨</span><span class="route-name">神秘事件</span><span class="route-desc">来历不明，三种性格完全等概率。</span></button>
       </div>
     </section>
@@ -207,7 +207,7 @@
     assets/rooms/room-destroyed.webp
     assets/cats/<品种>/<kitten或adult>/<状态>.webp
 
-    品种键：orange tabby tuxedo white black calico silver
+    品种键：orange tabby tuxedo white black calico silver americanSilver
     状态键：idle happy sleepy angry sick mischievous
 
     每个年龄阶段有6种状态。图片尚未上传或选择无图片模式时，系统使用内置矢量画面。
@@ -224,11 +224,12 @@
     const breeds = {
       orange:{name:"橘白田园猫",imageReady:true,base:"#d98b3e",light:"#fff6e8",stripe:"#9a5526"},
       tabby:{name:"狸花猫",imageReady:true,base:"#77685b",light:"#e8ded2",stripe:"#3f3832"},
-      tuxedo:{name:"奶牛猫",imageReady:false,base:"#242528",light:"#fffdf7",stripe:"#111214"},
+      tuxedo:{name:"奶牛猫",imageReady:true,base:"#242528",light:"#fffdf7",stripe:"#111214"},
       white:{name:"纯白田园猫",imageReady:false,base:"#f8f5ee",light:"#ffffff",stripe:"#d8d4ca"},
-      black:{name:"纯黑田园猫",imageReady:false,base:"#25262a",light:"#4b4d52",stripe:"#111216"},
+      black:{name:"纯黑田园猫",imageReady:true,base:"#25262a",light:"#4b4d52",stripe:"#111216"},
       calico:{name:"三花猫",imageReady:false,base:"#fff5e8",light:"#ffffff",stripe:"#29282a",patch:"#d67a32"},
-      silver:{name:"银渐层",imageReady:false,base:"#c9cbd0",light:"#f7f7f7",stripe:"#74777d"}
+      silver:{name:"银渐层",imageReady:false,base:"#c9cbd0",light:"#f7f7f7",stripe:"#74777d"},
+      americanSilver:{name:"美短银虎斑",imageReady:false,shopOnly:true,forcedPersonality:"spirit",base:"#c8cbd0",light:"#f8f8f6",stripe:"#60656c"}
     };
     const routes = {
       shelterKitten:{name:"救助站幼猫",ageStage:"kitten",initial:{spirit:45,demon:45,chaos:10},growth:{spirit:45,demon:45,chaos:10},story:"救助站工作人员把一只幼猫轻轻放到你面前。它的性格还没有完全定型，却一直偷偷观察着你。",base:{health:80,trust:38,vitality:72,courage:40,intimacy:28,hunger:72,cleanliness:76}},
@@ -262,7 +263,7 @@
      某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
   ========================= */
   const ASSETS = Object.freeze({
-    version: "local-cache-v2-webp-20260805-pet-shop-scene",
+    version: "local-cache-v4-webp-20260805-american-silver",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",
@@ -450,7 +451,7 @@
   ========================= */
   const Art = (() => {
     function eyes(mood){if(mood==="sleepy")return `<path d="M-17 0 q7 6 14 0 M8 0 q7 6 14 0" fill="none" stroke="#2e2724" stroke-width="3" stroke-linecap="round"/>`;if(mood==="angry")return `<path d="M-22 -5 l15 5 M23 -5 l-15 5" stroke="#2e2724" stroke-width="3"/><ellipse cx="-13" cy="4" rx="4" ry="7" fill="#252323"/><ellipse cx="14" cy="4" rx="4" ry="7" fill="#252323"/>`;return `<ellipse cx="-14" cy="2" rx="${mood==="happy"?6:5}" ry="${mood==="happy"?8:7}" fill="#252323"/><ellipse cx="14" cy="2" rx="${mood==="happy"?6:5}" ry="${mood==="happy"?8:7}" fill="#252323"/><circle cx="-12" cy="0" r="1.5" fill="white"/><circle cx="16" cy="0" r="1.5" fill="white"/>`}
-    function pattern(breed){const c=CONFIG.breeds[breed];if(breed==="calico")return `<path d="M-34 -9 q18-16 30-2 q-7 13-21 18z" fill="${c.patch}"/><path d="M7 -19 q20 0 26 16 q-12 6-27 0z" fill="#343236"/>`;if(["orange","tabby","silver"].includes(breed))return `<path d="M-22 -26 l6 15 M-5 -30 l3 17 M15 -27 l-5 15" stroke="${c.stripe}" stroke-width="4" stroke-linecap="round" opacity=".85"/>`;if(breed==="tuxedo")return `<path d="M-22 -7 q22-14 43 0 q-4 26-21 31 q-17-5-22-31" fill="${c.light}"/>`;if(breed==="white")return `<path d="M-7 -31 q12 1 19 9" stroke="${c.stripe}" stroke-width="3" opacity=".5"/>`;return ""}
+    function pattern(breed){const c=CONFIG.breeds[breed];if(breed==="calico")return `<path d="M-34 -9 q18-16 30-2 q-7 13-21 18z" fill="${c.patch}"/><path d="M7 -19 q20 0 26 16 q-12 6-27 0z" fill="#343236"/>`;if(["orange","tabby","silver","americanSilver"].includes(breed))return `<path d="M-22 -26 l6 15 M-5 -30 l3 17 M15 -27 l-5 15" stroke="${c.stripe}" stroke-width="4" stroke-linecap="round" opacity=".85"/>`;if(breed==="tuxedo")return `<path d="M-22 -7 q22-14 43 0 q-4 26-21 31 q-17-5-22-31" fill="${c.light}"/>`;if(breed==="white")return `<path d="M-7 -31 q12 1 19 9" stroke="${c.stripe}" stroke-width="3" opacity=".5"/>`;return ""}
     function catGroup(breed,age,mood="neutral",x=0,y=0){const c=CONFIG.breeds[breed];const kitten=age==="kitten";const s=kitten?.78:1;const head=kitten?47:42;return `<g transform="translate(${x} ${y}) scale(${s})">
       <path d="M45 38 q42 2 45 45 q-2 39-47 39 q-16 0-27-7" fill="${c.base}"/>
       <path d="M80 79 q42 7 34-30" fill="none" stroke="${c.base}" stroke-width="18" stroke-linecap="round"/>
@@ -782,9 +783,13 @@
   const Game = (() => {
     let game=null,candidate=null;
     function get(){return game}function set(v){game=v}function getCandidate(){return candidate}
-    function createCandidate(routeKey,forcedPersonality=null,forcedName="",forcedBreed=null){const route=CONFIG.routes[routeKey];candidate={routeKey,routeName:route.name,ageStage:route.ageStage,personality:forcedPersonality||Utils.roll(route.initial),breedKey:forcedBreed&&CONFIG.breeds[forcedBreed]?forcedBreed:Utils.pick(Object.keys(CONFIG.breeds)),sex:Utils.pick(CONFIG.sexes),suggestedName:forcedName||Utils.pick(CONFIG.names),story:route.story,rerollable:routeKey!=="shelterAdult"};return candidate}
-    function setCandidateBreed(breedKey){if(candidate&&CONFIG.breeds[breedKey])candidate.breedKey=breedKey;return candidate}
-    function adopt(name){const c=candidate,r=CONFIG.routes[c.routeKey],stats={...r.base};if(c.personality==="spirit"){stats.trust+=8;stats.intimacy+=8}if(c.personality==="demon")stats.vitality+=8;if(c.personality==="chaos"){stats.trust-=10;stats.intimacy-=8;stats.courage+=8}Object.keys(stats).forEach(k=>stats[k]=Utils.clamp(stats[k]));game={version:2,name:name||c.suggestedName,routeKey:c.routeKey,routeName:c.routeName,breedKey:c.breedKey,sex:c.sex,ageStage:c.ageStage,personality:c.personality,initialPersonality:c.personality,personalityChanged:false,day:1,actionsLeft:4,coins:100,houseDamage:0,mood:"neutral",isSick:false,treatmentCost:null,bathDue:false,lastBathDay:null,nextBathDay:["shop","friend"].includes(c.routeKey)?10:5,stats,logs:[`第1天：${name||c.suggestedName}来到你的家。`]};Storage.save(game);return game}
+    function breedAllowedForRoute(breedKey,routeKey){const breed=CONFIG.breeds[breedKey];return !!breed&&(!breed.shopOnly||routeKey==="shop")}
+    function allowedBreedsForRoute(routeKey){return Object.keys(CONFIG.breeds).filter(key=>breedAllowedForRoute(key,routeKey))}
+    function personalityForBreed(breedKey,fallback){return CONFIG.breeds[breedKey]?.forcedPersonality||fallback}
+    function storyForBreed(routeKey,breedKey){if(routeKey==="shop"&&breedKey==="americanSilver")return "宠物店的玻璃柜里，这只美短银虎斑一看见你就主动靠近，圆圆的眼睛一直追着你的手。店员说，它从小就格外亲人。";return CONFIG.routes[routeKey].story}
+    function createCandidate(routeKey,forcedPersonality=null,forcedName="",forcedBreed=null){const route=CONFIG.routes[routeKey],allowed=allowedBreedsForRoute(routeKey),breedKey=forcedBreed&&allowed.includes(forcedBreed)?forcedBreed:Utils.pick(allowed),routePersonality=forcedPersonality||(route.initial?Utils.roll(route.initial):"spirit");candidate={routeKey,routeName:route.name,ageStage:route.ageStage,routePersonality,personality:personalityForBreed(breedKey,routePersonality),breedKey,sex:Utils.pick(CONFIG.sexes),suggestedName:forcedName||Utils.pick(CONFIG.names),story:storyForBreed(routeKey,breedKey),rerollable:routeKey!=="shelterAdult"};return candidate}
+    function setCandidateBreed(breedKey){if(candidate&&breedAllowedForRoute(breedKey,candidate.routeKey)){candidate.breedKey=breedKey;candidate.personality=personalityForBreed(breedKey,candidate.routePersonality||candidate.personality);candidate.story=storyForBreed(candidate.routeKey,breedKey)}return candidate}
+    function adopt(name){const c=candidate,r=CONFIG.routes[c.routeKey],personality=personalityForBreed(c.breedKey,c.personality),stats={...r.base};if(personality==="spirit"){stats.trust+=8;stats.intimacy+=8}if(personality==="demon")stats.vitality+=8;if(personality==="chaos"){stats.trust-=10;stats.intimacy-=8;stats.courage+=8}Object.keys(stats).forEach(k=>stats[k]=Utils.clamp(stats[k]));game={version:3,name:name||c.suggestedName,routeKey:c.routeKey,routeName:c.routeName,breedKey:c.breedKey,sex:c.sex,ageStage:c.ageStage,personality,initialPersonality:personality,personalityChanged:false,day:1,actionsLeft:4,coins:100,houseDamage:0,mood:"neutral",isSick:false,treatmentCost:null,bathDue:false,lastBathDay:null,nextBathDay:["shop","friend"].includes(c.routeKey)?10:5,stats,logs:[`第1天：${name||c.suggestedName}来到你的家。`]};Storage.save(game);return game}
     function rollTreatmentCost(){return Math.floor(Math.random()*201)+100}
     function becomeSick(){if(!game)return null;game.isSick=true;if(!Number.isInteger(game.treatmentCost)||game.treatmentCost<100||game.treatmentCost>300)game.treatmentCost=rollTreatmentCost();return game.treatmentCost}
     function maxFor(key){if(game.personality==="chaos"&&key==="trust")return 45;if(game.personality==="chaos"&&key==="intimacy")return 35;return 100}
@@ -792,7 +797,7 @@
     function apply(effects){Object.entries(effects||{}).forEach(([k,v])=>change(k,v))}
     function log(text){game.logs.unshift(`第${game.day}天：${text}`);game.logs=game.logs.slice(0,40)}
     function isDead(){return !!game&&game.stats.health<=0}
-    function action(actionKey){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=EventSystem.getAction(game.personality,actionKey);apply(event.effects);game.mood=event.effects.health<0||event.effects.trust<0?"angry":actionKey==="play"?"happy":actionKey==="feed"?"happy":"neutral";log(event.body);Storage.save(game);return {event,death:isDead()}}
+    function action(actionKey){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=game.breedKey==="americanSilver"&&game.stats.hunger<70&&actionKey==="pet"?{emoji:"🐱",title:"一看见你就开始撒娇",body:`${game.name}一看见你就喵喵叫，还主动抬起头去蹭你的手。它越蹭越起劲，前爪都快离开地面，像是马上就要站起来抱住你。`,effects:{trust:2,intimacy:4},visual:{catState:"happy"}}:EventSystem.getAction(game.personality,actionKey);apply(event.effects);game.mood=event.visual?.catState||((event.effects.health<0||event.effects.trust<0)?"angry":actionKey==="play"||actionKey==="feed"?"happy":"neutral");log(event.body);Storage.save(game);return {event,death:isDead()}}
     function work(){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=Economy.work(game.personality,game.name);apply(event.effects);game.mood=event.effects.damage?"angry":"neutral";log(event.body);Storage.save(game);return {event,death:isDead()}}
     function cleanRoom(){
       if(!game)return {error:"没有小猫"};
@@ -824,8 +829,8 @@
       let growth=null;if(game.ageStage==="kitten"&&!game.personalityChanged&&game.day>=7)growth=grow();
       Storage.save(game);return {events,growth,death:isDead()}
     }
-    function grow(){const old=game.personality;const next=Utils.roll(CONFIG.routes[game.routeKey].growth);game.ageStage="adult";game.personality=next;game.personalityChanged=true;game.mood=next==="chaos"?"angry":"neutral";const story=next==="spirit"?`${game.name}长大后安静了许多，开始每天主动趴在你身边。`:next==="demon"?`你发现家里的杯子总会莫名其妙掉到地上。监控里的${game.name}每次推完都会若无其事地走开。`:`${game.name}静静看着你。下一秒，它突然给了你一爪，随后转身抓坏了新沙发。`;log(`${game.name}成年了，性格从“${CONFIG.personalities[old].name}”定型为“${CONFIG.personalities[next].name}”。`);return {old,next,story}}
-    return {get,set,getCandidate,createCandidate,setCandidateBreed,adopt,maxFor,change,apply,log,isDead,action,work,cleanRoom,endDay,becomeSick};
+    function grow(){const old=game.personality;const next=personalityForBreed(game.breedKey,Utils.roll(CONFIG.routes[game.routeKey].growth));game.ageStage="adult";game.personality=next;game.personalityChanged=true;game.mood=next==="chaos"?"angry":"neutral";const story=next==="spirit"?`${game.name}长大后安静了许多，开始每天主动趴在你身边。`:next==="demon"?`你发现家里的杯子总会莫名其妙掉到地上。监控里的${game.name}每次推完都会若无其事地走开。`:`${game.name}静静看着你。下一秒，它突然给了你一爪，随后转身抓坏了新沙发。`;log(`${game.name}成年了，性格从“${CONFIG.personalities[old].name}”定型为“${CONFIG.personalities[next].name}”。`);return {old,next,story}}
+    return {get,set,getCandidate,createCandidate,setCandidateBreed,breedAllowedForRoute,allowedBreedsForRoute,adopt,maxFor,change,apply,log,isDead,action,work,cleanRoom,endDay,becomeSick};
   })();
 
   /* =========================
@@ -883,7 +888,7 @@
     function updateBackgroundStatus(progress,finished=false){const box=$("#assetBackgroundStatus");if(!box)return;if(finished){box.textContent=progress?.failed?.length?`⚠️ 有${progress.failed.length}张图片未成功，下次进入会继续尝试`:`✅ 其他可用品种已保存到本机`;box.classList.add("show","done");setTimeout(()=>box.classList.remove("show"),3200);return}box.classList.remove("done");box.classList.add("show");box.textContent=`🐾 后台准备其他猫咪 ${progress.completed}/${progress.total}`}
 
     function showScreen(id){$$('.screen').forEach(s=>s.classList.toggle('active',s.id===id));const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&['homeScreen','attributeScreen','careScreen'].includes(id));window.scrollTo({top:0,behavior:'smooth'})}
-    function renderCandidate(){const c=Game.getCandidate();Visual.preload(c);Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=CONFIG.breeds[c.breedKey].name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;const select=$('#candidateBreedSelect');select.innerHTML=Object.entries(CONFIG.breeds).map(([key,breed])=>`<option value="${key}" ${key===c.breedKey?'selected':''}>${breed.name}${breed.imageReady?'':'（图片开发中）'}</option>`).join('');$('#candidateBreedHint').textContent=CONFIG.breeds[c.breedKey].imageReady?'这个品种已有 WebP 图片；如果尚未缓存，系统会在领养前自动准备。':'该品种 WebP 图片仍在开发中，目前会使用内置轻量画面。';$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none'}
+    function renderCandidate(){const c=Game.getCandidate(),breed=CONFIG.breeds[c.breedKey];Visual.preload(c);Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=breed.name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${breed.forcedPersonality?'品种固定性格':c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;const select=$('#candidateBreedSelect'),allowed=Game.allowedBreedsForRoute(c.routeKey);select.innerHTML=allowed.map(key=>{const item=CONFIG.breeds[key];return `<option value="${key}" ${key===c.breedKey?'selected':''}>${item.name}${item.shopOnly?'（宠物店限定）':''}${item.imageReady?'':'（图片开发中）'}</option>`}).join('');if(breed.shopOnly)$('#candidateBreedHint').textContent='美短银虎斑仅可在宠物店获得，性格100%固定为灵珠。当前图片尚未完成时会使用内置轻量画面。';else $('#candidateBreedHint').textContent=breed.imageReady?'这个品种已有 WebP 图片；如果尚未缓存，系统会在领养前自动准备。':'该品种 WebP 图片仍在开发中，目前会使用内置轻量画面。';$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none'}
     function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥣 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
     function damageLabel(d){return d<15?'房间完好':d<40?'轻微破坏':d<70?'明显破坏':'惨不忍睹'}
     function renderHome(){const g=Game.get();if(!g)return;$('#dayChip').textContent=`第${g.day}天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · 来源：${g.routeName}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careBtn').textContent=g.isSick?'🏥 小猫生病了':g.bathDue?'🛁 需要护理':'🛁 护理与看病';$('#compactStats').innerHTML=statCards(g,['health','hunger','cleanliness','intimacy']);$('#actionPointsText').textContent=`今日行动：${g.actionsLeft}/4 · 金币：${g.coins}`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年：${Math.max(0,7-g.day)}天`;$$('.action-btn').forEach(b=>b.disabled=g.actionsLeft<=0);$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('')}
