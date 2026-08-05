@@ -262,13 +262,16 @@
      某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
   ========================= */
   const ASSETS = Object.freeze({
-    version: "local-cache-v2-webp-20260805-breed-switch",
+    version: "local-cache-v2-webp-20260805-pet-shop-scene",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",
       light: "assets/rooms/room-light-damage.webp",
       heavy: "assets/rooms/room-heavy-damage.webp",
       destroyed: "assets/rooms/room-destroyed.webp"
+    },
+    routeScenes: {
+      shop: "assets/rooms/pet-shop.webp"
     },
     effects: {
       windowLight: "assets/effects/window-light.webp"
@@ -396,7 +399,7 @@
     }
 
     function catPaths(breed,age){return ASSETS.catStates.map(state=>`assets/cats/${breed}/${age}/${state}.webp`)}
-    function scenePaths(){return Object.values(ASSETS.rooms)}
+    function scenePaths(){return [...Object.values(ASSETS.rooms),...Object.values(ASSETS.routeScenes||{})]}
     function initialPack(breed){return [...scenePaths(),...catPaths(breed,"kitten")]}
     function gamePack(game){return [...scenePaths(),...catPaths(game.breedKey,game.ageStage||"kitten")]}
     function breedPack(breed){return [...catPaths(breed,"kitten"),...catPaths(breed,"adult")]}
@@ -494,7 +497,12 @@
 
     function roomLevel(damage=0){if(damage<15)return "clean";if(damage<40)return "light";if(damage<70)return "heavy";return "destroyed"}
     function stateFor(game,override=null){if(override)return override;if(game.isSick)return "sick";if(game.mood==="angry")return "angry";if(game.mood==="sleepy")return "sleepy";if(game.mood==="happy")return "happy";if(game.personality==="demon"&&game.houseDamage>=15)return "mischievous";return "idle"}
-    function roomPath(game){return ASSETS.rooms[roomLevel(game.houseDamage||0)]}
+    function roomPath(game){
+      /* 开局通过“宠物店购买”查看候选猫时，使用宠物店专属背景；
+         领养回家后 game.day 已存在，继续使用正常房间背景。 */
+      if(game?.routeKey==="shop"&&!game?.day)return ASSETS.routeScenes.shop;
+      return ASSETS.rooms[roomLevel(game.houseDamage||0)];
+    }
     function catPath(game,stateOverride=null,ageOverride=null){const state=stateFor(game,stateOverride);const age=ageOverride||game.ageStage||"kitten";return `assets/cats/${game.breedKey||"orange"}/${age}/${state}.webp`}
 
     function decodeUrl(url,priority="auto"){
