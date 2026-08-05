@@ -38,7 +38,7 @@
     .visual-room-photo{z-index:1;object-fit:cover;opacity:0;transition:opacity .45s ease;user-select:none;pointer-events:none}.visual-room-photo.loaded{opacity:1}.visual-stage.room-loaded .visual-room-fallback{opacity:0}
     .visual-cat-shadow{position:absolute;z-index:2;left:50%;bottom:6.5%;width:25%;height:6.5%;transform:translateX(-50%);border-radius:50%;background:rgba(45,31,23,.25);filter:blur(11px);opacity:.8;pointer-events:none}
     .visual-cat-fallback{position:absolute;z-index:3;left:50%;bottom:3.8%;width:40%;height:65%;transform:translateX(-50%);transition:opacity .3s ease;pointer-events:none}.visual-cat-fallback svg{width:100%;height:100%;display:block;filter:drop-shadow(0 13px 10px rgba(54,38,29,.2))}
-    .visual-cat-photo{position:absolute;z-index:4;left:50%;bottom:4.2%;width:42%;max-height:79%;object-fit:contain;object-position:center bottom;transform:translateX(-50%);transform-origin:center bottom;opacity:0;filter:drop-shadow(0 13px 10px rgba(54,38,29,.22));transition:opacity .35s ease,transform .35s ease;user-select:none;pointer-events:none}.visual-cat-photo.loaded{opacity:1}.visual-stage.cat-loaded .visual-cat-fallback{opacity:0}
+    .visual-cat-photo{position:absolute;z-index:4;left:50%;bottom:4.2%;width:42%;max-height:79%;object-fit:contain;object-position:center bottom;transform:translateX(-50%);transform-origin:center bottom;opacity:0;filter:drop-shadow(0 13px 10px rgba(54,38,29,.22));transition:opacity .35s ease,transform .35s ease;user-select:none;pointer-events:none}.visual-cat-photo.loaded{opacity:1}.visual-stage.cat-loaded .visual-cat-fallback{opacity:0!important;visibility:hidden;animation:none!important}
     .visual-light{z-index:5;pointer-events:none;background:linear-gradient(125deg,rgba(255,238,201,.22),transparent 46%,rgba(50,31,20,.08));mix-blend-mode:screen}.visual-vignette{z-index:6;pointer-events:none;box-shadow:inset 0 0 80px rgba(55,34,22,.13)}
     .visual-stage.state-idle .visual-cat-photo,.visual-stage.state-idle .visual-cat-fallback{animation:catBreathing 3.4s ease-in-out infinite}
     .visual-stage.state-happy .visual-cat-photo,.visual-stage.state-happy .visual-cat-fallback{animation:catHappy 1.55s ease-in-out infinite}
@@ -225,7 +225,7 @@
       orange:{name:"橘白田园猫",imageReady:true,base:"#d98b3e",light:"#fff6e8",stripe:"#9a5526"},
       tabby:{name:"狸花猫",imageReady:true,base:"#77685b",light:"#e8ded2",stripe:"#3f3832"},
       tuxedo:{name:"奶牛猫",imageReady:true,base:"#242528",light:"#fffdf7",stripe:"#111214"},
-      white:{name:"纯白田园猫",imageReady:false,base:"#f8f5ee",light:"#ffffff",stripe:"#d8d4ca"},
+      white:{name:"纯白田园猫",imageReady:true,base:"#f8f5ee",light:"#ffffff",stripe:"#d8d4ca"},
       black:{name:"纯黑田园猫",imageReady:true,base:"#25262a",light:"#4b4d52",stripe:"#111216"},
       calico:{name:"三花猫",imageReady:false,base:"#fff5e8",light:"#ffffff",stripe:"#29282a",patch:"#d67a32"},
       silver:{name:"银渐层",imageReady:false,base:"#c9cbd0",light:"#f7f7f7",stripe:"#74777d"},
@@ -263,7 +263,7 @@
      某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
   ========================= */
   const ASSETS = Object.freeze({
-    version: "local-cache-v4-webp-20260805-american-silver",
+    version: "local-cache-v4-webp-20260805-white-ready1",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",
