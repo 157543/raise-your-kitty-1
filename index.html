@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fff4e8">
-  <title>云养小猫 · 横屏游戏版 V2.2</title>
+  <title>云养小猫 · 横屏游戏版 V2.3</title>
   <script>
     (()=>{
       const root=document.documentElement;
@@ -14,6 +14,8 @@
         const height=Math.round(vv?.height||window.innerHeight||document.documentElement.clientHeight||0);
         if(width>0) root.style.setProperty('--game-viewport-width',`${width}px`);
         if(height>0) root.style.setProperty('--game-viewport-height',`${height}px`);
+        root.style.setProperty('--game-viewport-top',`${Math.round(vv?.offsetTop||0)}px`);
+        root.style.setProperty('--game-viewport-left',`${Math.round(vv?.offsetLeft||0)}px`);
         const shortSide=Math.min(window.screen?.width||width,window.screen?.height||height);
         const touchCapable=('ontouchstart' in window)||(navigator.maxTouchPoints||0)>0;
         root.classList.toggle('phone-landscape',Boolean(touchCapable&&shortSide<=560&&width>height));
@@ -265,6 +267,77 @@
     html.phone-landscape body.game-home-active .abandon-corner,html.phone-landscape body.game-home-active .asset-background-status{display:none}
 
     @media (min-aspect-ratio:21/9) and (max-height:599px){.game-scene .visual-cat-photo{width:min(27vw,245px)}.game-scene .visual-cat-fallback{width:min(27vw,240px)}}
+
+
+    /* V2.3 手机横屏：弹窗严格限制在 Safari 当前可视区域，并将事件卡改为横向双栏。 */
+    html.phone-landscape .overlay,
+    html.phone-landscape .asset-loading{
+      inset:auto;
+      top:var(--game-viewport-top,0px);
+      left:var(--game-viewport-left,0px);
+      width:var(--game-viewport-width,100vw);
+      height:var(--game-viewport-height,100dvh);
+      max-width:var(--game-viewport-width,100vw);
+      max-height:var(--game-viewport-height,100dvh);
+      padding:max(4px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));
+      overflow:auto;
+      overscroll-behavior:contain;
+    }
+    html.phone-landscape .overlay .modal-card{
+      width:min(96vw,760px);
+      max-width:100%;
+      max-height:calc(var(--game-viewport-height,100dvh) - 8px);
+      padding:10px;
+      border-radius:16px;
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+    html.phone-landscape #eventOverlay{
+      place-items:center;
+    }
+    html.phone-landscape #eventOverlay .event-card{
+      width:min(96vw,900px);
+      height:min(calc(var(--game-viewport-height,100dvh) - 8px),420px);
+      max-height:calc(var(--game-viewport-height,100dvh) - 8px);
+      display:grid;
+      grid-template-columns:minmax(0,1.45fr) minmax(190px,.75fr);
+      grid-template-rows:auto auto minmax(0,1fr) auto auto;
+      grid-template-areas:
+        "art emoji"
+        "art title"
+        "art body"
+        "art effects"
+        "art hint";
+      gap:4px 10px;
+      text-align:left;
+      overflow:hidden;
+      pointer-events:auto;
+    }
+    html.phone-landscape #eventOverlay .event-illustration{
+      grid-area:art;
+      width:100%;
+      height:100%;
+      min-height:0;
+      margin:0;
+      border-radius:12px;
+    }
+    html.phone-landscape #eventOverlay .event-illustration .visual-cat-photo{width:42%;max-height:75%;bottom:2%}
+    html.phone-landscape #eventOverlay .event-illustration .visual-cat-fallback{width:40%;height:72%;bottom:2%}
+    html.phone-landscape #eventOverlay .event-emoji{grid-area:emoji;margin:0;font-size:26px;line-height:1}
+    html.phone-landscape #eventOverlay .event-card h2{grid-area:title;margin:0;font-size:15px;line-height:1.15}
+    html.phone-landscape #eventOverlay .event-body{grid-area:body;min-height:0;overflow:auto;font-size:10px;line-height:1.4;-webkit-overflow-scrolling:touch}
+    html.phone-landscape #eventOverlay .effect-list{grid-area:effects;justify-content:flex-start;gap:4px;margin-top:2px}
+    html.phone-landscape #eventOverlay .effect-chip{padding:3px 6px;font-size:8px}
+    html.phone-landscape #eventOverlay .tap-hint{grid-area:hint;margin-top:1px;font-size:8px;text-align:right}
+    html.phone-landscape .game-overlay-screen{
+      inset:auto;
+      top:var(--game-viewport-top,0px);
+      left:var(--game-viewport-left,0px);
+      width:var(--game-viewport-width,100vw);
+      height:var(--game-viewport-height,100dvh);
+      max-width:var(--game-viewport-width,100vw);
+      max-height:var(--game-viewport-height,100dvh);
+    }
 
   </style>
 </head>
@@ -572,7 +645,7 @@
      某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
   ========================= */
   const ASSETS = Object.freeze({
-    version: "local-cache-v9-webp-20260805-landscape-v2-2-phone",
+    version: "local-cache-v10-webp-20260805-landscape-v2-3-modal-pose",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",
@@ -1324,7 +1397,7 @@
      8. 界面渲染模块
   ========================= */
   const UI = (() => {
-    const {$,$$,clamp}=Utils;let eventCloseCallback=null;
+    const {$,$$,clamp}=Utils;let eventCloseCallback=null,eventHomePose=null;
     function showAssetLoading(text="正在加载房间和猫咪素材……"){
       const overlay=$("#assetLoading");
       if(!overlay)return;
@@ -1363,11 +1436,31 @@
       const burst=document.createElement('span');burst.className='feedback-burst';burst.textContent=event.emoji||'✨';layer.appendChild(burst);setTimeout(()=>burst.remove(),1250);
       entries.forEach(([key,value],index)=>{const meta=labels[key]||['✨',key],chip=document.createElement('span');chip.className=`floating-effect ${value>0?'positive':'negative'} ${key==='coins'?'coin':''}`;chip.style.setProperty('--drift',`${(index-(entries.length-1)/2)*34}px`);chip.style.animationDelay=`${index*90}ms`;chip.innerHTML=`<span>${meta[0]}</span><span>${meta[1]} ${value>0?'+':''}${value}</span>`;layer.appendChild(chip);setTimeout(()=>chip.remove(),1900);const hud=$(`[data-stat-key="${key}"]`);if(hud){hud.classList.remove('hud-pop');void hud.offsetWidth;hud.classList.add('hud-pop');setTimeout(()=>hud.classList.remove('hud-pop'),600)}});
     }
-    function scheduleMoodReset(){const token=++moodResetToken;setTimeout(()=>{if(token!==moodResetToken)return;const g=Game.get();if(!g)return;g.mood='neutral';Storage.save(g);if(document.body.classList.contains('game-home-active')){Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g)}},2700)}
-    function showEvent(event,after=null){$('#eventIllustration').replaceChildren();Visual.renderEvent('#eventIllustration',event);$('#eventEmoji').textContent=event.emoji;$('#eventTitle').textContent=event.title;$('#eventBody').textContent=event.body;$('#effectList').innerHTML=Utils.effectText(event.effects).map(t=>`<span class="effect-chip">${t}</span>`).join('');animateEffects(event);scheduleMoodReset();eventCloseCallback=after;$('#eventOverlay').classList.add('show')}
+    function scheduleMoodReset(){const token=++moodResetToken;setTimeout(()=>{if(token!==moodResetToken)return;const g=Game.get();if(!g)return;g.mood='neutral';Storage.save(g);if(document.body.classList.contains('game-home-active')){Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g)}},3700)}
+    function showEvent(event,after=null){
+      const g=Game.get();
+      eventHomePose=event.visual?.catState||null;
+      if(g&&document.body.classList.contains('game-home-active')){
+        Visual.renderScene('#roomArt',g,{state:eventHomePose});
+        $('#roomCaption').textContent=roomCaption(g);
+      }
+      $('#eventIllustration').replaceChildren();Visual.renderEvent('#eventIllustration',event);$('#eventEmoji').textContent=event.emoji;$('#eventTitle').textContent=event.title;$('#eventBody').textContent=event.body;$('#effectList').innerHTML=Utils.effectText(event.effects).map(t=>`<span class="effect-chip">${t}</span>`).join('');animateEffects(event);eventCloseCallback=after;$('#eventOverlay').classList.add('show')
+    }
     function showEventSequence(events,after=null){const queue=[...(events||[])];const next=()=>{if(!queue.length){if(after)after();return}showEvent(queue.shift(),next)};next()}
     function showDeath(name){$('#deathTitle').textContent=`${name}离开了`;$('#deathText').textContent=`${name}的健康降到了0。你没能及时挽回它的生命，这一局游戏结束。`;$('#deathOverlay').classList.add('show')}
-    function closeEvent(){if(!$('#eventOverlay').classList.contains('show'))return;$('#eventOverlay').classList.remove('show');const cb=eventCloseCallback;eventCloseCallback=null;if(cb)cb()}
+    function closeEvent(){
+      if(!$('#eventOverlay').classList.contains('show'))return;
+      $('#eventOverlay').classList.remove('show');
+      const cb=eventCloseCallback,pose=eventHomePose;eventCloseCallback=null;eventHomePose=null;
+      if(cb)cb();
+      requestAnimationFrame(()=>{
+        if($('#eventOverlay').classList.contains('show'))return;
+        const g=Game.get();if(!g||!document.body.classList.contains('game-home-active'))return;
+        Visual.renderScene('#roomArt',g,{state:pose});
+        $('#roomCaption').textContent=roomCaption(g);
+        scheduleMoodReset();
+      })
+    }
     function showGrowth(growth){$('#growthEmoji').textContent=growth.next==='spirit'?'💗':growth.next==='demon'?'😼':'🌫️';$('#growthBody').textContent=`${growth.story} 成年性格：${CONFIG.personalities[growth.next].name}`;$('#growthOverlay').classList.add('show')}
     function updateContinue(){const g=Storage.load();$('#continueBox').classList.toggle('show',!!g);if(g){$('#continueTitle').textContent=`${g.name}正在等你回来`;$('#continueText').textContent=`第${g.day}天 · ${g.ageStage==='adult'?'成年猫':'幼猫'} · ${CONFIG.breeds[g.breedKey].name}`}}
     function toast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),1700)}
