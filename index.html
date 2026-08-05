@@ -26,7 +26,7 @@
     .primary,.secondary{min-height:52px;padding:12px 16px;border-radius:17px;font-weight:900}.primary{color:#fff;background:linear-gradient(135deg,var(--orange2),var(--orange));box-shadow:0 12px 26px rgba(231,111,49,.26)}.secondary{color:#675b53;background:#f3ece7}
     .back-link{display:inline-flex;align-items:center;gap:7px;margin-bottom:14px;padding:8px 11px;border-radius:13px;color:#6d6159;background:#f4ede8;font-weight:850}.choice-list{display:grid;gap:12px;margin-top:18px}.adult-card{width:100%;min-height:116px}.adult-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px;font-weight:900}.personality-tag{padding:6px 10px;border-radius:999px;font-size:12px;font-weight:900}.spirit{color:#2d7b50;background:#dcf5e6}.demon{color:#ad5a1f;background:#ffead3}.chaos{color:#94333f;background:#ffe0e4}
     .candidate{text-align:center}.candidate-art{height:245px;margin:8px 0 16px;border-radius:24px;overflow:hidden;background:#fff5e6}.candidate-art svg{width:100%;height:100%;display:block}.origin-story{margin:14px 0;padding:14px;border-radius:18px;color:#665a52;background:#fff4e8;line-height:1.65;text-align:left}.candidate-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:16px 0;text-align:left}.meta-box{padding:12px;border-radius:16px;background:#f8f2ed}.meta-box small{display:block;margin-bottom:4px;color:#9a8d83;font-weight:800}.name-input{width:100%;min-height:56px;padding:0 16px;border:1.5px solid var(--line);border-radius:17px;outline:none;background:#fff;font-size:17px}.name-input:focus{border-color:rgba(233,119,49,.55);box-shadow:0 0 0 4px rgba(255,155,88,.12)}
-    .home-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.home-top h2{margin:0;font-size:23px}.top-buttons{display:flex;gap:8px;align-items:center}.day-chip,.tiny-btn{padding:8px 11px;border-radius:999px;font-size:12px;font-weight:900}.day-chip{color:#9c551f;background:#fff0dd}.tiny-btn{color:#665a52;background:rgba(255,255,255,.84);box-shadow:0 8px 22px rgba(93,66,47,.09)}
+    .home-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.home-top h2{margin:0;font-size:23px}.top-buttons{display:flex;gap:8px;align-items:center;justify-content:flex-end;flex-wrap:wrap}.day-chip,.tiny-btn{padding:8px 11px;border-radius:999px;font-size:12px;font-weight:900}.day-chip{color:#9c551f;background:#fff0dd}.tiny-btn{color:#665a52;background:rgba(255,255,255,.84);box-shadow:0 8px 22px rgba(93,66,47,.09)}
     .home-card{padding:16px}.room-frame{position:relative;overflow:hidden;border-radius:24px;background:#f5e8d6;aspect-ratio:16/10}#roomArt{position:absolute;inset:0}.room-frame svg{width:100%;height:100%;display:block}.room-caption{position:absolute;left:12px;bottom:12px;max-width:72%;padding:9px 12px;border-radius:14px 14px 14px 4px;background:rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(72,52,39,.12);font-size:13px;line-height:1.4}.room-damage-label{position:absolute;right:12px;top:12px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.86);font-size:12px;font-weight:900;color:#805f4e}
     .cat-summary{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-top:14px}.cat-name{margin:0 0 4px;font-size:27px}.cat-sub{color:var(--muted);font-size:13px;line-height:1.5}.stats-compact{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:14px}.stat-card{padding:11px;border:1px solid rgba(127,93,68,.09);border-radius:16px;background:rgba(255,255,255,.78)}.stat-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:7px;font-size:12px;font-weight:850}.bar{height:8px;overflow:hidden;border-radius:999px;background:#eee5df}.bar span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ffb577,#f17f3b);transition:width .25s}
     .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}.action-btn{min-height:76px;padding:12px;border-radius:19px;color:var(--text);background:rgba(255,255,255,.88);box-shadow:0 10px 25px rgba(101,70,48,.08);font-weight:900;text-align:left}.action-btn span{display:block;margin-bottom:4px;font-size:25px}.action-btn small{color:var(--muted);font-weight:700}.action-btn:disabled{opacity:.44}.action-btn.work-action{grid-column:1/-1;background:linear-gradient(135deg,rgba(255,247,224,.96),rgba(255,232,198,.96));border:1px solid rgba(202,135,66,.16)}.action-btn.room-clean-action{grid-column:1/-1;background:linear-gradient(135deg,rgba(235,250,242,.97),rgba(210,239,224,.97));border:1px solid rgba(74,151,105,.18)}.status-line{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px;padding:11px 13px;border-radius:17px;background:#f7eee8;font-size:13px;font-weight:850}.log-card{margin-top:14px;padding:16px}.log-card h3{margin-bottom:10px;font-size:16px}.log-list{display:grid;gap:8px;max-height:235px;overflow:auto}.log-item{padding:10px 12px;border-radius:14px;color:#665a52;background:#faf4ef;font-size:13px;line-height:1.55}.small-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
@@ -56,6 +56,7 @@
     .asset-hint{position:absolute;left:10px;top:10px;z-index:8;padding:5px 8px;border-radius:999px;color:#725f53;background:rgba(255,255,255,.76);font-size:10px;font-weight:800;opacity:.72;pointer-events:none}
     .care-entry{position:absolute;left:12px;top:12px;z-index:4;padding:8px 12px;border-radius:999px;color:#6b5143;background:rgba(255,255,255,.9);box-shadow:0 8px 22px rgba(72,52,39,.13);font-size:12px;font-weight:900}.care-entry.alert{color:#9d3c47;background:#fff0f2;animation:pulse 1.4s ease-in-out infinite}@keyframes pulse{50%{transform:scale(1.05)}}
     .care-status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.care-status{padding:14px;border-radius:18px;background:#f8f2ed}.care-status small{display:block;margin-bottom:5px;color:#96877d;font-weight:800}.care-status strong{font-size:15px}.care-actions{display:grid;gap:12px;margin-top:16px}.care-action{min-height:78px;padding:15px;border-radius:20px;text-align:left;color:var(--text);background:rgba(255,255,255,.9);box-shadow:0 10px 26px rgba(101,70,48,.09);font-weight:900}.care-action span{display:block;margin-bottom:5px;font-size:27px}.care-action small{color:var(--muted);font-weight:700}.care-action:disabled{opacity:.45;cursor:not-allowed}.sick-note{margin-top:12px;padding:13px;border-radius:17px;color:#8c3d49;background:#fff0f2;font-size:13px;line-height:1.6}.healthy-note{margin-top:12px;padding:13px;border-radius:17px;color:#367451;background:#eaf7ef;font-size:13px;line-height:1.6}.choice-buttons{display:grid;gap:10px;margin-top:16px}.danger-button{min-height:52px;padding:12px 16px;border-radius:17px;color:#fff;background:linear-gradient(135deg,#c96a72,#9f3f49);font-weight:900}.death-card{border:2px solid rgba(125,91,75,.2);background:linear-gradient(160deg,#fff,#f3eee9)}
+    .mall-summary{margin:16px 0;padding:14px;border-radius:19px;background:linear-gradient(135deg,#fff7e8,#fff0d8)}.mall-summary strong{display:block;margin-bottom:7px;font-size:16px}.mall-summary .bar{margin-top:8px}.mall-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}.mall-item{min-height:205px;padding:17px;border:1px solid var(--line);border-radius:22px;color:var(--text);background:rgba(255,255,255,.94);box-shadow:0 11px 28px rgba(101,70,48,.09);text-align:left;transition:.18s}.mall-item:active{transform:scale(.97)}.mall-item:disabled{opacity:.45;cursor:not-allowed}.mall-item-emoji{display:block;margin-bottom:10px;font-size:40px}.mall-item-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font-size:17px;font-weight:900}.mall-price{padding:5px 8px;border-radius:999px;color:#9b581f;background:#fff0d8;font-size:12px;white-space:nowrap}.mall-item-desc{min-height:48px;color:var(--muted);font-size:13px;line-height:1.55}.mall-effect{display:inline-block;margin-top:12px;padding:7px 10px;border-radius:12px;color:#347450;background:#e8f7ee;font-size:12px;font-weight:900}.mall-note{margin-top:15px;padding:13px;border-radius:17px;color:#6f5d51;background:#f8f2ed;font-size:13px;line-height:1.6}@media(max-width:520px){.mall-grid{grid-template-columns:1fr}.mall-item{min-height:170px}}
     .abandon-corner{position:fixed;right:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:50;display:none;padding:6px 10px;border:1px solid rgba(151,71,71,.16);border-radius:999px;color:#9b4d4d;background:rgba(255,247,247,.82);box-shadow:0 7px 20px rgba(101,52,52,.1);font-size:11px;font-weight:850;opacity:.74}.abandon-corner.show{display:block}
     .overlay{display:none;position:fixed;inset:0;z-index:100;place-items:center;padding:18px;background:rgba(45,35,29,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}.overlay.show{display:grid}.modal-card{width:min(92vw,470px);padding:23px;border-radius:26px;background:#fff;box-shadow:0 25px 80px rgba(36,28,23,.3);text-align:center;animation:pop .26s ease}@keyframes pop{from{opacity:0;transform:scale(.93)}to{opacity:1;transform:none}}.event-card{pointer-events:none}.event-emoji{font-size:64px;margin-bottom:8px}.event-card h2{font-size:28px}.event-body{color:#6d6057;line-height:1.7}.effect-list{display:flex;flex-wrap:wrap;justify-content:center;gap:7px;margin-top:14px}.effect-chip{padding:6px 9px;border-radius:999px;background:#f6eee8;color:#6c5b50;font-size:12px;font-weight:850}.tap-hint{margin-top:15px;color:#a39287;font-size:12px}.abandon-result.shame{border:2px solid rgba(194,65,78,.35);background:linear-gradient(160deg,#fff,#fff1f2)}.abandon-result.mercy{border:2px solid rgba(119,104,90,.24);background:linear-gradient(160deg,#fff,#f7f3ef)}.quote{margin:14px 0 0;padding:14px;border-radius:17px;color:#5f5048;background:rgba(255,255,255,.76);line-height:1.75;text-align:left}.asset-loading{position:fixed;inset:0;z-index:220;display:none;place-items:center;padding:24px;background:rgba(255,248,239,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}.asset-loading.show{display:grid}.asset-loading-card{width:min(88vw,360px);padding:24px;border-radius:26px;background:#fff;box-shadow:0 22px 70px rgba(72,49,34,.22);text-align:center}.asset-loading-spinner{width:46px;height:46px;margin:0 auto 14px;border:4px solid #f2dfd1;border-top-color:#ef7f3c;border-radius:50%;animation:assetSpin .75s linear infinite}@keyframes assetSpin{to{transform:rotate(360deg)}}.asset-loading-title{font-size:18px;font-weight:900;margin-bottom:7px}.asset-loading-text{color:#81736a;font-size:13px;line-height:1.6}.asset-loading-bar{height:8px;margin-top:16px;overflow:hidden;border-radius:999px;background:#f0e5de}.asset-loading-bar span{display:block;width:35%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ffb276,#ef7f3c);animation:assetBar 1.15s ease-in-out infinite}@keyframes assetBar{0%{transform:translateX(-120%)}100%{transform:translateX(390%)}}.toast{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));z-index:130;padding:11px 16px;border-radius:999px;color:#fff;background:rgba(55,43,35,.9);font-size:13px;font-weight:850;transform:translate(-50%,18px);opacity:0;pointer-events:none;transition:.22s}.toast.show{transform:translate(-50%,0);opacity:1}
 
@@ -94,7 +95,7 @@
     <section class="screen" id="candidateScreen"><div class="panel candidate"><button class="back-link" id="candidateBack">← 重新选择</button><div class="candidate-art" id="candidateArt"></div><h2 id="candidateTitle"></h2><div class="origin-story" id="originStory"></div><div class="candidate-meta"><div class="meta-box"><small>年龄阶段</small><strong id="candidateAge"></strong></div><div class="meta-box"><small>品种</small><strong id="candidateBreed"></strong></div><div class="meta-box"><small>性别</small><strong id="candidateSex"></strong></div><div class="meta-box"><small>当前性格</small><strong id="candidatePersonality"></strong></div></div><div class="candidate-breed-switch"><label for="candidateBreedSelect">切换猫咪品种</label><select id="candidateBreedSelect"></select><small id="candidateBreedHint">可随时换成其他品种；尚未完成 WebP 的品种会使用内置轻量画面。</small></div><input class="name-input" id="catNameInput" maxlength="10" placeholder="给它取个名字"><div class="button-row"><button class="secondary" id="rerollBtn">换一只看看</button><button class="primary" id="adoptBtn">带它回家</button></div></div></section>
 
     <section class="screen" id="homeScreen">
-      <div class="home-top"><h2>我的猫咪房间</h2><div class="top-buttons"><button class="tiny-btn" id="attributeBtn">查看属性</button><span class="day-chip" id="dayChip"></span></div></div>
+      <div class="home-top"><h2>我的猫咪房间</h2><div class="top-buttons"><button class="tiny-btn" id="mallBtn">🛒 商场</button><button class="tiny-btn" id="attributeBtn">查看属性</button><span class="day-chip" id="dayChip"></span></div></div>
       <div class="home-card"><div class="room-frame" id="roomFrame"><div id="roomArt"></div><button class="care-entry" id="careBtn">🛁 护理与看病</button><div class="room-caption" id="roomCaption"></div><div class="room-damage-label" id="damageLabel"></div></div><div class="cat-summary"><div><h2 class="cat-name" id="homeCatName"></h2><div class="cat-sub" id="homeCatSub"></div></div></div><div class="stats-compact" id="compactStats"></div><div class="actions"><button class="action-btn" data-action="feed"><span>🥣</span>喂食<small>提升饱腹与健康</small></button><button class="action-btn" data-action="pet"><span>🖐️</span>摸猫<small>结果取决于性格</small></button><button class="action-btn" data-action="play"><span>🪶</span>陪玩<small>消耗活力并增进感情</small></button><button class="action-btn" data-action="clean"><span>🧹</span>铲屎<small>改善清洁与健康</small></button><button class="action-btn room-clean-action" id="cleanRoomBtn"><span>🧽</span>打扫房间<small>消耗1次行动，房屋损坏度减少25%</small></button><button class="action-btn work-action" id="workBtn"><span>💼</span>打工赚钱<small>消耗1次行动，获得12金币；小猫会独自在家</small></button></div><div class="status-line"><span id="actionPointsText"></span><span id="growthText"></span></div><button class="primary" id="sleepBtn" style="width:100%;margin-top:12px">🌙 结束今天</button></div>
       <div class="log-card"><h3>猫咪日记</h3><div class="log-list" id="logList"></div></div><div class="small-actions"><button class="secondary" id="saveBtn">保存进度</button><button class="secondary" id="resetBtn">删除存档</button></div>
     </section>
@@ -120,6 +121,33 @@
           <button class="care-action" id="bathBtn"><span>🛁</span>洗澡并剪指甲<small id="bathBtnHint"></small></button>
           <button class="care-action" id="doctorBtn"><span>🏥</span>带它去看病<small id="doctorBtnHint">每次生病的治疗费在100～300金币之间随机生成</small></button>
         </div>
+      </div>
+    </section>
+
+    <section class="screen" id="mallScreen">
+      <div class="panel">
+        <div class="attribute-head">
+          <button class="back-link" data-go="homeScreen">← 返回房间</button>
+          <span class="day-chip" id="mallCoins"></span>
+        </div>
+        <h2>猫咪商场</h2>
+        <p class="subtitle">购买后会立刻喂给小猫，不消耗今日行动次数。所有性格的猫都会吃。</p>
+        <div class="mall-summary" id="mallSummary"></div>
+        <div class="mall-grid">
+          <button class="mall-item" data-mall-item="catStrip">
+            <span class="mall-item-emoji">🍗</span>
+            <div class="mall-item-title"><span>猫条</span><span class="mall-price">5金币</span></div>
+            <div class="mall-item-desc">香香软软的小零食，适合快速垫一垫肚子。</div>
+            <span class="mall-effect">饱腹 +20</span>
+          </button>
+          <button class="mall-item" data-mall-item="can">
+            <span class="mall-item-emoji">🥫</span>
+            <div class="mall-item-title"><span>猫罐头</span><span class="mall-price">10金币</span></div>
+            <div class="mall-item-desc">分量更足的主食罐头，能一次补充大量饱腹。</div>
+            <span class="mall-effect">饱腹 +50</span>
+          </button>
+        </div>
+        <div class="mall-note" id="mallNote"></div>
       </div>
     </section>
   </main>
@@ -263,7 +291,7 @@
      某张图片尚未上传时，会自动使用原来的矢量画面，游戏不会报错。
   ========================= */
   const ASSETS = Object.freeze({
-    version: "local-cache-v4-webp-20260805-white-ready1",
+    version: "local-cache-v4-webp-20260805-mall1",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",
@@ -662,20 +690,20 @@
         {emoji:"👁️",title:"只盯着你",body:"它不追玩具，只在远处压低身体盯着你的动作。",effects:{trust:1,courage:2}}
       ]},
       clean:{base:{cleanliness:26,health:1},spirit:[
-        {emoji:"✨",title:"监督铲屎",body:"它坐在旁边认真看你清理，结束后第一个进去检查。",effects:{trust:3,intimacy:2}},
-        {emoji:"🐾",title:"保持得很干净",body:"猫砂盆几乎没有被刨得到处都是，清理非常顺利。",effects:{cleanliness:5}},
-        {emoji:"🧼",title:"蹭了蹭你的腿",body:"你收拾完后，它绕着你的腿走了一圈，像是在表示感谢。",effects:{intimacy:4}},
-        {emoji:"😺",title:"满意验收",body:"它闻了闻干净的猫砂，抬头冲你眨了眨眼。",effects:{trust:4}}
+        {emoji:"✨",title:"监督铲屎",body:"它坐在旁边认真看你清理，结束后第一个进去检查。猫砂盆被顺利打扫干净。",effects:{trust:3,intimacy:2}},
+        {emoji:"🐾",title:"保持得很干净",body:"猫砂盆几乎没有被刨得到处都是，你很快就完成了清理。",effects:{cleanliness:5}},
+        {emoji:"🧼",title:"蹭了蹭你的腿",body:"你顺利收拾干净猫砂盆后，它绕着你的腿走了一圈，像是在表示感谢。",effects:{intimacy:4}},
+        {emoji:"😺",title:"满意验收",body:"猫砂盆已经焕然一新。它闻了闻干净的猫砂，抬头冲你眨了眨眼。",effects:{trust:4}}
       ],demon:[
-        {emoji:"🌪️",title:"刚铲完又刨出来",body:"你刚收好工具，它立刻跳进去把猫砂刨了一地。",effects:{cleanliness:-10,intimacy:1}},
-        {emoji:"🪣",title:"把铲子当玩具",body:"它一路追着猫砂铲，差点把垃圾袋也拖走。",effects:{cleanliness:-5,vitality:2}},
-        {emoji:"😼",title:"蹲在门口堵你",body:"它不让你进，直到你拿出零食才慢慢让开。",effects:{coins:-2,trust:2}},
-        {emoji:"🧹",title:"帮倒忙",body:"它跟着你的手来回扑，清理时间直接翻倍。",effects:{intimacy:3,cleanliness:-3}}
+        {emoji:"🪣",title:"一路围观",body:"它追着猫砂铲跑了两圈，但你还是顺利把猫砂盆彻底清理干净。",effects:{intimacy:2,vitality:1}},
+        {emoji:"😼",title:"假装来帮忙",body:"它一直盯着你的动作，偶尔伸爪碰一下工具。虽然有点捣乱，清洁仍然顺利完成。",effects:{trust:2,intimacy:2}},
+        {emoji:"🧹",title:"清理完成",body:"它蹲在旁边甩着尾巴监督你。你耐心完成了铲屎，猫砂盆恢复了干净。",effects:{trust:2}},
+        {emoji:"🐾",title:"抢先验收",body:"你刚清理完，它就立刻跳进去检查。好在猫砂盆已经被你收拾得干干净净。",effects:{intimacy:3}}
       ],chaos:[
-        {emoji:"🚫",title:"领地禁止进入",body:"它守在猫砂盆前哈气，拒绝让你靠近。",effects:{cleanliness:-9,trust:-2}},
-        {emoji:"💨",title:"猫砂风暴",body:"它把大量猫砂踢出盆外，整个房间都需要重新打扫。",effects:{cleanliness:-15,damage:4}},
-        {emoji:"🩹",title:"清理时遭到袭击",body:"你伸手拿猫砂铲时，它从旁边扑了过来。",effects:{trust:-2,coins:-2}},
-        {emoji:"🕳️",title:"把垃圾袋咬破",body:"它咬破了刚装好的垃圾袋，一切重新散在地上。",effects:{cleanliness:-18,damage:3}}
+        {emoji:"🛡️",title:"保持距离完成清理",body:"它一直警惕地守在附近。你等它退开后迅速完成清洁，猫砂盆最终恢复干净。",effects:{trust:1}},
+        {emoji:"🧤",title:"谨慎铲屎",body:"你戴好手套、慢慢靠近，在不刺激它的情况下顺利清理完全部猫砂。",effects:{courage:1}},
+        {emoji:"🧹",title:"趁它不注意",body:"趁它转身观察窗外，你迅速完成铲屎。等它回头时，猫砂盆已经干净了。",effects:{trust:1}},
+        {emoji:"✅",title:"清洁成功",body:"虽然它全程盯着你，但没有阻止你。你稳稳完成清理，没有出现任何意外。",effects:{health:1}}
       ]}
     };
     const dayEvents={
@@ -799,6 +827,24 @@
     function isDead(){return !!game&&game.stats.health<=0}
     function action(actionKey){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=game.breedKey==="americanSilver"&&game.stats.hunger<70&&actionKey==="pet"?{emoji:"🐱",title:"一看见你就开始撒娇",body:`${game.name}一看见你就喵喵叫，还主动抬起头去蹭你的手。它越蹭越起劲，前爪都快离开地面，像是马上就要站起来抱住你。`,effects:{trust:2,intimacy:4},visual:{catState:"happy"}}:EventSystem.getAction(game.personality,actionKey);apply(event.effects);game.mood=event.visual?.catState||((event.effects.health<0||event.effects.trust<0)?"angry":actionKey==="play"||actionKey==="feed"?"happy":"neutral");log(event.body);Storage.save(game);return {event,death:isDead()}}
     function work(){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=Economy.work(game.personality,game.name);apply(event.effects);game.mood=event.effects.damage?"angry":"neutral";log(event.body);Storage.save(game);return {event,death:isDead()}}
+    const mallItems={
+      catStrip:{name:"猫条",emoji:"🍗",price:5,hunger:20},
+      can:{name:"猫罐头",emoji:"🥫",price:10,hunger:50}
+    };
+    function buyFood(itemKey){
+      if(!game)return {error:"没有小猫"};
+      const item=mallItems[itemKey];
+      if(!item)return {error:"商品不存在"};
+      if(game.stats.hunger>=100)return {error:`${game.name}现在已经吃得很饱了`};
+      if(game.coins<item.price)return {error:`金币不足，还需要${item.price-game.coins}金币`};
+      const before=game.stats.hunger;
+      change("coins",-item.price);change("hunger",item.hunger);
+      const gained=Math.round(game.stats.hunger-before);
+      game.mood="happy";
+      const event={emoji:item.emoji,title:`${game.name}吃掉了${item.name}`,body:`你花了${item.price}金币买下${item.name}。${game.name}闻到香味立刻凑了过来，很快就吃得干干净净。`,effects:{coins:-item.price,hunger:gained},visual:{catState:"happy"}};
+      log(`你在商场购买${item.name}喂给${game.name}，饱腹增加${gained}。`);Storage.save(game);
+      return {event,death:false};
+    }
     function cleanRoom(){
       if(!game)return {error:"没有小猫"};
       if(game.actionsLeft<=0)return {error:"今天已经没有行动次数了"};
@@ -830,7 +876,7 @@
       Storage.save(game);return {events,growth,death:isDead()}
     }
     function grow(){const old=game.personality;const next=personalityForBreed(game.breedKey,Utils.roll(CONFIG.routes[game.routeKey].growth));game.ageStage="adult";game.personality=next;game.personalityChanged=true;game.mood=next==="chaos"?"angry":"neutral";const story=next==="spirit"?`${game.name}长大后安静了许多，开始每天主动趴在你身边。`:next==="demon"?`你发现家里的杯子总会莫名其妙掉到地上。监控里的${game.name}每次推完都会若无其事地走开。`:`${game.name}静静看着你。下一秒，它突然给了你一爪，随后转身抓坏了新沙发。`;log(`${game.name}成年了，性格从“${CONFIG.personalities[old].name}”定型为“${CONFIG.personalities[next].name}”。`);return {old,next,story}}
-    return {get,set,getCandidate,createCandidate,setCandidateBreed,breedAllowedForRoute,allowedBreedsForRoute,adopt,maxFor,change,apply,log,isDead,action,work,cleanRoom,endDay,becomeSick};
+    return {get,set,getCandidate,createCandidate,setCandidateBreed,breedAllowedForRoute,allowedBreedsForRoute,adopt,maxFor,change,apply,log,isDead,action,work,buyFood,cleanRoom,endDay,becomeSick};
   })();
 
   /* =========================
@@ -887,7 +933,7 @@
     function updateAssetModeButton(){const pref=AssetManager.getPreference();const text=!pref?"尚未选择":pref.mode==="none"?"轻量无图片":`完整图片 · ${CONFIG.breeds[pref.breed]?.name||"已选择"}`;$("#assetSettingsBtn").textContent=`🎨 画面模式：${text}`}
     function updateBackgroundStatus(progress,finished=false){const box=$("#assetBackgroundStatus");if(!box)return;if(finished){box.textContent=progress?.failed?.length?`⚠️ 有${progress.failed.length}张图片未成功，下次进入会继续尝试`:`✅ 其他可用品种已保存到本机`;box.classList.add("show","done");setTimeout(()=>box.classList.remove("show"),3200);return}box.classList.remove("done");box.classList.add("show");box.textContent=`🐾 后台准备其他猫咪 ${progress.completed}/${progress.total}`}
 
-    function showScreen(id){$$('.screen').forEach(s=>s.classList.toggle('active',s.id===id));const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&['homeScreen','attributeScreen','careScreen'].includes(id));window.scrollTo({top:0,behavior:'smooth'})}
+    function showScreen(id){$$('.screen').forEach(s=>s.classList.toggle('active',s.id===id));const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&['homeScreen','attributeScreen','careScreen','mallScreen'].includes(id));window.scrollTo({top:0,behavior:'smooth'})}
     function renderCandidate(){const c=Game.getCandidate(),breed=CONFIG.breeds[c.breedKey];Visual.preload(c);Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=breed.name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${breed.forcedPersonality?'品种固定性格':c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;const select=$('#candidateBreedSelect'),allowed=Game.allowedBreedsForRoute(c.routeKey);select.innerHTML=allowed.map(key=>{const item=CONFIG.breeds[key];return `<option value="${key}" ${key===c.breedKey?'selected':''}>${item.name}${item.shopOnly?'（宠物店限定）':''}${item.imageReady?'':'（图片开发中）'}</option>`}).join('');if(breed.shopOnly)$('#candidateBreedHint').textContent='美短银虎斑仅可在宠物店获得，性格100%固定为灵珠。当前图片尚未完成时会使用内置轻量画面。';else $('#candidateBreedHint').textContent=breed.imageReady?'这个品种已有 WebP 图片；如果尚未缓存，系统会在领养前自动准备。':'该品种 WebP 图片仍在开发中，目前会使用内置轻量画面。';$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none'}
     function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥣 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
     function damageLabel(d){return d<15?'房间完好':d<40?'轻微破坏':d<70?'明显破坏':'惨不忍睹'}
@@ -895,6 +941,7 @@
     function roomCaption(g){if(g.isSick)return `${g.name}生病了，看起来没有精神。`;if(g.mood==='angry')return `${g.name}现在看起来不太高兴。`;if(g.mood==='sleepy')return `${g.name}困了，正准备找地方睡觉。`;if(g.mood==='happy')return `${g.name}心情很好，尾巴轻轻晃着。`;if(g.stats.hunger<25)return `${g.name}正在等你放饭。`;return `${g.name}在房间里观察你。`}
     function renderAttributes(){const g=Game.get(),p=CONFIG.personalities[g.personality];$('#attributeDay').textContent=`第${g.day}天`;$('#attributeName').textContent=`${g.name}的档案`;Visual.renderScene('#attributeArt',g);$('#attributeInfo').innerHTML=`<div class="info-box"><small>品种</small><strong>${CONFIG.breeds[g.breedKey].name}</strong></div><div class="info-box"><small>性别</small><strong>${g.sex}</strong></div><div class="info-box"><small>年龄</small><strong>${g.ageStage==='adult'?'成年猫':'幼猫'}</strong></div><div class="info-box"><small>获得方式</small><strong>${g.routeName}</strong></div><div class="info-box"><small>初始性格</small><strong>${CONFIG.personalities[g.initialPersonality].name}</strong></div><div class="info-box"><small>房屋损坏</small><strong>${Math.round(g.houseDamage)}%</strong></div>`;$('#attributeStats').innerHTML=statCards(g,['health','trust','vitality','courage','intimacy','hunger','cleanliness']);$('#attributePersonality').textContent=`当前性格：${p.name}`;$('#attributePersonalityDesc').textContent=p.desc}
     function renderCare(){const g=Game.get();if(!g)return;const cost=g.isSick?(Number.isInteger(g.treatmentCost)?g.treatmentCost:Game.becomeSick()):null;$('#careDay').textContent=`第${g.day}天`;Visual.renderScene('#careArt',g,{state:g.isSick?'sick':null});$('#bathStatus').textContent=g.bathDue?'现在需要护理':`下次第${g.nextBathDay}天`;$('#illnessStatus').textContent=g.isSick?`生病中 · 治疗${cost}金币`:'健康';$('#careActionsLeft').textContent=`${g.actionsLeft}/4`;$('#careCoins').textContent=`${g.coins}`;$('#careNotice').innerHTML=g.isSick?`<div class="sick-note">${g.name}正在生病。生病期间每天会继续损失健康，本次治疗费用为${cost}金币，请尽快看病。</div>`:`<div class="healthy-note">${g.name}目前没有生病。每天结束时有4%的概率随机生病，每次治疗费用会在100～300金币之间随机生成。</div>`;$('#bathBtn').disabled=!g.bathDue||g.actionsLeft<=0;$('#bathBtnHint').textContent=g.bathDue?'本次护理会消耗1次行动':'还没有到需要护理的时间';$('#doctorBtnHint').textContent=g.isSick?`本次治疗需要${cost}金币，并消耗1次行动`:'每次生病的治疗费在100～300金币之间随机生成';$('#doctorBtn').disabled=!g.isSick||g.actionsLeft<=0||g.coins<cost}
+    function renderMall(){const g=Game.get();if(!g)return;$('#mallCoins').textContent=`金币：${g.coins}`;const hunger=Math.round(g.stats.hunger);$('#mallSummary').innerHTML=`<strong>🥣 ${g.name}当前饱腹：${hunger}/100</strong><div class="bar"><span style="width:${clamp(hunger)}%"></span></div>`;const full=g.stats.hunger>=100;$('#mallNote').textContent=full?`${g.name}现在已经吃饱了，饱腹下降后再来购买。`:`购买后会立即喂给${g.name}，不消耗行动次数；所有性格都会吃，饱腹最高为100。`;$$('[data-mall-item]').forEach(button=>{const price=button.dataset.mallItem==='catStrip'?5:10;button.disabled=full||g.coins<price})}
     function showEvent(event,after=null){$('#eventIllustration').replaceChildren();Visual.renderEvent('#eventIllustration',event);$('#eventEmoji').textContent=event.emoji;$('#eventTitle').textContent=event.title;$('#eventBody').textContent=event.body;$('#effectList').innerHTML=Utils.effectText(event.effects).map(t=>`<span class="effect-chip">${t}</span>`).join('');eventCloseCallback=after;$('#eventOverlay').classList.add('show')}
     function showEventSequence(events,after=null){const queue=[...(events||[])];const next=()=>{if(!queue.length){if(after)after();return}showEvent(queue.shift(),next)};next()}
     function showDeath(name){$('#deathTitle').textContent=`${name}离开了`;$('#deathText').textContent=`${name}的健康降到了0。你没能及时挽回它的生命，这一局游戏结束。`;$('#deathOverlay').classList.add('show')}
@@ -902,7 +949,7 @@
     function showGrowth(growth){$('#growthEmoji').textContent=growth.next==='spirit'?'💗':growth.next==='demon'?'😼':'🌫️';$('#growthBody').textContent=`${growth.story} 成年性格：${CONFIG.personalities[growth.next].name}`;$('#growthOverlay').classList.add('show')}
     function updateContinue(){const g=Storage.load();$('#continueBox').classList.toggle('show',!!g);if(g){$('#continueTitle').textContent=`${g.name}正在等你回来`;$('#continueText').textContent=`第${g.day}天 · ${g.ageStage==='adult'?'成年猫':'幼猫'} · ${CONFIG.breeds[g.breedKey].name}`}}
     function toast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),1700)}
-    return {showAssetLoading,hideAssetLoading,updateAssetModeButton,updateBackgroundStatus,showScreen,renderCandidate,renderHome,renderAttributes,renderCare,showEvent,showEventSequence,closeEvent,showGrowth,showDeath,updateContinue,toast};
+    return {showAssetLoading,hideAssetLoading,updateAssetModeButton,updateBackgroundStatus,showScreen,renderCandidate,renderHome,renderAttributes,renderCare,renderMall,showEvent,showEventSequence,closeEvent,showGrowth,showDeath,updateContinue,toast};
   })();
 
   /* =========================
@@ -1015,6 +1062,7 @@
       $('#candidateBack').addEventListener('click',()=>UI.showScreen(Game.getCandidate().routeKey.startsWith('shelter')?'shelterScreen':'startScreen'));
       $('#rerollBtn').addEventListener('click',()=>createAndShow(Game.getCandidate().routeKey));
       $('#candidateBreedSelect').addEventListener('change',async event=>{const breedKey=event.target.value;const candidate=Game.setCandidateBreed(breedKey);if(AssetManager.imagesEnabled()&&AssetManager.validBreed(breedKey)){UI.showAssetLoading(`正在准备${CONFIG.breeds[breedKey].name}的6种形态……`);try{await AssetManager.ensureAge(breedKey,candidate.ageStage,progress=>{$('#assetLoadingText').textContent=`正在准备 ${CONFIG.breeds[breedKey].name} ${progress.completed}/${progress.total}`});Visual.resetCache();await Visual.preload(candidate)}finally{UI.hideAssetLoading()}}else if(AssetManager.imagesEnabled()){UI.toast(`${CONFIG.breeds[breedKey].name}图片仍在开发中，先使用内置画面`)}UI.renderCandidate()});
+      $('#mallBtn').addEventListener('click',()=>{UI.renderMall();UI.showScreen('mallScreen')});
       $('#attributeBtn').addEventListener('click',()=>{UI.renderAttributes();UI.showScreen('attributeScreen')});
       $('#careBtn').addEventListener('click',()=>{UI.renderCare();UI.showScreen('careScreen')});
     }
@@ -1025,6 +1073,7 @@
       $('#adoptBtn').addEventListener('click',async()=>{const game=Game.adopt($('#catNameInput').value.trim());await prepareGameVisuals(game,'正在准备这只猫的六种状态，完成后互动切换会更流畅。');UI.renderHome();UI.updateContinue();UI.showScreen('homeScreen');startBackgroundAssets(game)});
       $$('.action-btn[data-action]').forEach(button=>button.addEventListener('click',()=>{const result=Game.action(button.dataset.action);if(!result){UI.toast('今天已经没有行动次数了');return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})}));
       $('#workBtn').addEventListener('click',()=>{const result=Game.work();if(!result){UI.toast('今天已经没有行动次数了');return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})});
+      $$('[data-mall-item]').forEach(button=>button.addEventListener('click',()=>{const result=Game.buyFood(button.dataset.mallItem);if(result.error){UI.toast(result.error);return}UI.renderMall();UI.renderHome();UI.showEvent(result.event)}));
       $('#cleanRoomBtn').addEventListener('click',()=>{const result=Game.cleanRoom();if(result.error){UI.toast(result.error);return}UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})});
       $('#sleepBtn').addEventListener('click',async()=>{const result=Game.endDay();const game=Game.get();if(result.growth&&AssetManager.imagesEnabled()){UI.showAssetLoading('小猫正在长大，正在准备成年后的6种形态……');try{await AssetManager.ensureAge(game.breedKey,'adult',progress=>{$('#assetLoadingText').textContent=`正在准备成年猫 ${progress.completed}/${progress.total}`});Visual.resetCache();await Visual.preload(game)}finally{UI.hideAssetLoading()}}UI.renderHome();UI.showEventSequence(result.events,()=>{if(result.death){endGameIfDead();return}if(result.growth){UI.renderHome();UI.showGrowth(result.growth)}})});
       $('#bathBtn').addEventListener('click',()=>{const result=Care.bath();if(result.error){UI.toast(result.error);return}UI.renderCare();UI.renderHome();if(result.choice){$('#bathChoiceText').textContent=result.event.body;$('#bathChoiceOverlay').classList.add('show');return}UI.showEvent(result.event,()=>{if(result.death)endGameIfDead();else UI.renderCare()})});
