@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fff4e8">
-  <title>云养小猫 · 成就与称号版 V4.5</title>
+  <title>云养小猫 · 自适应界面版 V4.5.1</title>
   
   <link rel="stylesheet" href="style.css">
 </head>
@@ -47,19 +47,19 @@
           <div id="roomArt"></div>
 
           <header class="game-top-hud">
-            <div class="game-day-badge"><span>🐾</span><strong id="dayChip"></strong></div>
+            <div class="game-day-badge"><span>🐾</span><strong id="dayChip"></strong><em class="portrait-coin-chip" id="portraitCoinChip"></em></div>
             <div class="game-hud-stats" id="compactStats"></div>
             <div class="game-hud-tools">
               <button class="hud-icon-button" id="taskHudBtn" aria-label="今日任务">📋<span class="hud-notice-dot" id="taskDot"></span></button>
               <button class="hud-icon-button" id="dailyEventHudBtn" aria-label="每日随机事件">✨<span class="hud-notice-dot" id="dailyEventDot"></span></button>
-              <button class="hud-icon-button" id="shelterHudBtn" aria-label="猫舍">🐈<span class="hud-count-badge" id="shelterCount">1/3</span></button>
-              <button class="hud-icon-button" id="catDexHudBtn" aria-label="猫咪图鉴">📚<span class="hud-count-badge" id="catDexCount">0/8</span></button>
-              <button class="hud-icon-button" id="achievementHudBtn" aria-label="成就与称号">🏆<span class="hud-count-badge" id="achievementCount">0/24</span></button>
-              <button class="hud-icon-button" id="bagHudBtn" aria-label="背包">🎒<span class="hud-count-badge" id="bagCount">0</span></button>
-              <button class="hud-icon-button" id="logHudBtn" aria-label="猫咪日记">📖</button>
-              <button class="hud-icon-button" id="mallBtn" aria-label="商场">🛒</button>
-              <button class="hud-icon-button" id="hudSettingsBtn" aria-label="设置">⚙️</button>
-              <button class="hud-icon-button mobile-more-only" id="moreHudBtn" aria-label="更多功能">☰</button>
+              <button class="hud-icon-button secondary-hud-tool" id="shelterHudBtn" data-open-feature="shelter" aria-label="猫舍">🐈<span class="hud-count-badge" id="shelterCount">1/3</span></button>
+              <button class="hud-icon-button secondary-hud-tool" id="catDexHudBtn" data-open-feature="catdex" aria-label="猫咪图鉴">📚<span class="hud-count-badge" id="catDexCount">0/8</span></button>
+              <button class="hud-icon-button secondary-hud-tool" id="achievementHudBtn" data-open-feature="achievements" aria-label="成就与称号">🏆<span class="hud-count-badge" id="achievementCount">0/24</span></button>
+              <button class="hud-icon-button secondary-hud-tool" id="bagHudBtn" data-open-feature="bag" aria-label="背包">🎒<span class="hud-count-badge" id="bagCount">0</span></button>
+              <button class="hud-icon-button secondary-hud-tool" id="logHudBtn" data-open-feature="log" aria-label="猫咪日记">📖</button>
+              <button class="hud-icon-button secondary-hud-tool" id="mallBtn" data-open-feature="mall" aria-label="商场">🛒</button>
+              <button class="hud-icon-button secondary-hud-tool" id="hudSettingsBtn" data-open-feature="settings" aria-label="设置">⚙️</button>
+              <button class="hud-icon-button mobile-more-only primary-menu-tool" id="moreHudBtn" aria-label="更多功能">☰</button>
             </div>
           </header>
 
@@ -82,6 +82,7 @@
           </div>
 
           <div class="game-feedback-layer" id="gameFeedbackLayer" aria-live="polite"></div>
+          <button class="portrait-quick-card" id="portraitQuickCard" type="button" aria-label="查看今日任务或随机事件"><span id="portraitQuickIcon">📋</span><strong id="portraitQuickText">今日任务</strong><small id="portraitQuickProgress"></small></button>
           <button class="hud-reveal-button" id="hudRevealBtn" aria-label="显示操作界面" title="显示操作界面"><span>🐾</span></button>
 
           <nav class="game-action-dock" aria-label="猫咪互动">
@@ -132,15 +133,16 @@
             <div class="more-menu-grid">
               <button class="more-menu-button mobile-quick-menu" id="mobileCleanLitterBtn"><span>🧹</span><strong>清理猫砂</strong></button>
               <button class="more-menu-button mobile-quick-menu" id="mobileWorkBtn"><span>💼</span><strong>打工赚钱</strong></button>
-              <button class="more-menu-button" id="moreShelterBtn"><span>🐈</span><strong>我的猫舍</strong></button>
-              <button class="more-menu-button" id="moreCatDexBtn"><span>📚</span><strong>猫咪图鉴</strong></button>
-              <button class="more-menu-button" id="moreAchievementBtn"><span>🏆</span><strong>成就与称号</strong></button>
-              <button class="more-menu-button" id="moreBagBtn"><span>🎒</span><strong>猫舍背包</strong></button>
-              <button class="more-menu-button" id="moreCareBtn"><span>🩺</span><strong>护理与看病</strong></button>
-              <button class="more-menu-button" id="moreAttributeBtn"><span>📊</span><strong>属性详情</strong></button>
+              <button class="more-menu-button" id="moreShelterBtn" data-open-feature="shelter"><span>🐈</span><strong>我的猫舍</strong></button>
+              <button class="more-menu-button" id="moreCatDexBtn" data-open-feature="catdex"><span>📚</span><strong>猫咪图鉴</strong></button>
+              <button class="more-menu-button" id="moreAchievementBtn" data-open-feature="achievements"><span>🏆</span><strong>成就与称号</strong></button>
+              <button class="more-menu-button" id="moreBagBtn" data-open-feature="bag"><span>🎒</span><strong>猫舍背包</strong></button>
+              <button class="more-menu-button" id="moreMallBtn" data-open-feature="mall"><span>🛒</span><strong>猫咪商场</strong></button>
+              <button class="more-menu-button" id="moreCareBtn" data-open-feature="care"><span>🩺</span><strong>护理与看病</strong></button>
+              <button class="more-menu-button" id="moreAttributeBtn" data-open-feature="attributes"><span>📊</span><strong>属性详情</strong></button>
               <button class="more-menu-button" id="moreCleanBtn"><span>🧽</span><strong>打扫房间</strong></button>
-              <button class="more-menu-button" id="moreLogBtn"><span>📖</span><strong>猫咪日记</strong></button>
-              <button class="more-menu-button" id="moreSettingsBtn"><span>⚙️</span><strong>画面设置</strong></button>
+              <button class="more-menu-button" id="moreLogBtn" data-open-feature="log"><span>📖</span><strong>猫咪日记</strong></button>
+              <button class="more-menu-button" id="moreSettingsBtn" data-open-feature="settings"><span>⚙️</span><strong>画面设置</strong></button>
               <button class="more-menu-button danger" id="moreAbandonBtn"><span>🚪</span><strong>弃养</strong></button>
             </div>
           </aside>

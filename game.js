@@ -20,7 +20,9 @@ const AchievementSystem = window.AchievementSystem;
         root.style.setProperty('--game-viewport-left',`${Math.round(vv?.offsetLeft||0)}px`);
         const shortSide=Math.min(window.screen?.width||width,window.screen?.height||height);
         const touchCapable=('ontouchstart' in window)||(navigator.maxTouchPoints||0)>0;
-        root.classList.toggle('phone-landscape',Boolean(touchCapable&&shortSide<=560&&width>height));
+        const isPhone=Boolean(touchCapable&&shortSide<=600);
+        root.classList.toggle('phone-landscape',Boolean(isPhone&&width>height));
+        root.classList.toggle('phone-portrait',Boolean(isPhone&&height>=width));
       };
       syncGameViewport();
       window.addEventListener('resize',syncGameViewport,{passive:true});
@@ -776,18 +778,33 @@ const AchievementSystem = window.AchievementSystem;
 
     function showScreen(id){const overlayIds=['attributeScreen','careScreen','mallScreen','shelterManageScreen','catDexScreen','achievementScreen'],isGameOverlay=overlayIds.includes(id);if(isGameOverlay){$$('.screen').forEach(screen=>{if(screen.id==='homeScreen')screen.classList.add('active');else if(overlayIds.includes(screen.id))screen.classList.toggle('active',screen.id===id);else screen.classList.remove('active')})}else{$$('.screen').forEach(screen=>screen.classList.toggle('active',screen.id===id))}document.body.classList.toggle('game-home-active',id==='homeScreen'||isGameOverlay);$$('.hud-drawer').forEach(drawer=>{drawer.classList.remove('show');drawer.setAttribute('aria-hidden','true')});$('#hudDrawerScrim')?.classList.remove('show');const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&Game.catCount()>1&&(id==='homeScreen'||isGameOverlay));if($('#routeSectionTitle'))$('#routeSectionTitle').textContent=adopted?'再获得一只新猫':'先获得一只小猫';if(!isGameOverlay)window.scrollTo({top:0,behavior:'smooth'});if(id==='homeScreen'){PhoneHud.show(true)}else{PhoneHud.hold()}}
     function renderCandidate(){const c=Game.getCandidate(),breed=CONFIG.breeds[c.breedKey];Visual.preload(c);Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=breed.name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${breed.forcedPersonality?'品种固定性格':c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;const select=$('#candidateBreedSelect'),allowed=Game.allowedBreedsForRoute(c.routeKey);select.innerHTML=allowed.map(key=>{const item=CONFIG.breeds[key];return `<option value="${key}" ${key===c.breedKey?'selected':''}>${item.name}${item.shopOnly?'（宠物店限定）':''}${item.imageReady?'':'（图片开发中）'}</option>`}).join('');if(breed.shopOnly)$('#candidateBreedHint').textContent='美短银虎斑仅可在宠物店获得，性格100%固定为灵珠。当前图片尚未完成时会使用内置轻量画面。';else $('#candidateBreedHint').textContent=breed.imageReady?'这个品种已有 WebP 图片；如果尚未缓存，系统会在领养前自动准备。':'该品种 WebP 图片仍在开发中，目前会使用内置轻量画面。';$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none';const hasShelter=!!Game.getShelter(),full=hasShelter&&!Game.hasRoom();$('#adoptBtn').textContent=hasShelter?'加入猫舍':'带它回家';$('#adoptBtn').disabled=full;if(full)$('#candidateBreedHint').textContent='猫舍已经满了。请先返回猫舍处理现有猫咪。'}
-    function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥣 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
+    function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥩 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
     function hudStats(game){
       const relationship=Game.relationshipView();
       const items=[
-        ['health','💗','健康',game.stats.health,100],['hunger','😊','饱腹',game.stats.hunger,100],['cleanliness','🫧','清洁',game.stats.cleanliness,100],['intimacy','💕',`亲密·${relationship.name}`,game.stats.intimacy,Game.maxFor('intimacy')],
+        ['health','💗','健康',game.stats.health,100],['hunger','🥩','饱腹',game.stats.hunger,100],['cleanliness','🫧','清洁',game.stats.cleanliness,100],['intimacy','💕',`亲密·${relationship.name}`,game.stats.intimacy,Game.maxFor('intimacy')],
         ['vitality','⚡','活力',game.stats.vitality,100],['courage','🛡️','胆量',game.stats.courage,100],['damage','🏠','破坏',game.houseDamage,100],['coins','🪙','金币',game.coins,null]
       ];
       return items.map(([key,icon,label,value,max])=>{const rounded=Math.round(value);const warning=max&&rounded<30;const sick=key==='health'&&game.isSick;const display=max?`${rounded}/${Math.round(max)}`:`${rounded}`;return `<div class="hud-stat ${warning?'warning':''} ${sick?'sick':''}" data-stat-key="${key}" title="${label} ${display}"><span class="hud-stat-icon">${icon}</span><span class="hud-stat-label">${label}</span><span class="hud-stat-value">${display}</span></div>`}).join('');
     }
     function damageLabel(d){return d<15?'房间完好':d<40?'轻微破坏':d<70?'明显破坏':'惨不忍睹'}
     function renderDailyTask(g){const task=TaskSystem.view(g),card=$('#dailyTaskCard'),button=$('#taskClaimBtn');$('#dailyTaskEmoji').textContent=task.emoji;$('#dailyTaskName').textContent=task.name;$('#dailyTaskReward').textContent=`奖励 ${task.reward}金币`;$('#dailyTaskDesc').textContent=task.desc;$('#dailyTaskProgressText').textContent=task.progressText;$('#dailyTaskStatus').textContent=task.claimed?'已领取':task.completed?'已完成':'进行中';$('#dailyTaskProgressBar').style.width=`${task.percent}%`;card.classList.toggle('claimed',task.claimed);button.disabled=!task.completed||task.claimed;button.textContent=task.claimed?'今日奖励已领取':task.completed?'领取任务奖励':'完成后领取'}
-    function renderHome(){const g=Game.get();if(!g)return;TaskSystem.ensure(g);TaskSystem.refresh(g);const relation=Game.relationshipView();$('#dayChip').textContent=`第 ${g.day} 天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · ${CONFIG.personalities[g.personality].name}`;$('#homeRelationshipChip').textContent=`${relation.emoji} ${relation.name} · 亲密 ${relation.value}/${relation.maximum}`;const equippedTitle=Game.currentTitle(),titleChip=$('#homeTitleChip');titleChip.hidden=!equippedTitle;if(equippedTitle)titleChip.textContent=`${equippedTitle.emoji} 称号 · ${equippedTitle.name}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careLabel').textContent=g.isSick?'小猫生病了':g.bathDue?'需要护理':'护理与看病';$('#compactStats').innerHTML=hudStats(g);renderDailyTask(g);const task=TaskSystem.view(g);$('#taskDot').classList.toggle('show',task.completed&&!task.claimed);const dailyChoice=Game.dailyChoiceView();$('#dailyEventDot')?.classList.toggle('show',Boolean(dailyChoice&&!dailyChoice.resolved));$('#actionPointsText').textContent=`今日行动 ${g.actionsLeft}/4`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年 ${Game.growthDaysLeft()}天`;const root=Game.getShelter();if($('#shelterCount'))$('#shelterCount').textContent=`${root.cats.length}/${root.slots}`;const dex=Game.collectionView();if($('#catDexCount')&&dex)$('#catDexCount').textContent=`${dex.summary.unlocked}/${dex.summary.total}`;const achievementData=Game.achievementView();if($('#achievementCount')&&achievementData)$('#achievementCount').textContent=`${achievementData.summary.unlocked}/${achievementData.summary.total}`;$$('.action-btn').forEach(button=>{button.disabled=(button.id!=='sleepBtn'&&button.id!=='mobileActionMoreBtn'&&button.dataset.action!=='feed'&&g.actionsLeft<=0)});$$('.action-remaining').forEach(el=>el.textContent=g.actionsLeft);if($('#feedNormalBtn'))$('#feedNormalBtn').disabled=g.actionsLeft<=0;renderMall();$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;if($('#moreCleanBtn'))$('#moreCleanBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;if($('#mobileCleanLitterBtn'))$('#mobileCleanLitterBtn').disabled=g.actionsLeft<=0;if($('#mobileWorkBtn'))$('#mobileWorkBtn').disabled=g.actionsLeft<=0;$('#cleanRoomLabel').textContent=g.houseDamage>0?`打扫房间 -25%`:'房间很干净';$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('');renderMall();Storage.save(g);PhoneHud.schedule()}
+    function renderPortraitQuick(g){
+      const button=$('#portraitQuickCard');if(!button||!g)return;
+      const daily=Game.dailyChoiceView(),task=TaskSystem.view(g);
+      if(daily&&!daily.resolved){
+        $('#portraitQuickIcon').textContent='✨';
+        $('#portraitQuickText').textContent=`${g.name}今天遇到了一件事`;
+        $('#portraitQuickProgress').textContent='点击处理';
+        button.dataset.quickType='event';
+      }else{
+        $('#portraitQuickIcon').textContent=task.emoji||'📋';
+        $('#portraitQuickText').textContent=`今日任务：${task.name}`;
+        $('#portraitQuickProgress').textContent=task.claimed?'已领取':task.completed?'可领取':task.progressText;
+        button.dataset.quickType='task';
+      }
+    }
+    function renderHome(){const g=Game.get();if(!g)return;TaskSystem.ensure(g);TaskSystem.refresh(g);const relation=Game.relationshipView();$('#dayChip').textContent=`第 ${g.day} 天`;if($('#portraitCoinChip'))$('#portraitCoinChip').textContent=`🪙 ${Math.round(g.coins)}`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · ${CONFIG.personalities[g.personality].name}`;$('#homeRelationshipChip').textContent=`${relation.emoji} ${relation.name} · 亲密 ${relation.value}/${relation.maximum}`;const equippedTitle=Game.currentTitle(),titleChip=$('#homeTitleChip');titleChip.hidden=!equippedTitle;if(equippedTitle)titleChip.textContent=`${equippedTitle.emoji} 称号 · ${equippedTitle.name}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careLabel').textContent=g.isSick?'小猫生病了':g.bathDue?'需要护理':'护理与看病';$('#compactStats').innerHTML=hudStats(g);renderDailyTask(g);const task=TaskSystem.view(g);$('#taskDot').classList.toggle('show',task.completed&&!task.claimed);const dailyChoice=Game.dailyChoiceView();$('#dailyEventDot')?.classList.toggle('show',Boolean(dailyChoice&&!dailyChoice.resolved));renderPortraitQuick(g);$('#actionPointsText').textContent=`今日行动 ${g.actionsLeft}/4`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年 ${Game.growthDaysLeft()}天`;const root=Game.getShelter();if($('#shelterCount'))$('#shelterCount').textContent=`${root.cats.length}/${root.slots}`;const dex=Game.collectionView();if($('#catDexCount')&&dex)$('#catDexCount').textContent=`${dex.summary.unlocked}/${dex.summary.total}`;const achievementData=Game.achievementView();if($('#achievementCount')&&achievementData)$('#achievementCount').textContent=`${achievementData.summary.unlocked}/${achievementData.summary.total}`;$$('.action-btn').forEach(button=>{button.disabled=(button.id!=='sleepBtn'&&button.id!=='mobileActionMoreBtn'&&button.dataset.action!=='feed'&&g.actionsLeft<=0)});$$('.action-remaining').forEach(el=>el.textContent=g.actionsLeft);if($('#feedNormalBtn'))$('#feedNormalBtn').disabled=g.actionsLeft<=0;renderMall();$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;if($('#moreCleanBtn'))$('#moreCleanBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;if($('#mobileCleanLitterBtn'))$('#mobileCleanLitterBtn').disabled=g.actionsLeft<=0;if($('#mobileWorkBtn'))$('#mobileWorkBtn').disabled=g.actionsLeft<=0;$('#cleanRoomLabel').textContent=g.houseDamage>0?`打扫房间 -25%`:'房间很干净';$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('');renderMall();Storage.save(g);PhoneHud.schedule()}
     function roomCaption(g){if(g.isSick)return `${g.name}生病了，看起来没有精神。`;if(g.mood==='angry')return `${g.name}现在看起来不太高兴。`;if(g.mood==='sleepy')return `${g.name}困了，正准备找地方睡觉。`;if(g.mood==='happy')return `${g.name}心情很好，尾巴轻轻晃着。`;if(g.stats.hunger<25)return `${g.name}正在等你放饭。`;const relation=Game.relationshipView();if(relation.rank>=5)return `${g.name}几乎一直守在你身边，已经和你形影不离。`;if(relation.rank>=4)return `${g.name}一看见你就会主动靠近。`;if(relation.rank>=2)return `${g.name}在你身边很放松，安静地观察着房间。`;return `${g.name}在房间里观察你。`}
     function renderShelter(){
       const root=Game.getShelter(),g=Game.get();if(!root||!g)return;
@@ -879,7 +896,7 @@ const AchievementSystem = window.AchievementSystem;
     let moodResetToken=0;
     function animateEffects(event){
       const layer=$('#gameFeedbackLayer');if(!layer||!document.body.classList.contains('game-home-active'))return;
-      const labels={health:['❤️','健康'],trust:['🤝','信任'],vitality:['⚡','活力'],courage:['🛡️','胆量'],intimacy:['💕','亲密'],hunger:['🥣','饱腹'],cleanliness:['🫧','清洁'],damage:['🏠','破坏'],coins:['🪙','金币']};
+      const labels={health:['❤️','健康'],trust:['🤝','信任'],vitality:['⚡','活力'],courage:['🛡️','胆量'],intimacy:['💕','亲密'],hunger:['🥩','饱腹'],cleanliness:['🫧','清洁'],damage:['🏠','破坏'],coins:['🪙','金币']};
       const entries=Object.entries(event.effects||{}).filter(([,value])=>value);
       const burst=document.createElement('span');burst.className='feedback-burst';burst.textContent=event.emoji||'✨';layer.appendChild(burst);setTimeout(()=>burst.remove(),1250);
       entries.forEach(([key,value],index)=>{const meta=labels[key]||['✨',key],chip=document.createElement('span');chip.className=`floating-effect ${value>0?'positive':'negative'} ${key==='coins'?'coin':''}`;chip.style.setProperty('--drift',`${(index-(entries.length-1)/2)*34}px`);chip.style.animationDelay=`${index*90}ms`;chip.innerHTML=`<span>${meta[0]}</span><span>${meta[1]} ${value>0?'+':''}${value}</span>`;layer.appendChild(chip);setTimeout(()=>chip.remove(),1900);const hud=$(`[data-stat-key="${key}"]`);if(hud){hud.classList.remove('hud-pop');void hud.offsetWidth;hud.classList.add('hud-pop');setTimeout(()=>hud.classList.remove('hud-pop'),600)}});
@@ -1032,7 +1049,6 @@ const AchievementSystem = window.AchievementSystem;
     function bindAssetSetup(){
       renderBreedChoices();
       $("#assetSettingsBtn").addEventListener("click",openAssetSetup);
-      $("#hudSettingsBtn")?.addEventListener("click",openAssetSetup);
       $("#noImageModeBtn").addEventListener("click",chooseNoImages);
       $("#imageModeBtn").addEventListener("click",()=>{showSetupStep("breed");$("#breedNotice").classList.remove("show")});
       $("#breedBackBtn").addEventListener("click",()=>showSetupStep("mode"));
@@ -1051,40 +1067,43 @@ const AchievementSystem = window.AchievementSystem;
       if(willOpen){target.classList.add('show');target.setAttribute('aria-hidden','false');$('#hudDrawerScrim')?.classList.add('show');PhoneHud.hold()}else{PhoneHud.show(true)}
     }
 
+    function openFeature(feature){
+      closeHudDrawers();
+      requestAnimationFrame(()=>{
+        if(feature==='shelter'){UI.renderShelter();UI.showScreen('shelterManageScreen');return}
+        if(feature==='catdex'){UI.renderCatDex();UI.showScreen('catDexScreen');return}
+        if(feature==='achievements'){UI.renderAchievements();UI.showScreen('achievementScreen');return}
+        if(feature==='bag'){UI.renderMall();toggleHudDrawer('bagDrawer');return}
+        if(feature==='care'){UI.renderCare();UI.showScreen('careScreen');return}
+        if(feature==='attributes'){UI.renderAttributes();UI.showScreen('attributeScreen');return}
+        if(feature==='log'){toggleHudDrawer('logDrawer');return}
+        if(feature==='mall'){UI.renderMall();UI.showScreen('mallScreen');return}
+        if(feature==='settings'){openAssetSetup()}
+      });
+    }
+
     function bindNavigation(){
       $$('[data-route]').forEach(button=>button.addEventListener('click',()=>{if(Game.getShelter()&&!Game.hasRoom()){UI.toast('猫舍已经满了，请先回猫舍查看');return}button.dataset.route==='shelter'?UI.showScreen('shelterScreen'):createAndShow(button.dataset.route)}));
       $$('[data-go]').forEach(button=>button.addEventListener('click',()=>{if(button.dataset.go==='homeScreen')UI.renderHome();UI.showScreen(button.dataset.go)}));
+      document.addEventListener('click',event=>{const button=event.target.closest('[data-open-feature]');if(!button)return;event.preventDefault();event.stopPropagation();openFeature(button.dataset.openFeature)});
+      $('#portraitQuickCard')?.addEventListener('click',()=>{const daily=Game.dailyChoiceView();if(daily&&!daily.resolved)UI.showDailyChoice();else toggleHudDrawer('taskDrawer')});
       $('[data-shelter="kitten"]').addEventListener('click',()=>createAndShow('shelterKitten'));
       $$('[data-adult]').forEach(button=>button.addEventListener('click',()=>createAndShow('shelterAdult',button.dataset.adult,{spirit:'米粒',demon:'麻薯',chaos:'锅盖'}[button.dataset.adult])));
       $('#candidateBack').addEventListener('click',()=>UI.showScreen(Game.getCandidate().routeKey.startsWith('shelter')?'shelterScreen':'startScreen'));
       $('#rerollBtn').addEventListener('click',()=>createAndShow(Game.getCandidate().routeKey));
       $('#candidateBreedSelect').addEventListener('change',async event=>{const breedKey=event.target.value;const candidate=Game.setCandidateBreed(breedKey);if(AssetManager.imagesEnabled()&&AssetManager.validBreed(breedKey)){UI.showAssetLoading(`正在准备${CONFIG.breeds[breedKey].name}的6种形态……`);try{await AssetManager.ensureAge(breedKey,candidate.ageStage,progress=>{$('#assetLoadingText').textContent=`正在准备 ${CONFIG.breeds[breedKey].name} ${progress.completed}/${progress.total}`});Visual.resetCache();await Visual.preload(candidate)}finally{UI.hideAssetLoading()}}else if(AssetManager.imagesEnabled()){UI.toast(`${CONFIG.breeds[breedKey].name}图片仍在开发中，先使用内置画面`)}UI.renderCandidate()});
-      $('#mallBtn').addEventListener('click',()=>{UI.renderMall();UI.showScreen('mallScreen')});
       $('#feedOpenMallBtn').addEventListener('click',()=>{closeHudDrawers();UI.renderMall();UI.showScreen('mallScreen')});
       $('#bagOpenMallBtn').addEventListener('click',()=>{closeHudDrawers();UI.renderMall();UI.showScreen('mallScreen')});
-      $('#shelterHudBtn').addEventListener('click',()=>{UI.renderShelter();UI.showScreen('shelterManageScreen')});
-      $('#moreShelterBtn')?.addEventListener('click',()=>{closeHudDrawers();UI.renderShelter();UI.showScreen('shelterManageScreen')});
-      $('#moreBagBtn')?.addEventListener('click',()=>{UI.renderMall();toggleHudDrawer('bagDrawer')});
       $('#addCatFromShelterBtn').addEventListener('click',()=>{if(!Game.hasRoom()){UI.toast('猫舍已经满了');return}UI.showScreen('startScreen')});
       $('#catShelterGrid').addEventListener('click',async event=>{const switchButton=event.target.closest('[data-shelter-switch]');if(switchButton){const result=Game.switchCat(switchButton.dataset.shelterSwitch);if(result.error){UI.toast(result.error);return}UI.showAssetLoading(`正在准备${result.game.name}的图片……`);try{await prepareGameVisuals(result.game,'正在切换猫咪并读取本地素材……')}finally{UI.hideAssetLoading()}Visual.resetCache();UI.renderHome();UI.renderShelter();UI.showScreen('homeScreen');if(result.growth)UI.showGrowth(result.growth);else setTimeout(showEntryMoments,280);return}if(event.target.closest('[data-add-cat]')){if(!Game.hasRoom()){UI.toast('猫舍已经满了');return}UI.showScreen('startScreen')}});
       $('#attributeBtn').addEventListener('click',()=>{UI.renderAttributes();UI.showScreen('attributeScreen')});
-      $('#catDexHudBtn')?.addEventListener('click',()=>{UI.renderCatDex();UI.showScreen('catDexScreen')});
-      $('#achievementHudBtn')?.addEventListener('click',()=>{UI.renderAchievements();UI.showScreen('achievementScreen')});
       $('#careBtn').addEventListener('click',()=>{UI.renderCare();UI.showScreen('careScreen')});
       const feedDockButton=$('.action-btn[data-action="feed"]');if(feedDockButton)feedDockButton.addEventListener('click',event=>{event.stopImmediatePropagation();UI.renderMall();toggleHudDrawer('feedDrawer')});
       $('#taskHudBtn').addEventListener('click',()=>toggleHudDrawer('taskDrawer'));
       $('#dailyEventHudBtn')?.addEventListener('click',()=>UI.showDailyChoice());
-      $('#bagHudBtn').addEventListener('click',()=>{UI.renderMall();toggleHudDrawer('bagDrawer')});
-      $('#logHudBtn').addEventListener('click',()=>toggleHudDrawer('logDrawer'));
       $('#moreHudBtn')?.addEventListener('click',()=>toggleHudDrawer('moreDrawer'));
       $('#mobileActionMoreBtn')?.addEventListener('click',()=>toggleHudDrawer('moreDrawer'));
-      $('#moreCareBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#careBtn').click()});
-      $('#moreCatDexBtn')?.addEventListener('click',()=>{closeHudDrawers();UI.renderCatDex();UI.showScreen('catDexScreen')});
-      $('#moreAchievementBtn')?.addEventListener('click',()=>{closeHudDrawers();UI.renderAchievements();UI.showScreen('achievementScreen')});
-      $('#moreAttributeBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#attributeBtn').click()});
       $('#moreCleanBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#cleanRoomBtn').click()});
-      $('#moreLogBtn')?.addEventListener('click',()=>toggleHudDrawer('logDrawer'));
-      $('#moreSettingsBtn')?.addEventListener('click',()=>{closeHudDrawers();openAssetSetup()});
       $('#moreAbandonBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#abandonBtn').click()});
       $('#catDexFilter')?.addEventListener('click',event=>{const button=event.target.closest('[data-catdex-filter]');if(button)UI.renderCatDex(button.dataset.catdexFilter)});
       $('#catDexGrid')?.addEventListener('click',event=>{const card=event.target.closest('[data-catdex-breed]');if(card)UI.openCatDexDetail(card.dataset.catdexBreed)});

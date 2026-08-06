@@ -1,8 +1,8 @@
 "use strict";
 
-const APP_VERSION = "cloud-cat-app-v4-5-20260806";
+const APP_VERSION = "cloud-cat-app-v4-5-1-20260806";
 const APP_CACHE = `${APP_VERSION}-shell`;
-const IMAGE_CACHE = "cloud-cat-webp-local-cache-v18-webp-20260806-v4-5-achievements";
+const IMAGE_CACHE = "cloud-cat-webp-local-cache-v19-webp-20260806-v4-5-1-responsive";
 const APP_SHELL = [
   "./",
   "./index.html",
