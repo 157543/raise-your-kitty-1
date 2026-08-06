@@ -1160,8 +1160,19 @@ const AchievementSystem = window.AchievementSystem;
   })();
 
   function registerServiceWorker(){
-    if(!("serviceWorker" in navigator))return;
-    window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}),{once:true});
+    if (!("serviceWorker" in navigator)) return;
+    window.addEventListener("load", async () => {
+      try {
+        const registration = await navigator.serviceWorker.register("./sw.js?v=v452-20260806-1", { updateViaCache: "none" });
+        await registration.update();
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+          const key = "cloudCatReloadedForV452";
+          if (sessionStorage.getItem(key)) return;
+          sessionStorage.setItem(key, "1");
+          location.reload();
+        });
+      } catch (_) {}
+    }, { once: true });
   }
   function main(){registerServiceWorker();App.init()}
   document.addEventListener('DOMContentLoaded',main);

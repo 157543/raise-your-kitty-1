@@ -122,7 +122,7 @@
     body.game-home-active .abandon-corner{right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));z-index:26;color:#f7d8d8;background:rgba(80,35,35,.72);border-color:rgba(255,255,255,.16)}
     body.game-home-active .asset-background-status{bottom:105px}
 
-    @media (orientation:portrait) and (max-width:1000px){body.game-home-active .rotate-game-prompt{display:grid}body.game-home-active .game-shell{visibility:hidden}}
+    
 
     /* 平板与较矮桌面：仅做温和压缩，不改变完整布局 */
     @media (max-width:1050px) and (min-height:600px){
@@ -798,3 +798,9 @@ html.phone-portrait .achievement-title-banner .secondary{grid-column:1/-1}
   html.phone-portrait .game-action-dock .action-btn span{font-size:20px}
   html.phone-portrait .game-action-dock .action-btn strong{font-size:10px}
 }
+
+
+/* V4.5.2: portrait is a supported game layout; never hide the game shell. */
+html.phone-portrait body.game-home-active .game-shell{visibility:visible!important;}
+html.phone-portrait body.game-home-active .rotate-game-prompt{display:none!important;}
+html.phone-portrait body.game-home-active .game-top-hud,html.phone-portrait body.game-home-active .game-action-dock,html.phone-portrait body.game-home-active .game-cat-card,html.phone-portrait body.game-home-active .portrait-quick-card{visibility:visible!important;}
