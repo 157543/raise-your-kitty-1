@@ -18,13 +18,35 @@ const AchievementSystem = window.AchievementSystem;
         if(height>0) root.style.setProperty('--game-viewport-height',`${height}px`);
         root.style.setProperty('--game-viewport-top',`${Math.round(vv?.offsetTop||0)}px`);
         root.style.setProperty('--game-viewport-left',`${Math.round(vv?.offsetLeft||0)}px`);
-        const shortSide=Math.min(window.screen?.width||width,window.screen?.height||height);
         const touchCapable=('ontouchstart' in window)||(navigator.maxTouchPoints||0)>0;
-        const isPhone=Boolean(touchCapable&&shortSide<=600);
-        root.classList.toggle('phone-landscape',Boolean(isPhone&&width>height));
-        root.classList.toggle('phone-portrait',Boolean(isPhone&&height>=width));
+        const portraitMedia=window.matchMedia?.('(orientation: portrait) and (max-width: 700px)').matches;
+        const landscapeMedia=window.matchMedia?.('(orientation: landscape) and (max-height: 700px)').matches;
+        const shortViewport=Math.min(width,height);
+        const isPhone=Boolean(touchCapable&&shortViewport<=700);
+        const isPortrait=Boolean(isPhone&&(portraitMedia||height>=width));
+        const isLandscape=Boolean(isPhone&&!isPortrait&&(landscapeMedia||width>height));
+        root.classList.toggle('phone-landscape',isLandscape);
+        root.classList.toggle('phone-portrait',isPortrait);
+        root.dataset.gameOrientation=isPortrait?'portrait':isLandscape?'landscape':'large';
+        requestAnimationFrame(()=>{
+          const dock=document.querySelector('.game-action-dock');
+          const scene=document.querySelector('.game-scene');
+          if(!dock||!scene||isPortrait||!document.body.classList.contains('game-home-active'))return;
+          const dockRect=dock.getBoundingClientRect();
+          const sceneRect=scene.getBoundingClientRect();
+          if(dockRect.height>0&&sceneRect.height>0){
+            const space=Math.max(72,Math.ceil(sceneRect.bottom-dockRect.top+12));
+            root.style.setProperty('--action-dock-space',`${space}px`);
+          }
+        });
       };
+      window.syncGameLayout=syncGameViewport;
       syncGameViewport();
+      document.addEventListener('DOMContentLoaded',()=>{syncGameViewport();setTimeout(syncGameViewport,120)},{once:true});
+      window.addEventListener('load',()=>setTimeout(syncGameViewport,80),{once:true});
+      window.addEventListener('pageshow',()=>setTimeout(syncGameViewport,40),{passive:true});
+      document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(syncGameViewport,40)},{passive:true});
+      window.screen?.orientation?.addEventListener?.('change',()=>setTimeout(syncGameViewport,80));
       window.addEventListener('resize',syncGameViewport,{passive:true});
       window.addEventListener('orientationchange',()=>setTimeout(syncGameViewport,80),{passive:true});
       window.visualViewport?.addEventListener('resize',syncGameViewport,{passive:true});
@@ -776,7 +798,7 @@ const AchievementSystem = window.AchievementSystem;
     function updateAssetModeButton(){const pref=AssetManager.getPreference();const text=!pref?"尚未选择":pref.mode==="none"?"轻量无图片":`完整图片 · ${CONFIG.breeds[pref.breed]?.name||"已选择"}`;$("#assetSettingsBtn").textContent=`🎨 画面模式：${text}`;const hud=$("#hudSettingsBtn");if(hud)hud.title=`画面模式：${text}`}
     function updateBackgroundStatus(progress,finished=false){const box=$("#assetBackgroundStatus");if(!box)return;if(finished){box.textContent=progress?.failed?.length?`⚠️ 有${progress.failed.length}张图片未成功，下次进入会继续尝试`:`✅ 其他可用品种已保存到本机`;box.classList.add("show","done");setTimeout(()=>box.classList.remove("show"),3200);return}box.classList.remove("done");box.classList.add("show");box.textContent=`🐾 后台准备其他猫咪 ${progress.completed}/${progress.total}`}
 
-    function showScreen(id){const overlayIds=['attributeScreen','careScreen','mallScreen','shelterManageScreen','catDexScreen','achievementScreen'],isGameOverlay=overlayIds.includes(id);if(isGameOverlay){$$('.screen').forEach(screen=>{if(screen.id==='homeScreen')screen.classList.add('active');else if(overlayIds.includes(screen.id))screen.classList.toggle('active',screen.id===id);else screen.classList.remove('active')})}else{$$('.screen').forEach(screen=>screen.classList.toggle('active',screen.id===id))}document.body.classList.toggle('game-home-active',id==='homeScreen'||isGameOverlay);$$('.hud-drawer').forEach(drawer=>{drawer.classList.remove('show');drawer.setAttribute('aria-hidden','true')});$('#hudDrawerScrim')?.classList.remove('show');const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&Game.catCount()>1&&(id==='homeScreen'||isGameOverlay));if($('#routeSectionTitle'))$('#routeSectionTitle').textContent=adopted?'再获得一只新猫':'先获得一只小猫';if(!isGameOverlay)window.scrollTo({top:0,behavior:'smooth'});if(id==='homeScreen'){PhoneHud.show(true)}else{PhoneHud.hold()}}
+    function showScreen(id){const overlayIds=['attributeScreen','careScreen','mallScreen','shelterManageScreen','catDexScreen','achievementScreen'],isGameOverlay=overlayIds.includes(id);if(isGameOverlay){$$('.screen').forEach(screen=>{if(screen.id==='homeScreen')screen.classList.add('active');else if(overlayIds.includes(screen.id))screen.classList.toggle('active',screen.id===id);else screen.classList.remove('active')})}else{$$('.screen').forEach(screen=>screen.classList.toggle('active',screen.id===id))}document.body.classList.toggle('game-home-active',id==='homeScreen'||isGameOverlay);$$('.hud-drawer').forEach(drawer=>{drawer.classList.remove('show');drawer.setAttribute('aria-hidden','true')});$('#hudDrawerScrim')?.classList.remove('show');const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&Game.catCount()>1&&(id==='homeScreen'||isGameOverlay));if($('#routeSectionTitle'))$('#routeSectionTitle').textContent=adopted?'再获得一只新猫':'先获得一只小猫';if(!isGameOverlay)window.scrollTo({top:0,behavior:'smooth'});if(id==='homeScreen'){PhoneHud.show(true)}else{PhoneHud.hold()}if(id==='homeScreen'||isGameOverlay)setTimeout(()=>window.syncGameLayout?.(),0)}
     function renderCandidate(){const c=Game.getCandidate(),breed=CONFIG.breeds[c.breedKey];Visual.preload(c);Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=breed.name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${breed.forcedPersonality?'品种固定性格':c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;const select=$('#candidateBreedSelect'),allowed=Game.allowedBreedsForRoute(c.routeKey);select.innerHTML=allowed.map(key=>{const item=CONFIG.breeds[key];return `<option value="${key}" ${key===c.breedKey?'selected':''}>${item.name}${item.shopOnly?'（宠物店限定）':''}${item.imageReady?'':'（图片开发中）'}</option>`}).join('');if(breed.shopOnly)$('#candidateBreedHint').textContent='美短银虎斑仅可在宠物店获得，性格100%固定为灵珠。当前图片尚未完成时会使用内置轻量画面。';else $('#candidateBreedHint').textContent=breed.imageReady?'这个品种已有 WebP 图片；如果尚未缓存，系统会在领养前自动准备。':'该品种 WebP 图片仍在开发中，目前会使用内置轻量画面。';$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none';const hasShelter=!!Game.getShelter(),full=hasShelter&&!Game.hasRoom();$('#adoptBtn').textContent=hasShelter?'加入猫舍':'带它回家';$('#adoptBtn').disabled=full;if(full)$('#candidateBreedHint').textContent='猫舍已经满了。请先返回猫舍处理现有猫咪。'}
     function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥩 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
     function hudStats(game){
@@ -1163,10 +1185,10 @@ const AchievementSystem = window.AchievementSystem;
     if (!("serviceWorker" in navigator)) return;
     window.addEventListener("load", async () => {
       try {
-        const registration = await navigator.serviceWorker.register("./sw.js?v=v452-20260806-1", { updateViaCache: "none" });
+        const registration = await navigator.serviceWorker.register("./sw.js?v=v453-20260806-1", { updateViaCache: "none" });
         await registration.update();
         navigator.serviceWorker.addEventListener("controllerchange", () => {
-          const key = "cloudCatReloadedForV452";
+          const key = "cloudCatReloadedForV453";
           if (sessionStorage.getItem(key)) return;
           sessionStorage.setItem(key, "1");
           location.reload();

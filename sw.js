@@ -1,20 +1,20 @@
 "use strict";
 
-const APP_VERSION = "cloud-cat-app-v4-5-2-20260806-1";
+const APP_VERSION = "cloud-cat-app-v4-5-3-20260806-1";
 const APP_CACHE = `${APP_VERSION}-shell`;
-const IMAGE_CACHE = "cloud-cat-webp-local-cache-v20-webp-20260806-v4-5-2-cache-layout-fix";
+const IMAGE_CACHE = "cloud-cat-webp-local-cache-v20-webp-20260806-v4-5-3-layout-stability";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./style.css?v=v452-20260806-1",
-  "./cats.js?v=v452-20260806-1",
-  "./encyclopedia.js?v=v452-20260806-1",
-  "./assets.js?v=v452-20260806-1",
-  "./relationships.js?v=v452-20260806-1",
-  "./events.js?v=v452-20260806-1",
-  "./tasks.js?v=v452-20260806-1",
-  "./achievements.js?v=v452-20260806-1",
-  "./game.js?v=v452-20260806-1"
+  "./style.css?v=v453-20260806-1",
+  "./cats.js?v=v453-20260806-1",
+  "./encyclopedia.js?v=v453-20260806-1",
+  "./assets.js?v=v453-20260806-1",
+  "./relationships.js?v=v453-20260806-1",
+  "./events.js?v=v453-20260806-1",
+  "./tasks.js?v=v453-20260806-1",
+  "./achievements.js?v=v453-20260806-1",
+  "./game.js?v=v453-20260806-1"
 ];
 
 self.addEventListener("install", event => {

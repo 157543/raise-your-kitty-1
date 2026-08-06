@@ -804,3 +804,328 @@ html.phone-portrait .achievement-title-banner .secondary{grid-column:1/-1}
 html.phone-portrait body.game-home-active .game-shell{visibility:visible!important;}
 html.phone-portrait body.game-home-active .rotate-game-prompt{display:none!important;}
 html.phone-portrait body.game-home-active .game-top-hud,html.phone-portrait body.game-home-active .game-action-dock,html.phone-portrait body.game-home-active .game-cat-card,html.phone-portrait body.game-home-active .portrait-quick-card{visibility:visible!important;}
+
+/* =========================================================
+   V4.5.3 布局稳定版
+   1. 平板/电脑：五个主操作 + 右侧“结束今天/更多”双层按钮
+   2. 猫咪资料根据操作栏真实高度自动避让
+   3. 手机竖屏：纯 CSS 网格兜底，不再依赖绝对定位和 JS 类名
+   ========================================================= */
+
+/* 桌面与平板操作栏：右侧独立上下两格。 */
+.game-action-dock{
+  bottom:max(2px,env(safe-area-inset-bottom));
+  width:min(88vw,1100px);
+  grid-template-columns:repeat(5,minmax(0,1fr)) minmax(106px,.86fr);
+  align-items:stretch;
+}
+.game-action-dock>.action-btn{min-height:88px}
+.dock-side-stack{
+  min-width:0;
+  display:grid;
+  grid-template-rows:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+.dock-side-stack .action-btn{
+  min-width:0;
+  min-height:0;
+  height:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:5px 8px;
+  border-radius:15px;
+  text-align:center;
+}
+.dock-side-stack .action-btn span{grid-row:auto;margin:0;font-size:20px;line-height:1}
+.dock-side-stack .action-btn strong{font-size:11px;line-height:1.05}
+.dock-side-stack .action-btn small{display:none}
+.dock-side-stack .mobile-more-action{display:flex!important}
+.dock-side-stack .end-day-action{background:linear-gradient(155deg,rgba(249,220,201,.97),rgba(195,145,111,.94))}
+
+@media (orientation:landscape) and (min-height:600px) and (max-width:1500px){
+  .game-action-dock{bottom:max(1px,env(safe-area-inset-bottom));width:min(89vw,1060px);gap:7px}
+  .game-action-dock>.action-btn{min-height:86px}
+  .dock-side-stack{gap:5px}
+  .game-cat-card{max-width:285px}
+}
+
+/* 手机横屏仍使用一排五个按钮；嵌套容器在此展开。 */
+html.phone-landscape .dock-side-stack{display:contents}
+html.phone-landscape .game-action-dock{grid-template-columns:repeat(5,minmax(0,1fr))}
+html.phone-landscape .game-action-dock .action-btn[data-action="feed"]{order:1}
+html.phone-landscape .game-action-dock .action-btn[data-action="pet"]{order:2}
+html.phone-landscape .game-action-dock .action-btn[data-action="play"]{order:3}
+html.phone-landscape .game-action-dock #mobileActionMoreBtn{order:4}
+html.phone-landscape .game-action-dock #sleepBtn{order:5}
+html.phone-landscape .dock-side-stack .action-btn{
+  min-height:56px;
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+  padding:3px;
+  border-radius:11px;
+}
+html.phone-landscape .dock-side-stack .action-btn span{font-size:18px}
+html.phone-landscape .dock-side-stack .action-btn strong{font-size:8px}
+
+/*
+  手机竖屏采用五行网格：HUD / 房间 / 猫资料 / 任务事件 / 操作。
+  这段规则只依赖媒体查询，即使 Safari 尚未添加 phone-portrait 类也能显示。
+*/
+@media (orientation:portrait) and (max-width:700px){
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
+  html body.game-home-active{
+    width:100%;
+    height:var(--game-viewport-height,100dvh);
+    min-height:var(--game-viewport-height,100dvh);
+    overflow:hidden;
+    overscroll-behavior:none;
+    background:#2b211b;
+  }
+  html body.game-home-active .app{
+    width:100%;max-width:none;
+    height:100%;min-height:0;
+    margin:0;padding:0;
+    overflow:hidden;
+  }
+  html body.game-home-active #homeScreen.active{
+    display:block!important;
+    width:100%;height:100%;min-height:0;
+    padding:0;overflow:hidden;
+  }
+  html body.game-home-active .game-shell{
+    width:100%;height:100%;min-height:0;
+    overflow:hidden;
+  }
+  html body.game-home-active .game-scene{
+    width:100%;height:100%;min-height:0;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr);
+    grid-template-rows:auto minmax(0,1fr) auto auto auto;
+    grid-template-areas:"hud" "scene" "cat" "quick" "dock";
+    gap:6px;
+    padding:max(6px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
+    overflow:hidden;
+    background:radial-gradient(circle at 50% 28%,#7d634f 0,#44352b 52%,#261d18 100%);
+  }
+
+  html body.game-home-active .game-top-hud{
+    position:relative!important;
+    grid-area:hud;
+    left:auto;right:auto;top:auto;bottom:auto;
+    width:100%;
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    grid-template-rows:38px 36px;
+    grid-template-areas:"day . tools" "stats stats stats";
+    gap:4px 6px;
+    transform:none;
+  }
+  html body.game-home-active .game-day-badge{
+    grid-area:day;
+    min-height:38px;height:38px;
+    padding:0 10px;border-radius:14px;gap:5px;
+  }
+  html body.game-home-active .game-day-badge span{font-size:16px}
+  html body.game-home-active .game-day-badge strong{font-size:13px}
+  html body.game-home-active .portrait-coin-chip{display:inline;font-style:normal;font-size:11px;font-weight:950;color:#ffe8b5;white-space:nowrap}
+  html body.game-home-active .game-hud-stats{
+    grid-area:stats;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:3px;padding:3px;border-radius:14px;
+  }
+  html body.game-home-active .game-hud-stats .hud-stat{display:none}
+  html body.game-home-active .game-hud-stats .hud-stat[data-stat-key="health"],
+  html body.game-home-active .game-hud-stats .hud-stat[data-stat-key="hunger"],
+  html body.game-home-active .game-hud-stats .hud-stat[data-stat-key="cleanliness"],
+  html body.game-home-active .game-hud-stats .hud-stat[data-stat-key="intimacy"]{
+    display:grid;
+    min-height:30px;
+    grid-template-columns:auto 1fr;
+    grid-template-rows:1fr;
+    gap:4px;padding:3px 5px;border-radius:10px;
+  }
+  html body.game-home-active .hud-stat-icon{grid-row:auto;font-size:15px}
+  html body.game-home-active .hud-stat-label{display:none}
+  html body.game-home-active .hud-stat-value{font-size:10px}
+  html body.game-home-active .game-hud-tools{grid-area:tools;align-self:center;gap:3px}
+  html body.game-home-active .game-hud-tools #taskHudBtn,
+  html body.game-home-active .game-hud-tools #dailyEventHudBtn{display:none!important}
+  html body.game-home-active .game-hud-tools #moreHudBtn{
+    display:grid!important;width:38px;height:38px;border-radius:13px;font-size:17px;
+  }
+
+  html body.game-home-active .game-scene>#roomArt{
+    position:relative!important;
+    z-index:1;
+    grid-area:scene;
+    inset:auto!important;
+    width:100%;height:100%;min-height:0;
+    border:1px solid rgba(255,255,255,.38);
+    border-radius:20px;
+    overflow:hidden;
+    background:#d6b995;
+    box-shadow:0 13px 30px rgba(0,0,0,.28);
+  }
+  html body.game-home-active .game-scene>#roomArt .visual-stage{width:100%;height:100%;min-height:0;border-radius:inherit;overflow:hidden}
+  html body.game-home-active .game-scene>#roomArt .visual-room-photo{object-fit:cover;object-position:center 52%}
+  html body.game-home-active .game-scene>#roomArt .visual-cat-photo{bottom:3%;width:min(69vw,340px);max-height:78%}
+  html body.game-home-active .game-scene>#roomArt .visual-cat-fallback{bottom:2%;width:min(67vw,330px);height:75%}
+  html body.game-home-active .game-scene>#roomArt .visual-cat-shadow{bottom:3%;width:min(43vw,210px)}
+
+  html body.game-home-active .game-scene .room-damage-label{
+    position:relative!important;
+    z-index:18;
+    grid-area:scene;
+    align-self:start;justify-self:end;
+    left:auto;right:auto;top:auto;bottom:auto;
+    margin:8px;
+    padding:4px 8px;font-size:9px;
+  }
+  html body.game-home-active .game-scene .room-caption{
+    position:relative!important;
+    z-index:17;
+    grid-area:scene;
+    align-self:end;justify-self:center;
+    left:auto;right:auto;top:auto;bottom:auto;
+    max-width:82%;
+    margin:0 0 8px;
+    padding:6px 9px;
+    font-size:10px;
+    transform:none;
+  }
+
+  html body.game-home-active .game-cat-card{
+    position:relative!important;
+    z-index:22;
+    grid-area:cat;
+    left:auto;right:auto;top:auto;bottom:auto;
+    width:100%;max-width:none;min-height:52px;
+    padding:7px 10px;border-radius:15px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-rows:auto auto;
+    align-items:center;gap:2px 8px;
+  }
+  html body.game-home-active .game-cat-card .cat-name{margin:0;font-size:16px}
+  html body.game-home-active .game-cat-card .cat-sub{grid-column:1/-1;font-size:9px;white-space:nowrap}
+  html body.game-home-active .game-cat-card .relationship-chip{position:absolute;right:9px;top:7px;margin:0;padding:3px 6px;font-size:8px}
+  html body.game-home-active .game-cat-card .achievement-title-chip{display:none!important}
+
+  html body.game-home-active .portrait-quick-card{
+    position:relative!important;
+    z-index:23;
+    grid-area:quick;
+    left:auto;right:auto;top:auto;bottom:auto;
+    width:100%;min-height:36px;
+    display:grid;
+    grid-template-columns:auto minmax(0,1fr) auto;
+    align-items:center;gap:7px;
+    padding:6px 10px;
+    border:1px solid rgba(255,255,255,.25);
+    border-radius:13px;
+    color:#fff;background:rgba(43,33,27,.76);
+    box-shadow:0 7px 18px rgba(0,0,0,.18);
+    backdrop-filter:blur(10px);
+    text-align:left;
+  }
+  html body.game-home-active .portrait-quick-card span{font-size:17px}
+  html body.game-home-active .portrait-quick-card strong{overflow:hidden;font-size:10px;white-space:nowrap;text-overflow:ellipsis}
+  html body.game-home-active .portrait-quick-card small{font-size:8px;color:rgba(255,255,255,.76);white-space:nowrap}
+
+  html body.game-home-active .game-action-dock{
+    position:relative!important;
+    z-index:25;
+    grid-area:dock;
+    left:auto;right:auto;top:auto;bottom:auto;
+    width:100%;height:clamp(104px,18vh,124px);
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    grid-template-rows:repeat(2,minmax(0,1fr));
+    gap:6px;
+    transform:none;
+  }
+  html body.game-home-active .dock-side-stack{display:contents}
+  html body.game-home-active .game-action-dock .action-btn{
+    position:relative;
+    min-width:0;min-height:0;height:auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:2px;padding:4px;
+    border-radius:14px;
+    text-align:center;overflow:hidden;
+  }
+  html body.game-home-active .game-action-dock .action-btn[data-action="feed"]{order:1}
+  html body.game-home-active .game-action-dock .action-btn[data-action="pet"]{order:2}
+  html body.game-home-active .game-action-dock .action-btn[data-action="play"]{order:3}
+  html body.game-home-active .game-action-dock .action-btn[data-action="clean"]{display:flex!important;order:4}
+  html body.game-home-active .game-action-dock #mobileActionMoreBtn{display:flex!important;order:5}
+  html body.game-home-active .game-action-dock #sleepBtn{order:6}
+  html body.game-home-active .game-action-dock #workBtn{display:none!important}
+  html body.game-home-active .game-action-dock .action-btn span{grid-row:auto;margin:0;font-size:21px;line-height:1}
+  html body.game-home-active .game-action-dock .action-btn strong{font-size:10px;white-space:nowrap}
+  html body.game-home-active .game-action-dock .action-btn small{
+    position:absolute;right:4px;top:4px;
+    display:grid;place-items:center;
+    min-width:16px;height:16px;padding:0 3px;
+    border-radius:999px;color:#fff;background:rgba(65,49,38,.66);
+    font-size:0;
+  }
+  html body.game-home-active .game-action-dock .action-btn small b{font-size:8px}
+  html body.game-home-active .game-action-dock .end-day-action small,
+  html body.game-home-active .game-action-dock .mobile-more-action small{display:none}
+
+  html body.game-home-active .game-side-rail,
+  html body.game-home-active .game-bottom-status,
+  html body.game-home-active .hud-reveal-button{display:none!important}
+  html body.game-home-active .asset-background-status{display:none!important}
+
+  /* 竖屏功能面板使用真实可视区域，内容在面板内部滚动。 */
+  html body.game-home-active .hud-drawer{
+    position:fixed;
+    z-index:90;
+    left:var(--game-viewport-left,0px);right:auto;
+    top:var(--game-viewport-top,0px);bottom:auto;
+    width:var(--game-viewport-width,100vw);
+    height:var(--game-viewport-height,100dvh);
+    max-width:none;
+    padding:max(12px,calc(env(safe-area-inset-top) + 8px)) max(12px,env(safe-area-inset-right)) max(14px,calc(env(safe-area-inset-bottom) + 8px)) max(12px,env(safe-area-inset-left));
+    border-radius:0;
+    overflow:auto;
+  }
+  html body.game-home-active .more-menu-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  html body.game-home-active .game-overlay-screen{
+    position:fixed!important;
+    z-index:110;
+    inset:auto;
+    top:var(--game-viewport-top,0px);left:var(--game-viewport-left,0px);
+    width:var(--game-viewport-width,100vw);
+    height:var(--game-viewport-height,100dvh);
+    padding:0;
+    align-items:stretch;
+    overflow:hidden;
+  }
+  html body.game-home-active .game-overlay-screen.active{display:block!important}
+  html body.game-home-active .game-overlay-screen>.panel{
+    width:100%;height:100%;max-height:none;margin:0;
+    padding:max(12px,calc(env(safe-area-inset-top) + 10px)) max(12px,env(safe-area-inset-right)) max(18px,calc(env(safe-area-inset-bottom) + 12px)) max(12px,env(safe-area-inset-left));
+    border:0;border-radius:0;box-shadow:none;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+  }
+  html body.game-home-active .catdex-grid,
+  html body.game-home-active .achievement-grid{grid-template-columns:1fr}
+}
+
+@media (orientation:portrait) and (max-width:700px) and (max-height:680px){
+  html body.game-home-active .game-top-hud{grid-template-rows:34px 32px}
+  html body.game-home-active .game-day-badge{height:34px;min-height:34px}
+  html body.game-home-active .game-cat-card{min-height:46px;padding:6px 9px}
+  html body.game-home-active .portrait-quick-card{min-height:32px;padding:5px 9px}
+  html body.game-home-active .game-action-dock{height:104px}
+  html body.game-home-active .game-action-dock .action-btn span{font-size:19px}
+  html body.game-home-active .game-action-dock .action-btn strong{font-size:9px}
+}
