@@ -1,14 +1,15 @@
 "use strict";
 
-const APP_VERSION = "cloud-cat-app-v4-2-20260806";
+const APP_VERSION = "cloud-cat-app-v4-3-1-20260806";
 const APP_CACHE = `${APP_VERSION}-shell`;
-const IMAGE_CACHE = "cloud-cat-webp-local-cache-v14-webp-20260806-v4-2-daily-events";
+const IMAGE_CACHE = "cloud-cat-webp-local-cache-v16-webp-20260806-v4-3-1-expanded-events";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./style.css",
   "./cats.js",
   "./assets.js",
+  "./relationships.js",
   "./events.js",
   "./tasks.js",
   "./game.js"

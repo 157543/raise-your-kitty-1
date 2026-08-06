@@ -69,7 +69,7 @@
 
           <div class="game-cat-card">
             <h2 class="cat-name" id="homeCatName"></h2>
-            <div class="cat-sub" id="homeCatSub"></div>
+            <div class="cat-sub" id="homeCatSub"></div><div class="relationship-chip" id="homeRelationshipChip"></div>
           </div>
           <div class="room-caption" id="roomCaption"></div>
           <div class="room-damage-label" id="damageLabel"></div>
@@ -159,7 +159,7 @@
       </div>
     </section>
 
-    <section class="screen game-overlay-screen" id="attributeScreen"><div class="panel"><div class="attribute-head"><button class="back-link" data-go="homeScreen">← 返回房间</button><span class="day-chip" id="attributeDay"></span></div><h2 id="attributeName"></h2><div class="attribute-art" id="attributeArt"></div><div class="info-grid" id="attributeInfo"></div><div class="stats-compact" id="attributeStats"></div><div class="personality-detail"><h3 id="attributePersonality"></h3><p id="attributePersonalityDesc"></p></div></div></section>
+    <section class="screen game-overlay-screen" id="attributeScreen"><div class="panel"><div class="attribute-head"><button class="back-link" data-go="homeScreen">← 返回房间</button><span class="day-chip" id="attributeDay"></span></div><h2 id="attributeName"></h2><div class="attribute-art" id="attributeArt"></div><div class="info-grid" id="attributeInfo"></div><div class="stats-compact" id="attributeStats"></div><div class="relationship-detail" id="attributeRelationship"></div><div class="personality-detail"><h3 id="attributePersonality"></h3><p id="attributePersonalityDesc"></p></div></div></section>
     <section class="screen game-overlay-screen" id="careScreen">
       <div class="panel">
         <div class="attribute-head">
@@ -298,6 +298,7 @@
   <div class="toast" id="toast"></div>
   <script src="cats.js" defer></script>
   <script src="assets.js" defer></script>
+  <script src="relationships.js" defer></script>
   <script src="events.js" defer></script>
   <script src="tasks.js" defer></script>
   <script src="game.js" defer></script>

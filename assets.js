@@ -2,7 +2,7 @@
 
 /* WebP 资源清单。新增素材时优先只修改这个文件。 */
 window.ASSETS = Object.freeze({
-    version: "local-cache-v14-webp-20260806-v4-2-daily-events",
+    version: "local-cache-v16-webp-20260806-v4-3-1-expanded-events",
     cover: "assets/cover/home-cover.webp",
     rooms: {
       clean: "assets/rooms/room-clean.webp",

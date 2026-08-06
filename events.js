@@ -193,7 +193,379 @@ window.DailyChoiceEventSystem = (() => {
         {id:"strip",label:"把猫条放在附近",desc:"需要背包中有猫条",require:{inventory:{catStrip:1}},inventory:{catStrip:-1},effects:{hunger:20,trust:2},outcome:{emoji:"🍗",title:"它接受了食物",body:"你退开后，{name}才慢慢走出来吃掉猫条。它仍然没有靠近你，但目光柔和了一点。",visual:{catState:"happy"}}},
         {id:"leave",label:"给它完全的空间",desc:"不强迫互动，增加胆量",effects:{courage:3},outcome:{emoji:"🚶",title:"你选择不打扰",body:"你离开了房间一会儿。回来时，{name}已经从桌下出来，独自在窗边坐着。",visual:{catState:"idle"}}}
       ]
+    },
+    /* 灵珠专属：新增10个每日选择事件 */
+    {
+      id: "spiritMorningWake",
+      personalities: ["spirit"],
+      emoji: "🌅",
+      title: "温柔的晨间叫醒",
+      body: "天刚亮，{name}就跳到床边，用肉垫轻轻碰你的脸。见你没有反应，它又小声喵了一下。",
+      choices: [
+        {id:"cuddle",label:"把它抱进被窝",desc:"一起赖床，增加亲密与信任",effects:{intimacy:5,trust:3,vitality:2},outcome:{emoji:"🛏️",title:"再睡五分钟",body:"{name}在你臂弯里团成一团，呼噜声很快盖过了闹钟。",visual:{catState:"sleepy"}}},
+        {id:"breakfast",label:"起床准备早餐",desc:"消耗1次行动，增加饱腹与健康",actions:-1,effects:{hunger:18,health:2,intimacy:2},outcome:{emoji:"🥣",title:"早饭比闹钟有效",body:"你刚拿起食盆，{name}立刻精神起来，迈着小碎步跟进了厨房。",visual:{catState:"happy"}}},
+        {id:"snooze",label:"翻身继续睡",desc:"不消耗行动，它会在旁边等你",effects:{trust:1},outcome:{emoji:"😴",title:"安静地守在旁边",body:"{name}没有继续打扰，只把尾巴搭在你的手腕上，陪你又睡了一会儿。",visual:{catState:"sleepy"}}}
+      ]
+    },
+    {
+      id: "spiritStudyCompanion",
+      personalities: ["spirit"],
+      emoji: "📚",
+      title: "陪你写作业",
+      body: "你坐到桌前后，{name}也跳上旁边的椅子，端端正正地陪着你，偶尔看看书页，偶尔看看你。",
+      choices: [
+        {id:"share",label:"给它留一个位置",desc:"安静陪伴，增加亲密",effects:{intimacy:4,trust:3},outcome:{emoji:"🤍",title:"一人一猫的自习时间",body:"{name}把下巴搭在桌沿，始终没有碰乱你的东西。",visual:{catState:"idle"}}},
+        {id:"break",label:"休息一下陪它玩",desc:"消耗1次行动，增加活力与亲密",actions:-1,effects:{vitality:5,intimacy:5,hunger:-2},outcome:{emoji:"🧶",title:"短暂的课间活动",body:"你晃了晃玩具，{name}立刻从认真陪读变成了满屋追逐的小旋风。",visual:{catState:"happy"}}},
+        {id:"move",label:"把它抱到猫窝",desc:"继续专心，它会自己休息",effects:{vitality:2,trust:1},outcome:{emoji:"🐾",title:"懂事地去休息了",body:"{name}在猫窝里转了两圈趴下，仍不时抬头确认你还在。",visual:{catState:"sleepy"}}}
+      ]
+    },
+    {
+      id: "spiritHairTie",
+      personalities: ["spirit"],
+      emoji: "🎀",
+      title: "失踪的发圈",
+      body: "{name}叼着你找了很久的发圈来到面前，轻轻放下后坐得笔直，像是在等待表扬。",
+      choices: [
+        {id:"praise",label:"认真夸奖它",desc:"增加信任与亲密",effects:{trust:4,intimacy:4},outcome:{emoji:"🥰",title:"它听懂了夸奖",body:"{name}眯起眼睛，尾巴在地上轻轻拍了两下。",visual:{catState:"happy"}}},
+        {id:"reward",label:"奖励一根猫条",desc:"需要背包中有猫条",require:{inventory:{catStrip:1}},inventory:{catStrip:-1},effects:{hunger:20,intimacy:4},outcome:{emoji:"🍗",title:"优秀寻物员的奖励",body:"{name}吃完猫条，又跑去房间角落认真检查，似乎想再找点什么。",visual:{catState:"happy"}}},
+        {id:"store",label:"收好发圈",desc:"避免它误吞，增加一点健康",effects:{health:1,trust:1},outcome:{emoji:"🧺",title:"危险的小东西收好了",body:"你把发圈放进抽屉，{name}没有不高兴，只安静地跟在你身边。",visual:{catState:"idle"}}}
+      ]
+    },
+    {
+      id: "spiritRainyWindow",
+      personalities: ["spirit"],
+      emoji: "🌧️",
+      title: "雨天的窗台",
+      body: "雨点敲在玻璃上，{name}缩在窗边，小心翼翼地伸爪碰着玻璃上滑落的水珠。",
+      choices: [
+        {id:"blanket",label:"给它披一条小毯子",desc:"增加健康与亲密",effects:{health:2,intimacy:4},outcome:{emoji:"🧣",title:"暖暖地看雨",body:"{name}裹着毯子靠在你旁边，目光跟着雨滴一路滑到窗沿。",visual:{catState:"sleepy"}}},
+        {id:"listen",label:"陪它听一会儿雨声",desc:"增加信任，恢复一点活力",effects:{trust:4,vitality:3},outcome:{emoji:"🎧",title:"房间安静下来",body:"你们并排坐着，{name}慢慢放松身体，把一只前爪搭在你腿上。",visual:{catState:"idle"}}},
+        {id:"close",label:"关好窗帘让它休息",desc:"避免着凉，增加健康",effects:{health:3},outcome:{emoji:"🏠",title:"回到温暖的猫窝",body:"窗帘合上后，{name}打了个哈欠，转身钻进了猫窝。",visual:{catState:"sleepy"}}}
+      ]
+    },
+    {
+      id: "spiritBottleCapGift",
+      personalities: ["spirit"],
+      emoji: "🟡",
+      title: "郑重其事的瓶盖礼物",
+      body: "{name}把一只亮闪闪的瓶盖推到你脚边，随后抬头望着你，表情认真得像完成了一件大事。",
+      choices: [
+        {id:"treasure",label:"把瓶盖收进纪念盒",desc:"增加大量亲密",effects:{intimacy:6,trust:2},outcome:{emoji:"🎁",title:"礼物被珍藏了",body:"看见你认真收好瓶盖，{name}开心地绕着你的脚走了一圈。",visual:{catState:"happy"}}},
+        {id:"roll",label:"把瓶盖滚回去",desc:"和它玩一会儿，消耗1次行动",actions:-1,effects:{intimacy:5,vitality:-3,courage:1},outcome:{emoji:"🏒",title:"瓶盖冰球赛",body:"瓶盖在地板上滑来滑去，{name}追得四只爪子差点打结。",visual:{catState:"mischievous"}}},
+        {id:"check",label:"检查后再还给它",desc:"确认安全，增加健康与信任",effects:{health:1,trust:3},outcome:{emoji:"✅",title:"安全的小玩具",body:"你磨平了瓶盖边缘再递回去，{name}满意地把它拨到了猫窝旁。",visual:{catState:"idle"}}}
+      ]
+    },
+    {
+      id: "spiritGuestVisit",
+      personalities: ["spirit"],
+      emoji: "🚪",
+      title: "陌生客人来访",
+      body: "门外传来陌生人的声音。{name}没有躲远，只安静地站在你脚边观察，尾巴有些紧张地贴着身体。",
+      choices: [
+        {id:"protect",label:"把它抱到安静房间",desc:"保护它，增加信任",effects:{trust:5,courage:-1},outcome:{emoji:"🤲",title:"安全感来自你的怀抱",body:"{name}伏在你怀里听了一会儿门外的动静，身体很快放松下来。",visual:{catState:"idle"}}},
+        {id:"introduce",label:"让客人远远打招呼",desc:"循序渐进，增加胆量与信任",effects:{courage:3,trust:2},outcome:{emoji:"👋",title:"一次温和的认识",body:"客人没有靠近，只轻声叫了它的名字。{name}观察片刻后，小心地探出了脑袋。",visual:{catState:"idle"}}},
+        {id:"treat",label:"用猫条帮助它放松",desc:"需要背包中有猫条",require:{inventory:{catStrip:1}},inventory:{catStrip:-1},effects:{hunger:20,courage:2,intimacy:2},outcome:{emoji:"🍗",title:"零食缓解了紧张",body:"吃完猫条后，{name}仍保持距离，但已经愿意在客人面前坐下。",visual:{catState:"happy"}}}
+      ]
+    },
+    {
+      id: "spiritWaterBowl",
+      personalities: ["spirit"],
+      emoji: "💧",
+      title: "水碗里的倒影",
+      body: "{name}盯着水碗里的自己看了很久，时不时伸爪碰一下水面，随后惊讶地缩回爪子。",
+      choices: [
+        {id:"fresh",label:"换一碗新鲜的水",desc:"增加健康与清洁",effects:{health:3,cleanliness:2},outcome:{emoji:"🚰",title:"清凉的新水",body:"{name}先闻了闻，随后认真喝了好几口，胡须尖沾满小水珠。",visual:{catState:"happy"}}},
+        {id:"play",label:"陪它拨水花",desc:"增加亲密，但会弄湿一点地面",effects:{intimacy:4,cleanliness:-3},outcome:{emoji:"💦",title:"一场迷你水仗",body:"你轻轻点了一下水面，{name}立刻跟着拍起水花，最后把两只前爪都弄湿了。",visual:{catState:"mischievous"}}},
+        {id:"move",label:"把水碗移到安静处",desc:"减少打扰，增加信任",effects:{trust:3},outcome:{emoji:"🫗",title:"找到了更舒服的位置",body:"换到墙边后，{name}终于不再研究倒影，安安静静地喝起水来。",visual:{catState:"idle"}}}
+      ]
+    },
+    {
+      id: "spiritLaundryWarmth",
+      personalities: ["spirit"],
+      emoji: "🧺",
+      title: "刚晒好的衣服",
+      body: "你把刚晒好的衣服放在床边，{name}立刻钻进柔软的衣物中，只露出一双满足的眼睛。",
+      choices: [
+        {id:"allow",label:"让它睡一小会儿",desc:"增加亲密和活力",effects:{intimacy:4,vitality:4},outcome:{emoji:"☁️",title:"最柔软的临时猫窝",body:"{name}在衣服里踩了几下奶，很快舒服得睡着了。",visual:{catState:"sleepy"}}},
+        {id:"fold",label:"一边摸它一边叠衣服",desc:"增加亲密与信任",effects:{intimacy:5,trust:2},outcome:{emoji:"🫳",title:"叠衣服也变成了互动",body:"每叠好一件，你就摸摸{name}的脑袋。它一直乖乖待在旁边。",visual:{catState:"happy"}}},
+        {id:"bed",label:"把它移到猫窝",desc:"保持衣服干净，增加清洁",effects:{cleanliness:2,trust:1},outcome:{emoji:"🐈",title:"换个地方继续睡",body:"{name}虽然有些舍不得，还是抱着一只袜子去了猫窝。",visual:{catState:"sleepy"}}}
+      ]
+    },
+    {
+      id: "spiritMealReminder",
+      personalities: ["spirit"],
+      condition: game => game.stats.hunger < 70,
+      emoji: "🐱",
+      title: "它在提醒你吃饭时间到了",
+      body: "{name}一看见你就喵喵叫，主动抬头去蹭你的手，前爪都快离开地面，像是马上要站起来抱住你。",
+      choices: [
+        {id:"strip",label:"喂它一根猫条",desc:"需要背包中有猫条",require:{inventory:{catStrip:1}},inventory:{catStrip:-1},effects:{hunger:20,intimacy:4},outcome:{emoji:"🍗",title:"撒娇成功了",body:"{name}吃得心满意足，吃完后又把脑袋塞回你的手心。",visual:{catState:"happy"}}},
+        {id:"can",label:"开一个猫罐头",desc:"需要背包中有猫罐头",require:{inventory:{can:1}},inventory:{can:-1},effects:{hunger:50,intimacy:7},outcome:{emoji:"🥫",title:"今天是罐头大餐",body:"罐头刚打开，{name}就开心得原地转了一圈，吃完后亲昵地靠着你。",visual:{catState:"happy"}}},
+        {id:"prepare",label:"认真准备普通猫粮",desc:"消耗1次行动，增加饱腹和健康",actions:-1,effects:{hunger:24,health:2,trust:3},outcome:{emoji:"🥣",title:"按时吃饭最安心",body:"你把食盆放好，{name}规规矩矩地吃完，还回头冲你轻轻叫了一声。",visual:{catState:"happy"}}}
+      ]
+    },
+    {
+      id: "spiritNightGuard",
+      personalities: ["spirit"],
+      emoji: "🌙",
+      title: "床边的小守卫",
+      body: "夜里传来一声轻响，{name}立刻坐到床边，竖起耳朵认真听着，像是在替你守夜。",
+      choices: [
+        {id:"check",label:"和它一起检查房间",desc:"消耗1次行动，增加胆量与信任",actions:-1,effects:{courage:3,trust:4},outcome:{emoji:"🔦",title:"房间一切正常",body:"你们一起巡视了一圈，发现只是窗外的风。{name}昂着头走回床边，像完成了任务。",visual:{catState:"happy"}}},
+        {id:"reassure",label:"轻声告诉它没事",desc:"增加亲密与信任",effects:{intimacy:4,trust:3},outcome:{emoji:"🤍",title:"它相信你的判断",body:"听见你的声音，{name}慢慢放下警戒，重新趴到你的脚边。",visual:{catState:"sleepy"}}},
+        {id:"sleep",label:"让它自己判断",desc:"增加胆量",effects:{courage:2},outcome:{emoji:"👂",title:"继续认真听了一会儿",body:"{name}确认没有危险后，才安静地团成一圈睡下。",visual:{catState:"sleepy"}}}
+      ]
+    },
+
+    /* 魔丸专属：新增10个每日选择事件 */
+    {
+      id: "demonTissueStorm",
+      personalities: ["demon"],
+      emoji: "🧻",
+      title: "客厅里下起了纸巾雪",
+      body: "你回头时，{name}正站在一堆纸巾碎片中央，嘴里还叼着最后一小截，神情十分坦然。",
+      choices: [
+        {id:"clean",label:"带着它一起收拾",desc:"消耗1次行动，降低损坏并增加信任",actions:-1,effects:{damage:-3,cleanliness:8,trust:2},outcome:{emoji:"🧹",title:"勉强算是一起打扫",body:"你收纸巾时，{name}负责追着碎片跑。虽然效率一般，房间总算恢复了整洁。",visual:{catState:"mischievous"}}},
+        {id:"photo",label:"先拍一张“犯罪现场”",desc:"增加亲密，但房间更乱一点",effects:{intimacy:3,cleanliness:-4},outcome:{emoji:"📸",title:"证据确凿",body:"镜头里的{name}一本正经，完全不像纸巾风暴的制造者。",visual:{catState:"mischievous"}}},
+        {id:"toy",label:"用玩具转移注意力",desc:"消耗1次行动，增加亲密与活力",actions:-1,effects:{intimacy:4,vitality:-3},outcome:{emoji:"🪶",title:"新的目标出现了",body:"玩具一晃，{name}立刻放弃纸巾，转身追着你跑了起来。",visual:{catState:"happy"}}}
+      ]
+    },
+    {
+      id: "demonKeyboard",
+      personalities: ["demon"],
+      emoji: "⌨️",
+      title: "键盘被占领",
+      body: "你刚准备使用电脑，{name}就整只趴在键盘上，还用尾巴挡住了屏幕的一角。",
+      choices: [
+        {id:"workaround",label:"把键盘让给它",desc:"增加亲密，今天先用手机",effects:{intimacy:4,trust:1},outcome:{emoji:"😼",title:"成功占领工作区",body:"{name}满意地伸了个懒腰，仿佛这个位置本来就属于它。",visual:{catState:"happy"}}},
+        {id:"move",label:"温柔地把它抱走",desc:"保住键盘，它会有点不满",effects:{trust:1,intimacy:1},outcome:{emoji:"🙄",title:"抗议无效",body:"{name}被抱到旁边后，尾巴重重拍了两下桌面，却没有真的离开。",visual:{catState:"angry"}}},
+        {id:"break",label:"陪它玩五分钟再工作",desc:"消耗1次行动，增加亲密",actions:-1,effects:{intimacy:5,vitality:-4},outcome:{emoji:"🧶",title:"先满足猫老板",body:"玩够以后，{name}终于主动让开键盘，转到旁边监督你。",visual:{catState:"happy"}}}
+      ]
+    },
+    {
+      id: "demonHiddenCoins",
+      personalities: ["demon"],
+      emoji: "🪙",
+      title: "沙发底下的私房钱",
+      body: "{name}从沙发底下拨出几枚金币，又飞快地用爪子盖住，明显不打算轻易交出来。",
+      choices: [
+        {id:"trade",label:"用猫条和它交换",desc:"需要背包中有猫条，可获得8金币",require:{inventory:{catStrip:1}},inventory:{catStrip:-1},effects:{coins:8,hunger:20,intimacy:2},outcome:{emoji:"🤝",title:"交易顺利完成",body:"{name}叼走猫条，你收起金币。双方都对这笔交易十分满意。",visual:{catState:"happy"}}},
+        {id:"game",label:"和它玩猜爪游戏",desc:"有机会拿回金币，增加亲密",effects:{coins:4,intimacy:3,courage:1},outcome:{emoji:"🎲",title:"你猜中了一半",body:"{name}把金币在两只爪子间换来换去。你最终拿回4枚，剩下的又被它藏了起来。",visual:{catState:"mischievous"}}},
+        {id:"leave",label:"让它继续收藏",desc:"不拿金币，增加信任",effects:{trust:3},outcome:{emoji:"🏦",title:"猫咪的小金库",body:"你没有拿走金币。{name}观察了你一会儿，郑重地把它们重新推进沙发底下。",visual:{catState:"idle"}}}
+      ]
+    },
+    {
+      id: "demonShoelace",
+      personalities: ["demon"],
+      emoji: "👟",
+      title: "鞋带伏击",
+      body: "你正准备出门，{name}突然扑住鞋带，四只爪子一起用力，像抓住了今天最重要的猎物。",
+      choices: [
+        {id:"play",label:"陪它玩一轮",desc:"消耗1次行动，增加亲密与胆量",actions:-1,effects:{intimacy:4,courage:2,vitality:-3},outcome:{emoji:"🏃",title:"鞋带猎物成功逃跑",body:"你拖着鞋带绕了两圈，{name}追得十分投入，最后气喘吁吁地趴下。",visual:{catState:"happy"}}},
+        {id:"replace",label:"给它一根安全绳结",desc:"花费2金币，避免鞋带损坏",require:{coins:2},effects:{coins:-2,intimacy:3},outcome:{emoji:"🪢",title:"获得了专属绳结",body:"{name}很快转移目标，抱着新绳结滚到了地毯上。",visual:{catState:"mischievous"}}},
+        {id:"untie",label:"直接把鞋带抽回来",desc:"它会有点不高兴",effects:{trust:-1,courage:1},outcome:{emoji:"😾",title:"猎物被没收",body:"{name}盯着空空的爪子看了两秒，随后转身去埋伏你的另一只鞋。",visual:{catState:"angry"}}}
+      ]
+    },
+    {
+      id: "demonPlantSoil",
+      personalities: ["demon"],
+      emoji: "🪴",
+      title: "花盆里的考古现场",
+      body: "{name}把一只前爪伸进花盆，正认真地往外刨土，地面已经出现了一小堆“考古成果”。",
+      choices: [
+        {id:"stop",label:"立刻制止并清理",desc:"消耗1次行动，恢复清洁",actions:-1,effects:{cleanliness:8,trust:1},outcome:{emoji:"🧹",title:"考古项目被叫停",body:"你把泥土扫回花盆。{name}蹲在旁边监督，似乎对项目中止很不满意。",visual:{catState:"angry"}}},
+        {id:"box",label:"给它一个装纸团的盒子",desc:"花费2金币，转移挖掘欲望",require:{coins:2},effects:{coins:-2,intimacy:4,damage:-2},outcome:{emoji:"📦",title:"新的挖掘基地",body:"纸团盒很快取代了花盆。{name}一头扎进去，忙得不亦乐乎。",visual:{catState:"mischievous"}}},
+        {id:"watch",label:"看看它到底想找什么",desc:"增加亲密，但清洁下降",effects:{intimacy:2,cleanliness:-6},outcome:{emoji:"🕳️",title:"什么也没有找到",body:"{name}最终刨到了花盆底，抬头看你时满脸都是土。",visual:{catState:"mischievous"}}}
+      ]
+    },
+    {
+      id: "demonMidnightSong",
+      personalities: ["demon"],
+      emoji: "🎤",
+      title: "凌晨的个人演唱会",
+      body: "夜深以后，{name}站在走廊中央开始大声喵叫，声音一声比一声有感情。",
+      choices: [
+        {id:"answer",label:"学它喵一声",desc:"增加亲密和胆量",effects:{intimacy:4,courage:2},outcome:{emoji:"🎶",title:"成功完成合唱",body:"你回应以后，{name}明显愣了一下，随后用更长的一声喵接了回来。",visual:{catState:"happy"}}},
+        {id:"snack",label:"拿猫条让它安静",desc:"需要背包中有猫条",require:{inventory:{catStrip:1}},inventory:{catStrip:-1},effects:{hunger:20,intimacy:2},outcome:{emoji:"🍗",title:"演出费已支付",body:"{name}叼走猫条，演唱会立刻宣布结束。",visual:{catState:"happy"}}},
+        {id:"ignore",label:"假装已经睡着",desc:"不消耗资源，它会自己停下",effects:{trust:1,vitality:-1},outcome:{emoji:"🌙",title:"观众没有反应",body:"{name}又唱了几声，发现没人回应后，终于跳上床尾安静下来。",visual:{catState:"sleepy"}}}
+      ]
+    },
+    {
+      id: "demonDoorHandle",
+      personalities: ["demon"],
+      emoji: "🚪",
+      title: "门把手研究计划",
+      body: "{name}站起来扒着门把手，反复尝试往下压。看它认真的样子，似乎离成功只差一点。",
+      choices: [
+        {id:"teach",label:"给它演示一次",desc:"增加胆量与亲密，但可能学会开门",effects:{courage:4,intimacy:3,damage:2},outcome:{emoji:"🧠",title:"它似乎真的看懂了",body:"你压下门把手时，{name}目不转睛。下一次你可能需要给门加锁了。",visual:{catState:"mischievous"}}},
+        {id:"block",label:"安装简易门挡",desc:"花费3金币，减少房屋风险",require:{coins:3},effects:{coins:-3,damage:-3},outcome:{emoji:"🔒",title:"研究项目暂时受阻",body:"门挡装好后，{name}尝试了几次，最后不甘心地甩着尾巴离开。",visual:{catState:"angry"}}},
+        {id:"distract",label:"拿纸箱转移注意",desc:"增加亲密，不花金币",effects:{intimacy:3,trust:1},outcome:{emoji:"📦",title:"纸箱更有吸引力",body:"纸箱刚放下，{name}就忘记了门把手，整只钻了进去。",visual:{catState:"happy"}}}
+      ]
+    },
+    {
+      id: "demonFoodBag",
+      personalities: ["demon"],
+      condition: game => game.stats.hunger < 85,
+      emoji: "🛍️",
+      title: "猫粮袋劫案",
+      body: "一阵窸窣声后，你看见{name}正倒退着拖走猫粮袋，袋子几乎和它一样大。",
+      choices: [
+        {id:"recover",label:"没收猫粮袋",desc:"避免偷吃，增加一点信任",effects:{trust:1,courage:-1},outcome:{emoji:"✋",title:"劫案被及时阻止",body:"你拿回猫粮袋，{name}坐在原地舔了舔爪子，假装从未参与。",visual:{catState:"idle"}}},
+        {id:"portion",label:"倒一小份给它",desc:"增加饱腹与亲密",effects:{hunger:16,intimacy:2},outcome:{emoji:"🥣",title:"谈判达成",body:"得到一小份猫粮后，{name}立刻放弃了整袋目标，认真吃了起来。",visual:{catState:"happy"}}},
+        {id:"chase",label:"假装追捕小偷",desc:"消耗1次行动，增加活力和亲密",actions:-1,effects:{intimacy:4,vitality:-4,courage:2},outcome:{emoji:"🚨",title:"追捕行动开始",body:"{name}拖着袋子在房间里绕了一圈，最后主动松口，转身等你继续追。",visual:{catState:"mischievous"}}}
+      ]
+    },
+    {
+      id: "demonLaundryBasket",
+      personalities: ["demon"],
+      emoji: "🧦",
+      title: "洗衣篮伏击点",
+      body: "你准备拿衣服时，{name}突然从洗衣篮里冒出脑袋，爪子还按着一只失踪很久的袜子。",
+      choices: [
+        {id:"retrieve",label:"拿回袜子",desc:"袜子失而复得，它会小小抗议",effects:{trust:1,intimacy:1},outcome:{emoji:"🧦",title:"失踪物品归位",body:"你抽走袜子后，{name}又在篮子里翻找起来，显然还有别的收藏。",visual:{catState:"mischievous"}}},
+        {id:"play",label:"用袜子和它拔河",desc:"消耗1次行动，增加亲密",actions:-1,effects:{intimacy:5,vitality:-3},outcome:{emoji:"💪",title:"袜子拔河赛",body:"你们拉扯了好一会儿，最后袜子平安，{name}也玩累了。",visual:{catState:"happy"}}},
+        {id:"basket",label:"把旧毛巾留给它",desc:"做成临时猫窝，增加信任",effects:{trust:3,vitality:2},outcome:{emoji:"🛌",title:"洗衣篮正式改造",body:"你铺好旧毛巾后，{name}满意地在里面踩了踩，抱着袜子睡下了。",visual:{catState:"sleepy"}}}
+      ]
+    },
+    {
+      id: "demonMirror",
+      personalities: ["demon"],
+      emoji: "🪞",
+      title: "镜子里的神秘对手",
+      body: "{name}对着镜子里的自己摆出狩猎姿势，往左一步，镜子里的猫也往左一步，它显然觉得事情很可疑。",
+      choices: [
+        {id:"observe",label:"陪它研究镜子",desc:"增加胆量与亲密",effects:{courage:3,intimacy:3},outcome:{emoji:"👀",title:"长时间的对视",body:"{name}试了各种角度，最后把鼻子贴到镜面上，和对手完成了碰鼻。",visual:{catState:"mischievous"}}},
+        {id:"cover",label:"暂时把镜子盖住",desc:"帮助它放松，增加信任",effects:{trust:3},outcome:{emoji:"🧣",title:"神秘对手消失了",body:"镜子被盖住后，{name}绕到后面确认了一圈，终于放心离开。",visual:{catState:"idle"}}},
+        {id:"toy",label:"在镜子前逗它玩",desc:"消耗1次行动，增加活力与亲密",actions:-1,effects:{intimacy:4,vitality:-4,courage:1},outcome:{emoji:"🪶",title:"两个影子一起追玩具",body:"{name}一会儿追玩具，一会儿看镜子里的动作，忙得顾不上怀疑对手。",visual:{catState:"happy"}}}
+      ]
+    },
+
+    /* 耄耋专属：新增10个每日选择事件 */
+    {
+      id: "chaosBowlGuard",
+      personalities: ["chaos"],
+      condition: game => game.stats.hunger < 80,
+      emoji: "🥣",
+      title: "食盆旁的低吼",
+      body: "{name}守在空食盆旁，身体压得很低。你一靠近，它就发出警告声，但目光又不停扫向食物柜。",
+      choices: [
+        {id:"distance",label:"保持距离放下猫粮",desc:"尊重边界，增加饱腹与少量信任",effects:{hunger:20,trust:2},outcome:{emoji:"🍽️",title:"它接受了远距离喂食",body:"你退开后，{name}才走向食盆。吃完时，它远远看了你一眼，没有继续低吼。",visual:{catState:"happy"}}},
+        {id:"can",label:"放下一罐猫罐头",desc:"需要背包中有猫罐头",require:{inventory:{can:1}},inventory:{can:-1},effects:{hunger:50,trust:3},outcome:{emoji:"🥫",title:"美食让警戒缓和",body:"罐头的香味让{name}慢慢放松。它仍护着食盆，却愿意在你留在房间时进食。",visual:{catState:"happy"}}},
+        {id:"wait",label:"先离开一会儿",desc:"不强迫它，增加胆量",effects:{courage:3},outcome:{emoji:"🚶",title:"给它完整的空间",body:"你关上门离开片刻。回来时食盆已经被推到角落，{name}也不再紧绷。",visual:{catState:"idle"}}}
+      ]
+    },
+    {
+      id: "chaosShadowCharge",
+      personalities: ["chaos"],
+      emoji: "🌑",
+      title: "影子里的突然冲刺",
+      body: "房间灯光晃了一下，{name}突然冲向墙上的影子，撞到一旁的小凳子后迅速退回暗处。",
+      choices: [
+        {id:"light",label:"打开更柔和的灯",desc:"花费2金币，减少紧张与损坏",require:{coins:2},effects:{coins:-2,damage:-2,trust:1},outcome:{emoji:"💡",title:"影子变得不再尖锐",body:"柔和灯光亮起后，{name}观察了一会儿，终于从暗处走了出来。",visual:{catState:"idle"}}},
+        {id:"play",label:"用玩具引导它追逐",desc:"消耗1次行动，增加胆量与少量亲密",actions:-1,effects:{courage:3,intimacy:1,vitality:-4},outcome:{emoji:"🪶",title:"目标变得可控制",body:"玩具的轨迹比影子更明确。{name}追了几轮后，动作明显放松了一些。",visual:{catState:"mischievous"}}},
+        {id:"quiet",label:"保持安静等它平复",desc:"尊重距离，增加信任",effects:{trust:2},outcome:{emoji:"🌫️",title:"房间重新安静",body:"你没有靠近。{name}在暗处观察很久，最后自己走回了房间中央。",visual:{catState:"idle"}}}
+      ]
+    },
+    {
+      id: "chaosHighShelf",
+      personalities: ["chaos"],
+      emoji: "🗄️",
+      title: "高处的据点",
+      body: "{name}跳上了最高的柜顶，伏低身体俯视整个房间。它不愿下来，也不允许任何人靠近柜子。",
+      choices: [
+        {id:"ladder",label:"放一条安全下来的路线",desc:"花费3金币，降低受伤风险",require:{coins:3},effects:{coins:-3,health:2,trust:1},outcome:{emoji:"🪜",title:"它自己选择了下来",body:"你摆好稳固的落脚点后退开。过了一会儿，{name}沿着路线悄悄回到地面。",visual:{catState:"idle"}}},
+        {id:"wait",label:"让它待到自己想下来",desc:"增加胆量，不强迫互动",effects:{courage:3},outcome:{emoji:"⏳",title:"高处观察结束",body:"{name}在柜顶待了很久，确认房间安全后才轻巧地跳了下来。",visual:{catState:"idle"}}},
+        {id:"lure",label:"用猫条引导它",desc:"需要背包中有猫条",require:{inventory:{catStrip:1}},inventory:{catStrip:-1},effects:{hunger:20,trust:2},outcome:{emoji:"🍗",title:"一步一步靠近",body:"你把猫条放在安全距离外。{name}犹豫片刻，最终沿着柜子边缘慢慢下来。",visual:{catState:"happy"}}}
+      ]
+    },
+    {
+      id: "chaosBrokenToy",
+      personalities: ["chaos"],
+      emoji: "🧸",
+      title: "被撕开的旧玩具",
+      body: "{name}把旧玩具撕开了一个口子，却没有继续破坏，只盯着露出的填充物，显得既警惕又困惑。",
+      choices: [
+        {id:"repair",label:"坐在远处修好它",desc:"花费3金币，增加少量信任",require:{coins:3},effects:{coins:-3,trust:2,damage:-2},outcome:{emoji:"🪡",title:"旧玩具重新完整",body:"你修好玩具后放回原处。{name}等你退开，才慢慢靠近闻了闻。",visual:{catState:"idle"}}},
+        {id:"remove",label:"悄悄把危险填充物收走",desc:"增加健康，避免误食",effects:{health:3,trust:1},outcome:{emoji:"🧹",title:"危险被及时清除",body:"你没有触碰{name}，只清走散落的填充物。它一直盯着你，却没有阻止。",visual:{catState:"idle"}}},
+        {id:"replace",label:"换成结实的纸团",desc:"消耗1次行动，增加胆量与活力",actions:-1,effects:{courage:2,vitality:-3,intimacy:1},outcome:{emoji:"⚪",title:"新的安全目标",body:"纸团滚过地面，{name}先观察很久，最终快速扑了上去。",visual:{catState:"mischievous"}}}
+      ]
+    },
+    {
+      id: "chaosCarrierFort",
+      personalities: ["chaos"],
+      emoji: "🧳",
+      title: "航空箱变成了堡垒",
+      body: "{name}钻进航空箱后不肯出来，从缝隙里盯着房间，偶尔伸爪拍一下经过的东西。",
+      choices: [
+        {id:"blanket",label:"在外面盖一层薄毯",desc:"让它更有安全感，增加信任",effects:{trust:3,vitality:2},outcome:{emoji:"🏕️",title:"获得了安静的藏身处",body:"光线暗下来后，{name}不再频繁出爪，慢慢在箱子里趴下。",visual:{catState:"sleepy"}}},
+        {id:"door",label:"把箱门完全固定打开",desc:"避免意外关门，增加健康",effects:{health:2,trust:1},outcome:{emoji:"🔓",title:"出口始终畅通",body:"确认箱门不会突然关上后，{name}终于愿意把前爪伸到外面。",visual:{catState:"idle"}}},
+        {id:"leave",label:"把这一角暂时让给它",desc:"增加胆量，不强迫接触",effects:{courage:3},outcome:{emoji:"🛡️",title:"堡垒得到尊重",body:"你绕开航空箱活动。许久以后，{name}自己走出来，姿态比之前放松。",visual:{catState:"idle"}}}
+      ]
+    },
+    {
+      id: "chaosSuddenTruce",
+      personalities: ["chaos"],
+      emoji: "🕊️",
+      title: "罕见的主动靠近",
+      body: "今天的{name}没有躲开。它停在离你一步远的位置，安静地看着你，尾巴也没有不耐烦地甩动。",
+      choices: [
+        {id:"still",label:"保持不动等它决定",desc:"尊重选择，增加信任",effects:{trust:4,intimacy:1},outcome:{emoji:"🤍",title:"它轻轻闻了闻你的手",body:"你没有伸手。{name}自己靠近半步，碰了碰你的指尖，又平静地退开。",visual:{catState:"happy"}}},
+        {id:"blink",label:"慢慢对它眨眼",desc:"增加信任与少量亲密",effects:{trust:3,intimacy:2},outcome:{emoji:"👁️",title:"它也回应了一次眨眼",body:"你缓慢闭眼再睁开。{name}观察片刻，也短暂地眯起了眼睛。",visual:{catState:"idle"}}},
+        {id:"pet",label:"尝试轻摸一下额头",desc:"可能太快，增加亲密但降低一点信任",effects:{intimacy:3,trust:-1},outcome:{emoji:"⚠️",title:"接触只持续了一瞬间",body:"你的手碰到额头后，{name}立刻后退，但这次没有出爪，只远远看着你。",visual:{catState:"angry"}}}
+      ]
+    },
+    {
+      id: "chaosDoorScratch",
+      personalities: ["chaos"],
+      condition: game => game.houseDamage < 95,
+      emoji: "🚪",
+      title: "门板上的抓痕",
+      body: "{name}不断抓挠房门，门板已经出现新的痕迹。每次你靠近，它都会立刻转身防备。",
+      choices: [
+        {id:"guard",label:"在门边放一块抓板",desc:"花费5金币，减少房屋损坏",require:{coins:5},effects:{coins:-5,damage:-7,trust:1},outcome:{emoji:"🪵",title:"抓挠目标被替换",body:"你放好抓板后退开。{name}试探几次，终于开始在抓板上磨爪。",visual:{catState:"mischievous"}}},
+        {id:"open",label:"打开门让它检查外面",desc:"增加胆量，但可能造成少量损坏",effects:{courage:3,damage:2},outcome:{emoji:"🚪",title:"认真巡查了一圈",body:"门打开后，{name}谨慎地查看走廊，确认没有异常才重新回房。",visual:{catState:"idle"}}},
+        {id:"wait",label:"保持距离等待它停下",desc:"增加信任，不刺激它",effects:{trust:2},outcome:{emoji:"⏳",title:"抓挠慢慢停止",body:"你没有靠近。{name}发泄完紧张后，自己离开了门边。",visual:{catState:"idle"}}}
+      ]
+    },
+    {
+      id: "chaosThunder",
+      personalities: ["chaos"],
+      emoji: "⛈️",
+      title: "雷声后的藏身",
+      body: "一声雷响后，{name}迅速钻进桌下，身体紧贴地面，任何细小的动静都会让它重新绷紧。",
+      choices: [
+        {id:"hideout",label:"在附近放一个遮蔽箱",desc:"花费2金币，增加信任和健康",require:{coins:2},effects:{coins:-2,trust:3,health:1},outcome:{emoji:"📦",title:"有了更安全的藏身处",body:"你放下纸箱后退开。{name}很快转移进去，雷声再响时也没有那么慌张。",visual:{catState:"idle"}}},
+        {id:"sit",label:"在远处安静坐着",desc:"陪伴但不靠近，增加信任",effects:{trust:3,intimacy:1},outcome:{emoji:"🌧️",title:"它知道你还在",body:"你没有说话，只留在视线范围内。{name}的呼吸渐渐平稳下来。",visual:{catState:"idle"}}},
+        {id:"music",label:"播放轻柔的白噪音",desc:"消耗1次行动，恢复活力与健康",actions:-1,effects:{vitality:4,health:2},outcome:{emoji:"🎧",title:"雷声变得遥远",body:"稳定的声音盖住部分雷响，{name}慢慢趴下，不再紧盯着门口。",visual:{catState:"sleepy"}}}
+      ]
+    },
+    {
+      id: "chaosWindowReflection",
+      personalities: ["chaos"],
+      emoji: "🪟",
+      title: "玻璃上的陌生猫影",
+      body: "夜色让玻璃变成镜子。{name}盯着倒影压低身体，喉咙里发出警戒声，认定外面有另一只猫。",
+      choices: [
+        {id:"curtain",label:"拉上窗帘",desc:"快速消除刺激，增加信任",effects:{trust:3},outcome:{emoji:"🪟",title:"陌生猫消失了",body:"窗帘合上后，{name}绕着窗边检查一圈，终于停止警戒。",visual:{catState:"idle"}}},
+        {id:"light",label:"打开室内灯让倒影变淡",desc:"增加胆量与健康",effects:{courage:2,health:1},outcome:{emoji:"💡",title:"玻璃重新变得透明",body:"光线改变后，倒影逐渐消失。{name}仍盯了一会儿，最后退回房间中央。",visual:{catState:"idle"}}},
+        {id:"stay",label:"陪它保持安全距离观察",desc:"增加信任与少量亲密",effects:{trust:3,intimacy:1},outcome:{emoji:"👀",title:"共同确认没有威胁",body:"你站在远处陪着。{name}反复确认后，终于不再对倒影低吼。",visual:{catState:"idle"}}}
+      ]
+    },
+    {
+      id: "chaosMedicineDistance",
+      personalities: ["chaos"],
+      condition: game => game.isSick || game.stats.health < 65,
+      emoji: "💊",
+      title: "它发现了药的气味",
+      body: "{name}闻到护理用品的气味后躲进角落，耳朵紧贴脑后，显然不允许你直接靠近。",
+      choices: [
+        {id:"doctor",label:"准备带它去专业治疗",desc:"花费10金币，增加健康与信任",require:{coins:10},effects:{coins:-10,health:8,trust:2},outcome:{emoji:"🏥",title:"专业处理更安全",body:"你用毛巾和航空箱谨慎配合，没有强行抓抱。{name}接受处理后精神好了一些。",visual:{catState:"sick"}}},
+        {id:"food",label:"把护理品藏在罐头旁",desc:"需要背包中有猫罐头",require:{inventory:{can:1}},inventory:{can:-1},effects:{hunger:50,health:4,trust:1},outcome:{emoji:"🥫",title:"食物降低了抗拒",body:"罐头香味让{name}愿意从角落出来。它仍保持警惕，但成功吃下了一些食物。",visual:{catState:"happy"}}},
+        {id:"pause",label:"暂时停止靠近并观察",desc:"避免刺激，增加信任",effects:{trust:2,health:1},outcome:{emoji:"🕰️",title:"先让它平静下来",body:"你把用品收远，留出安静空间。{name}的身体逐渐不再那么紧绷。",visual:{catState:"sick"}}}
+      ]
     }
+
+
   ];
 
   const byId = id => definitions.find(item => item.id === id) || null;

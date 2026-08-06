@@ -493,3 +493,15 @@
   #dailyChoiceOverlay .daily-choice-resolved{grid-area:choices;margin:0}
 }
 
+
+
+/* =========================
+   V4.3 亲密关系等级
+========================= */
+.relationship-chip{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:5px 9px;border:1px solid rgba(255,255,255,.36);border-radius:999px;background:rgba(52,37,29,.52);color:#fff;font-size:11px;font-weight:800;backdrop-filter:blur(9px)}
+.relationship-detail{margin-top:14px;padding:16px;border:1px solid rgba(239,127,60,.2);border-radius:20px;background:linear-gradient(135deg,#fff8ef,#fff1e4)}
+.relationship-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.relationship-detail-head small{display:block;color:var(--muted);font-weight:800}.relationship-detail-head h3{margin:3px 0 0;font-size:20px}.relationship-detail-value{font-size:14px;color:#8a5f42}
+.relationship-progress{height:10px;margin:12px 0 9px;border-radius:999px;background:rgba(139,98,68,.13);overflow:hidden}.relationship-progress span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#ef7f3c,#f0b85d)}
+.relationship-detail p{margin:0;color:#66584f;line-height:1.6;font-size:13px}.relationship-next{margin-top:8px!important;font-weight:800;color:#85583d!important}.relationship-unlocks{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.relationship-unlock{padding:5px 8px;border-radius:999px;background:#fff;color:#75503a;font-size:10px;font-weight:800}
+.shelter-relationship{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:7px 0 5px;padding:6px 8px;border-radius:11px;background:#fff5e9;color:#7b5238;font-size:10px;font-weight:800}.shelter-relationship small{font-size:9px;color:#9b775f}
+@media(orientation:landscape) and (max-height:599px){.relationship-chip{margin-top:3px;padding:3px 7px;font-size:8px}.relationship-detail{margin-top:8px;padding:10px;border-radius:14px}.relationship-detail-head h3{font-size:14px}.relationship-detail p{font-size:9px}.relationship-unlock{padding:3px 5px;font-size:7px}.shelter-relationship{margin:3px 0;padding:3px 5px;font-size:7px}.shelter-relationship small{font-size:6px}}
