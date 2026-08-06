@@ -6,6 +6,7 @@ const EventSystem = window.EventSystem;
 const DailyChoiceEventSystem = window.DailyChoiceEventSystem;
 const TaskSystem = window.TaskSystem;
 const RelationshipSystem = window.RelationshipSystem;
+const AchievementSystem = window.AchievementSystem;
 
 (()=>{
       const root=document.documentElement;
@@ -192,10 +193,10 @@ const RelationshipSystem = window.RelationshipSystem;
      3. 存档模块
   ========================= */
   const Storage = (() => {
-    const KEY="cloudCatShelterSave_v8";
-    const BACKUP_KEY="cloudCatShelterSave_v8_backup";
-    const LEGACY=["cloudCatShelterSave_v7","cloudCatShelterSave_v7_backup","cloudCatShelterSave_v5","cloudCatShelterSave_v4","cloudCatGameSave_v2","cloudCatGameSave_v1"];
-    const sharedFields=["version","slots","day","actionsLeft","coins","houseDamage","dailyTask","dailyChoice","inventory","activeCatId","cats"];
+    const KEY="cloudCatShelterSave_v10";
+    const BACKUP_KEY="cloudCatShelterSave_v10_backup";
+    const LEGACY=["cloudCatShelterSave_v9","cloudCatShelterSave_v9_backup","cloudCatShelterSave_v8","cloudCatShelterSave_v8_backup","cloudCatShelterSave_v7","cloudCatShelterSave_v7_backup","cloudCatShelterSave_v5","cloudCatShelterSave_v4","cloudCatGameSave_v2","cloudCatGameSave_v1"];
+    const sharedFields=["version","slots","day","actionsLeft","coins","houseDamage","dailyTask","dailyChoice","inventory","collection","achievements","activeCatId","cats"];
     function makeId(){return globalThis.crypto?.randomUUID?.()||`cat_${Date.now()}_${Math.random().toString(36).slice(2,9)}`}
     function normalizeCat(source={},rootDay=1){
       const cat={...source,stats:{...(source.stats||{})}};
@@ -234,12 +235,18 @@ const RelationshipSystem = window.RelationshipSystem;
         const slots=Math.max(3,Number(data.slots)||3,cats.length);
         const activeCatId=cats.some(cat=>cat.id===data.activeCatId)?data.activeCatId:cats[0].id;
         const inventory={catStrip:Math.max(0,Math.floor(Number(data.inventory?.catStrip)||0)),can:Math.max(0,Math.floor(Number(data.inventory?.can)||0))};
-        return {version:8,slots,day,actionsLeft:Utils.clamp(Number.isFinite(Number(data.actionsLeft))?Number(data.actionsLeft):4,0,4),coins:Math.max(0,Number(data.coins)||0),houseDamage:Utils.clamp(Number(data.houseDamage)||0),dailyTask:data.dailyTask||null,dailyChoice:data.dailyChoice||null,inventory,activeCatId,cats};
+        const collection=CatDexSystem.sync(data.collection,cats,day);
+        const root={version:10,slots,day,actionsLeft:Utils.clamp(Number.isFinite(Number(data.actionsLeft))?Number(data.actionsLeft):4,0,4),coins:Math.max(0,Number(data.coins)||0),houseDamage:Utils.clamp(Number(data.houseDamage)||0),dailyTask:data.dailyTask||null,dailyChoice:data.dailyChoice||null,inventory,collection,achievements:null,activeCatId,cats};
+        root.achievements=AchievementSystem.normalize(data.achievements,root,{migrating:!data.achievements});
+        return root;
       }
       const day=Math.max(1,Number(data.day)||1);
       const cat=normalizeCat(data,day);
       const inventory={catStrip:Math.max(0,Math.floor(Number(data.inventory?.catStrip)||0)),can:Math.max(0,Math.floor(Number(data.inventory?.can)||0))};
-      return {version:8,slots:3,day,actionsLeft:Utils.clamp(Number.isFinite(Number(data.actionsLeft))?Number(data.actionsLeft):4,0,4),coins:Math.max(0,Number(data.coins)||0),houseDamage:Utils.clamp(Number(data.houseDamage)||0),dailyTask:data.dailyTask||null,dailyChoice:data.dailyChoice||null,inventory,activeCatId:cat.id,cats:[cat]};
+      const cats=[cat],collection=CatDexSystem.sync(data.collection,cats,day);
+      const root={version:10,slots:3,day,actionsLeft:Utils.clamp(Number.isFinite(Number(data.actionsLeft))?Number(data.actionsLeft):4,0,4),coins:Math.max(0,Number(data.coins)||0),houseDamage:Utils.clamp(Number(data.houseDamage)||0),dailyTask:data.dailyTask||null,dailyChoice:data.dailyChoice||null,inventory,collection,achievements:null,activeCatId:cat.id,cats};
+      root.achievements=AchievementSystem.normalize(data.achievements,root,{migrating:!data.achievements});
+      return root;
     }
     function save(data){
       if(!data)return false;
@@ -405,6 +412,19 @@ const RelationshipSystem = window.RelationshipSystem;
       return swapStage(element,buildStage(game,state,roomResult,catResult,options));
     }
 
+    async function renderCatPreview(target,breedKey,age="kitten",unlocked=true){
+      const element=typeof target==="string"?$(target):target;if(!element)return;
+      const token=(element.__catDexRenderToken||0)+1;element.__catDexRenderToken=token;
+      element.classList.toggle("locked",!unlocked);element.replaceChildren();
+      if(!unlocked)return;
+      const preview={breedKey,ageStage:age,mood:"neutral",isSick:false,personality:"spirit",houseDamage:0};
+      const fallback=document.createElement("div");fallback.className="catdex-cat-fallback";fallback.innerHTML=Art.catSVG(preview);element.appendChild(fallback);
+      if(!AssetManager.imagesEnabled()||!AssetManager.validBreed(breedKey))return;
+      const result=await loadImage(catPath(preview,"idle",age),"auto");
+      if(element.__catDexRenderToken!==token||!result.ok)return;
+      element.appendChild(readyImage("catdex-cat-photo",result,`${CONFIG.breeds[breedKey].name}${age==="adult"?"成年":"幼猫"}形态`));
+    }
+
     async function renderCover(){
       const box=$("#logoArt");if(!box)return;
       box.innerHTML="";box.classList.remove("has-cover");
@@ -435,7 +455,7 @@ const RelationshipSystem = window.RelationshipSystem;
     }
 
     function preloadStatic(){return Promise.resolve([])}
-    return {renderScene,renderCover,renderEvent,preload,preloadStatic,loadImage,stateFor,roomPath,catPath,resetCache};
+    return {renderScene,renderCover,renderEvent,renderCatPreview,preload,preloadStatic,loadImage,stateFor,roomPath,catPath,resetCache};
   })();
 
   /* =========================
@@ -517,7 +537,7 @@ const RelationshipSystem = window.RelationshipSystem;
   ========================= */
   const Game = (() => {
     let shelter=null,game=null,candidate=null;
-    const sharedKeys=new Set(["version","slots","day","actionsLeft","coins","houseDamage","dailyTask","dailyChoice","inventory","activeCatId","cats"]);
+    const sharedKeys=new Set(["version","slots","day","actionsLeft","coins","houseDamage","dailyTask","dailyChoice","inventory","collection","achievements","activeCatId","cats"]);
     function activeCat(){return shelter?.cats?.find(cat=>cat.id===shelter.activeCatId)||shelter?.cats?.[0]||null}
     function makeProxy(){
       if(!shelter||!activeCat())return null;
@@ -552,6 +572,8 @@ const RelationshipSystem = window.RelationshipSystem;
       game=makeProxy();
       TaskSystem.ensure(game);
       DailyChoiceEventSystem.ensure(game);
+      AchievementSystem.ensure(shelter);
+      AchievementSystem.evaluate(shelter);
       Storage.save(game);
       return game;
     }
@@ -575,13 +597,14 @@ const RelationshipSystem = window.RelationshipSystem;
       if(!candidate)return {error:"还没有选择猫咪"};
       if(!hasRoom())return {error:`猫舍已经满了，目前只有${shelter.slots}个猫位`};
       const first=!shelter;
-      if(first)shelter={version:8,slots:3,day:1,actionsLeft:4,coins:100,houseDamage:0,dailyTask:null,dailyChoice:null,inventory:{catStrip:0,can:0},activeCatId:null,cats:[]};
+      if(first)shelter={version:10,slots:3,day:1,actionsLeft:4,coins:100,houseDamage:0,dailyTask:null,dailyChoice:null,inventory:{catStrip:0,can:0},collection:CatDexSystem.sync({},[],1),achievements:AchievementSystem.create(1),activeCatId:null,cats:[]};
       const cat=buildCat(candidate,name,shelter.day);
-      shelter.cats.push(cat);shelter.activeCatId=cat.id;game=makeProxy();
+      const dexResult=CatDexSystem.register(shelter.collection,cat,shelter.day);shelter.cats.push(cat);shelter.collection=CatDexSystem.sync(shelter.collection,shelter.cats,shelter.day);shelter.activeCatId=cat.id;game=makeProxy();
       if(first)TaskSystem.create(game);else TaskSystem.ensure(game);
       DailyChoiceEventSystem.ensure(game);
+      recordAchievement("catsAdopted");
       Storage.save(game);
-      return {game,cat,first};
+      return {game,cat,first,collectionUnlock:dexResult.newUnlock};
     }
     function daysOwned(cat=activeCat()){return cat?Math.max(1,shelter.day-cat.joinedDay+1):0}
     function growthDaysLeft(cat=activeCat()){return !cat||cat.ageStage==="adult"?0:Math.max(0,7-daysOwned(cat))}
@@ -591,13 +614,13 @@ const RelationshipSystem = window.RelationshipSystem;
       shelter.activeCatId=id;game=makeProxy();
       if(game.day>=game.nextBathDay&&!game.lastBathDay)game.bathDue=true;
       let growth=null;if(game.ageStage==="kitten"&&!game.personalityChanged&&daysOwned(cat)>=7)growth=grow();
-      TaskSystem.refresh(game);DailyChoiceEventSystem.ensure(game);Storage.save(game);return {game,growth};
+      TaskSystem.refresh(game);DailyChoiceEventSystem.ensure(game);checkAchievements();Storage.save(game);return {game,growth};
     }
     function removeActiveCat({allowLast=false}={}){
       if(!shelter||!activeCat())return {error:"没有可以移除的猫"};
       if(!allowLast&&shelter.cats.length<=1)return {error:"猫舍里只剩最后一只猫，不能弃养"};
       const removed=activeCat(),index=shelter.cats.findIndex(cat=>cat.id===removed.id);
-      shelter.cats.splice(index,1);
+      shelter.cats.splice(index,1);shelter.collection=CatDexSystem.sync(shelter.collection,shelter.cats,shelter.day);
       if(!shelter.cats.length){Storage.clear();shelter=null;game=null;return {removed,remaining:0,game:null}}
       shelter.activeCatId=shelter.cats[Math.min(index,shelter.cats.length-1)].id;game=makeProxy();TaskSystem.refresh(game);Storage.save(game);
       return {removed,remaining:shelter.cats.length,game};
@@ -617,18 +640,26 @@ const RelationshipSystem = window.RelationshipSystem;
     }
     function apply(effects){Object.entries(effects||{}).forEach(([key,value])=>change(key,value))}
     function relationshipView(cat=game){if(!cat)return null;const max=cat.personality==="chaos"?35:100;return RelationshipSystem.view(cat,max)}
+    function collectionView(){if(!shelter)return null;const result=CatDexSystem.view(shelter.collection,shelter.cats,shelter.day);shelter.collection=result.collection;return result}
     function takeRelationshipEvents(){if(!game)return[];const events=RelationshipSystem.takePending(game);if(events.length)Storage.save(game);return events}
     function welcomeEvent(){if(!game)return null;const event=RelationshipSystem.welcomeEvent(game);if(event){log(event.body);Storage.save(game)}return event}
     function log(text){game.logs.unshift(`第${game.day}天：${text}`);game.logs=game.logs.slice(0,40)}
+    function noteAchievementUnlocks(unlocked){(unlocked||[]).forEach(definition=>log(`解锁成就“${definition.name}”，获得称号“${definition.title.name}”。`))}
+    function checkAchievements(){if(!shelter)return[];const unlocked=AchievementSystem.evaluate(shelter);noteAchievementUnlocks(unlocked);return unlocked}
+    function recordAchievement(key,amount=1,meta={}){if(!shelter)return[];const unlocked=AchievementSystem.record(shelter,key,amount,meta);noteAchievementUnlocks(unlocked);return unlocked}
+    function achievementView(filter="all"){if(!shelter)return null;checkAchievements();return AchievementSystem.view(shelter,filter)}
+    function currentTitle(){return shelter?AchievementSystem.currentTitle(shelter):null}
+    function selectTitle(key){if(!shelter)return {error:"还没有猫舍"};const result=AchievementSystem.selectTitle(shelter,key);if(!result.error)Storage.save(game);return result}
+    function takeAchievementEvents(){if(!shelter)return[];const events=AchievementSystem.takePending(shelter);if(events.length)Storage.save(game);return events}
     function isDead(){return !!game&&game.stats.health<=0}
-    function action(actionKey){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const hungerBefore=game.stats.hunger;const baseEvent=game.breedKey==="americanSilver"&&game.stats.hunger<70&&actionKey==="pet"?{emoji:"🐱",title:"一看见你就开始撒娇",body:`${game.name}一看见你就喵喵叫，还主动抬起头去蹭你的手。它越蹭越起劲，前爪都快离开地面，像是马上就要站起来抱住你。`,effects:{trust:2,intimacy:4},visual:{catState:"happy"}}:EventSystem.getAction(game.personality,actionKey);const event=RelationshipSystem.decorateAction(game,actionKey,baseEvent);apply(event.effects);const hungerGain=Math.max(0,game.stats.hunger-hungerBefore);TaskSystem.record(game,{type:actionKey,hungerGain});TaskSystem.refresh(game);game.mood=event.visual?.catState||((event.effects.health<0||event.effects.trust<0)?"angry":actionKey==="play"||actionKey==="feed"?"happy":"neutral");log(event.body);Storage.save(game);return {event,death:isDead()}}
-    function work(){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=Economy.work(game.personality,game.name);apply(event.effects);TaskSystem.refresh(game);game.mood=event.effects.damage?"angry":"neutral";log(event.body);Storage.save(game);return {event,death:isDead()}}
+    function action(actionKey){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const hungerBefore=game.stats.hunger;const baseEvent=game.breedKey==="americanSilver"&&game.stats.hunger<70&&actionKey==="pet"?{emoji:"🐱",title:"一看见你就开始撒娇",body:`${game.name}一看见你就喵喵叫，还主动抬起头去蹭你的手。它越蹭越起劲，前爪都快离开地面，像是马上就要站起来抱住你。`,effects:{trust:2,intimacy:4},visual:{catState:"happy"}}:EventSystem.getAction(game.personality,actionKey);const event=RelationshipSystem.decorateAction(game,actionKey,baseEvent);apply(event.effects);const hungerGain=Math.max(0,game.stats.hunger-hungerBefore);TaskSystem.record(game,{type:actionKey,hungerGain});TaskSystem.refresh(game);game.mood=event.visual?.catState||((event.effects.health<0||event.effects.trust<0)?"angry":actionKey==="play"||actionKey==="feed"?"happy":"neutral");log(event.body);recordAchievement(actionKey==="clean"?"cleanLitter":actionKey);Storage.save(game);return {event,death:isDead()}}
+    function work(){if(!game||game.actionsLeft<=0)return null;game.actionsLeft--;const event=Economy.work(game.personality,game.name);apply(event.effects);TaskSystem.refresh(game);game.mood=event.effects.damage?"angry":"neutral";log(event.body);recordAchievement("work");Storage.save(game);return {event,death:isDead()}}
     const mallItems={catStrip:{name:"猫条",emoji:"🍗",price:5,hunger:20,intimacy:2},can:{name:"猫罐头",emoji:"🥫",price:10,hunger:50,intimacy:5}};
     function inventory(){if(!shelter.inventory)shelter.inventory={catStrip:0,can:0};return shelter.inventory}
-    function buyItem(itemKey){if(!game)return {error:"没有小猫"};const item=mallItems[itemKey];if(!item)return {error:"商品不存在"};if(game.coins<item.price)return {error:`金币不足，还需要${item.price-game.coins}金币`};change("coins",-item.price);inventory()[itemKey]=(inventory()[itemKey]||0)+1;TaskSystem.record(game,{type:"shop"});TaskSystem.refresh(game);const event={emoji:"🛍️",title:`${item.name}已放入背包`,body:`你花了${item.price}金币购买${item.name}。它已经放进猫舍共享背包，可以选择任意一只猫使用。`,effects:{coins:-item.price}};log(`你在商场购买了${item.name}，当前库存${inventory()[itemKey]}个。`);Storage.save(game);return {event,death:false}}
-    function useItem(itemKey){if(!game)return {error:"没有小猫"};const item=mallItems[itemKey];if(!item)return {error:"物品不存在"};if((inventory()[itemKey]||0)<=0)return {error:`背包里没有${item.name}了`};if(game.stats.hunger>=100)return {error:`${game.name}现在已经吃得很饱了`};inventory()[itemKey]--;const hungerBefore=game.stats.hunger,intimacyBefore=game.stats.intimacy;change("hunger",item.hunger);change("intimacy",item.intimacy);const gained=Math.round(game.stats.hunger-hungerBefore),intimacyGained=Math.round(game.stats.intimacy-intimacyBefore);TaskSystem.record(game,{type:"feedItem",hungerGain:gained});TaskSystem.refresh(game);game.mood="happy";const baseEvent={emoji:item.emoji,title:`${game.name}吃掉了${item.name}`,body:`你从背包里拿出${item.name}。${game.name}闻到香味立刻凑了过来，很快吃得干干净净，也和你更亲近了。`,effects:{hunger:gained,intimacy:intimacyGained},visual:{catState:"happy"}};const event=RelationshipSystem.decorateAction(game,"feedItem",baseEvent);log(`你从背包取出${item.name}喂给${game.name}，饱腹增加${gained}，亲密增加${intimacyGained}。`);Storage.save(game);return {event,death:false}}
-    function cleanRoom(){if(!game)return {error:"没有小猫"};if(game.actionsLeft<=0)return {error:"今天已经没有行动次数了"};if(game.houseDamage<=0)return {error:"房间现在已经很干净了"};game.actionsLeft--;const before=game.houseDamage;game.houseDamage=Utils.clamp(game.houseDamage-25);const reduced=Math.round(before-game.houseDamage);const event={emoji:"🧽",title:"房间打扫完成",body:`你花时间收拾了散落的猫粮、猫砂和被弄乱的物品，房屋损坏度降低了${reduced}%。`,effects:{damage:-reduced}};TaskSystem.record(game,{type:"cleanRoom"});TaskSystem.refresh(game);log(event.body);Storage.save(game);return {event,death:isDead()}}
-    function claimDailyTask(){if(!game)return {error:"没有小猫"};const result=TaskSystem.claim(game);if(result.error)return result;game.mood="happy";Storage.save(game);return result}
+    function buyItem(itemKey){if(!game)return {error:"没有小猫"};const item=mallItems[itemKey];if(!item)return {error:"商品不存在"};if(game.coins<item.price)return {error:`金币不足，还需要${item.price-game.coins}金币`};change("coins",-item.price);inventory()[itemKey]=(inventory()[itemKey]||0)+1;TaskSystem.record(game,{type:"shop"});TaskSystem.refresh(game);const event={emoji:"🛍️",title:`${item.name}已放入背包`,body:`你花了${item.price}金币购买${item.name}。它已经放进猫舍共享背包，可以选择任意一只猫使用。`,effects:{coins:-item.price}};log(`你在商场购买了${item.name}，当前库存${inventory()[itemKey]}个。`);recordAchievement("itemsBought");Storage.save(game);return {event,death:false}}
+    function useItem(itemKey){if(!game)return {error:"没有小猫"};const item=mallItems[itemKey];if(!item)return {error:"物品不存在"};if((inventory()[itemKey]||0)<=0)return {error:`背包里没有${item.name}了`};if(game.stats.hunger>=100)return {error:`${game.name}现在已经吃得很饱了`};inventory()[itemKey]--;const hungerBefore=game.stats.hunger,intimacyBefore=game.stats.intimacy;change("hunger",item.hunger);change("intimacy",item.intimacy);const gained=Math.round(game.stats.hunger-hungerBefore),actualIntimacyGained=Math.round(game.stats.intimacy-intimacyBefore);TaskSystem.record(game,{type:"feedItem",hungerGain:gained});TaskSystem.refresh(game);game.mood="happy";const baseEvent={emoji:item.emoji,title:`${game.name}吃掉了${item.name}`,body:`你从背包里拿出${item.name}。${game.name}闻到香味立刻凑了过来，很快吃得干干净净，也和你更亲近了。`,effects:{hunger:gained,intimacy:actualIntimacyGained},visual:{catState:"happy"}};const event=RelationshipSystem.decorateAction(game,"feedItem",baseEvent);log(`你从背包取出${item.name}喂给${game.name}，饱腹增加${gained}，亲密增加${actualIntimacyGained}。`);recordAchievement("itemsUsed");recordAchievement("feed");Storage.save(game);return {event,death:false}}
+    function cleanRoom(){if(!game)return {error:"没有小猫"};if(game.actionsLeft<=0)return {error:"今天已经没有行动次数了"};if(game.houseDamage<=0)return {error:"房间现在已经很干净了"};game.actionsLeft--;const before=game.houseDamage;game.houseDamage=Utils.clamp(game.houseDamage-25);const reduced=Math.round(before-game.houseDamage);const event={emoji:"🧽",title:"房间打扫完成",body:`你花时间收拾了散落的猫粮、猫砂和被弄乱的物品，房屋损坏度降低了${reduced}%。`,effects:{damage:-reduced}};TaskSystem.record(game,{type:"cleanRoom"});TaskSystem.refresh(game);log(event.body);recordAchievement("cleanRoom",1,{before,after:game.houseDamage});Storage.save(game);return {event,death:isDead()}}
+    function claimDailyTask(){if(!game)return {error:"没有小猫"};const result=TaskSystem.claim(game);if(result.error)return result;game.mood="happy";recordAchievement("tasksClaimed");Storage.save(game);return result}
     function dailyChoiceView(){if(!game)return null;return DailyChoiceEventSystem.view(game)}
     function resolveDailyChoice(choiceId){
       if(!game)return {error:"没有小猫"};
@@ -643,6 +674,7 @@ const RelationshipSystem = window.RelationshipSystem;
       const event={...outcome,effects:{...(choice.effects||{})}};
       game.mood=event.visual?.catState||"neutral";
       log(`每日随机事件“${event.title}”：${event.body}`);
+      recordAchievement("eventsResolved");
       Storage.save(game);
       return {event,death:isDead()};
     }
@@ -659,10 +691,10 @@ const RelationshipSystem = window.RelationshipSystem;
       else if(Math.random()<.04){const cost=becomeSick();change("health",-12);const sickEvent={emoji:"🌡️",title:"小猫生病了",body:`${game.name}今天突然没什么精神，也不太愿意吃东西。本次治疗费用为${cost}金币，最好尽快带它去看病。`,effects:{health:-12}};events.push(sickEvent);log(sickEvent.body)}
       if(!game.bathDue&&game.day>=game.nextBathDay){game.bathDue=true;const bathEvent={emoji:"🛁",title:"该洗澡并剪指甲了",body:`${game.name}已经到需要护理的时间。请从房间图片上的“护理与看病”入口处理。`,effects:{}};events.push(bathEvent);log(bathEvent.body)}
       let growth=null;if(game.ageStage==="kitten"&&!game.personalityChanged&&daysOwned()>=7)growth=grow();
-      TaskSystem.create(game);log(`新的每日任务：${TaskSystem.view(game).name}。`);DailyChoiceEventSystem.create(game);log("今天出现了一个新的随机事件，等待你的选择。");Storage.save(game);return {events,growth,dailyChoice:DailyChoiceEventSystem.view(game),death:isDead()}
+      TaskSystem.create(game);log(`新的每日任务：${TaskSystem.view(game).name}。`);DailyChoiceEventSystem.create(game);log("今天出现了一个新的随机事件，等待你的选择。");checkAchievements();Storage.save(game);return {events,growth,dailyChoice:DailyChoiceEventSystem.view(game),death:isDead()}
     }
-    function grow(){const old=game.personality;const growthWeights=CONFIG.routes[game.routeKey]?.growth||{spirit:1,demon:1,chaos:1};const next=personalityForBreed(game.breedKey,Utils.roll(growthWeights));game.ageStage="adult";game.personality=next;game.personalityChanged=true;if(next==="chaos"){game.stats.trust=Math.min(game.stats.trust,45);game.stats.intimacy=Math.min(game.stats.intimacy,35);RelationshipSystem.ensure(game)}game.mood=next==="chaos"?"angry":"neutral";const story=next==="spirit"?`${game.name}长大后安静了许多，开始每天主动趴在你身边。`:next==="demon"?`你发现家里的杯子总会莫名其妙掉到地上。监控里的${game.name}每次推完都会若无其事地走开。`:`${game.name}静静看着你。下一秒，它突然给了你一爪，随后转身抓坏了新沙发。`;log(`${game.name}成年了，性格从“${CONFIG.personalities[old].name}”定型为“${CONFIG.personalities[next].name}”。`);return {old,next,story}}
-    return {get,set,getShelter,getCats,catCount,hasRoom,getCandidate,createCandidate,setCandidateBreed,breedAllowedForRoute,allowedBreedsForRoute,adopt,switchCat,removeActiveCat,daysOwned,growthDaysLeft,maxFor,change,apply,log,isDead,action,work,buyItem,useItem,cleanRoom,claimDailyTask,dailyChoiceView,resolveDailyChoice,endDay,becomeSick,relationshipView,takeRelationshipEvents,welcomeEvent};
+    function grow(){const old=game.personality;const growthWeights=CONFIG.routes[game.routeKey]?.growth||{spirit:1,demon:1,chaos:1};const next=personalityForBreed(game.breedKey,Utils.roll(growthWeights));game.ageStage="adult";game.personality=next;CatDexSystem.markStage(shelter.collection,game,"adult",game.day);game.personalityChanged=true;if(next==="chaos"){game.stats.trust=Math.min(game.stats.trust,45);game.stats.intimacy=Math.min(game.stats.intimacy,35);RelationshipSystem.ensure(game)}game.mood=next==="chaos"?"angry":"neutral";const story=next==="spirit"?`${game.name}长大后安静了许多，开始每天主动趴在你身边。`:next==="demon"?`你发现家里的杯子总会莫名其妙掉到地上。监控里的${game.name}每次推完都会若无其事地走开。`:`${game.name}静静看着你。下一秒，它突然给了你一爪，随后转身抓坏了新沙发。`;log(`${game.name}成年了，性格从“${CONFIG.personalities[old].name}”定型为“${CONFIG.personalities[next].name}”。`);recordAchievement("catsGrown");return {old,next,story}}
+    return {get,set,getShelter,getCats,catCount,hasRoom,getCandidate,createCandidate,setCandidateBreed,breedAllowedForRoute,allowedBreedsForRoute,adopt,switchCat,removeActiveCat,daysOwned,growthDaysLeft,maxFor,change,apply,log,isDead,action,work,buyItem,useItem,cleanRoom,claimDailyTask,dailyChoiceView,resolveDailyChoice,endDay,becomeSick,relationshipView,takeRelationshipEvents,welcomeEvent,collectionView,checkAchievements,recordAchievement,achievementView,currentTitle,selectTitle,takeAchievementEvents};
   })();
 
   /* =========================
@@ -670,7 +702,7 @@ const RelationshipSystem = window.RelationshipSystem;
   ========================= */
   const Care = (() => {
     let waitingChaosChoice=false;
-    function completeBath(){const g=Game.get();g.stats.cleanliness=100;g.bathDue=false;g.lastBathDay=g.day;g.nextBathDay=g.day+10}
+    function completeBath(){const g=Game.get();g.stats.cleanliness=100;g.bathDue=false;g.lastBathDay=g.day;g.nextBathDay=g.day+10;Game.recordAchievement("care")}
     function makeSick(amount=15){const g=Game.get();Game.becomeSick();Game.change("health",-amount)}
     function useAction(){const g=Game.get();if(!g||g.actionsLeft<=0)return false;g.actionsLeft--;return true}
     function bath(){
@@ -697,7 +729,7 @@ const RelationshipSystem = window.RelationshipSystem;
       else{event={emoji:"🛋️",title:"洗澡失败",body:`${g.name}挣脱后跑到沙发底下哈气。洗澡和剪指甲没有完成。`,effects:{}}}
       Game.log(event.body);Storage.save(g);return {event,death:Game.isDead()}
     }
-    function doctor(){const g=Game.get();if(!g)return {error:"没有小猫"};if(!g.isSick)return {error:`${g.name}目前没有生病`};if(g.actionsLeft<=0)return {error:"今天已经没有行动次数了"};const cost=Game.becomeSick();if(g.coins<cost)return {error:`金币不足，本次看病需要${cost}金币`};g.actionsLeft--;g.coins-=cost;g.isSick=false;g.treatmentCost=null;Game.change("health",30);g.mood="neutral";const event={emoji:"🏥",title:"看病完成",body:`医生检查并治疗了${g.name}。本次治疗花费${cost}金币，它已经脱离生病状态，需要继续好好休息。`,effects:{coins:-cost,health:30}};Game.log(event.body);Storage.save(g);return {event,death:Game.isDead()}}
+    function doctor(){const g=Game.get();if(!g)return {error:"没有小猫"};if(!g.isSick)return {error:`${g.name}目前没有生病`};if(g.actionsLeft<=0)return {error:"今天已经没有行动次数了"};const cost=Game.becomeSick();if(g.coins<cost)return {error:`金币不足，本次看病需要${cost}金币`};g.actionsLeft--;g.coins-=cost;g.isSick=false;g.treatmentCost=null;Game.change("health",30);g.mood="neutral";const event={emoji:"🏥",title:"看病完成",body:`医生检查并治疗了${g.name}。本次治疗花费${cost}金币，它已经脱离生病状态，需要继续好好休息。`,effects:{coins:-cost,health:30}};Game.log(event.body);Game.recordAchievement("care");Storage.save(g);return {event,death:Game.isDead()}}
     return {bath,resolveChaos,doctor};
   })();
 
@@ -728,7 +760,7 @@ const RelationshipSystem = window.RelationshipSystem;
      8. 界面渲染模块
   ========================= */
   const UI = (() => {
-    const {$,$$,clamp}=Utils;let eventCloseCallback=null,eventHomePose=null;
+    const {$,$$,clamp}=Utils;let eventCloseCallback=null,eventHomePose=null,catDexFilter='all',achievementFilter='all';
     function showAssetLoading(text="正在加载房间和猫咪素材……"){
       const overlay=$("#assetLoading");
       if(!overlay)return;
@@ -742,7 +774,7 @@ const RelationshipSystem = window.RelationshipSystem;
     function updateAssetModeButton(){const pref=AssetManager.getPreference();const text=!pref?"尚未选择":pref.mode==="none"?"轻量无图片":`完整图片 · ${CONFIG.breeds[pref.breed]?.name||"已选择"}`;$("#assetSettingsBtn").textContent=`🎨 画面模式：${text}`;const hud=$("#hudSettingsBtn");if(hud)hud.title=`画面模式：${text}`}
     function updateBackgroundStatus(progress,finished=false){const box=$("#assetBackgroundStatus");if(!box)return;if(finished){box.textContent=progress?.failed?.length?`⚠️ 有${progress.failed.length}张图片未成功，下次进入会继续尝试`:`✅ 其他可用品种已保存到本机`;box.classList.add("show","done");setTimeout(()=>box.classList.remove("show"),3200);return}box.classList.remove("done");box.classList.add("show");box.textContent=`🐾 后台准备其他猫咪 ${progress.completed}/${progress.total}`}
 
-    function showScreen(id){const overlayIds=['attributeScreen','careScreen','mallScreen','shelterManageScreen'],isGameOverlay=overlayIds.includes(id);if(isGameOverlay){$$('.screen').forEach(screen=>{if(screen.id==='homeScreen')screen.classList.add('active');else if(overlayIds.includes(screen.id))screen.classList.toggle('active',screen.id===id);else screen.classList.remove('active')})}else{$$('.screen').forEach(screen=>screen.classList.toggle('active',screen.id===id))}document.body.classList.toggle('game-home-active',id==='homeScreen'||isGameOverlay);$$('.hud-drawer').forEach(drawer=>{drawer.classList.remove('show');drawer.setAttribute('aria-hidden','true')});$('#hudDrawerScrim')?.classList.remove('show');const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&Game.catCount()>1&&(id==='homeScreen'||isGameOverlay));if($('#routeSectionTitle'))$('#routeSectionTitle').textContent=adopted?'再获得一只新猫':'先获得一只小猫';if(!isGameOverlay)window.scrollTo({top:0,behavior:'smooth'});if(id==='homeScreen'){PhoneHud.show(true)}else{PhoneHud.hold()}}
+    function showScreen(id){const overlayIds=['attributeScreen','careScreen','mallScreen','shelterManageScreen','catDexScreen','achievementScreen'],isGameOverlay=overlayIds.includes(id);if(isGameOverlay){$$('.screen').forEach(screen=>{if(screen.id==='homeScreen')screen.classList.add('active');else if(overlayIds.includes(screen.id))screen.classList.toggle('active',screen.id===id);else screen.classList.remove('active')})}else{$$('.screen').forEach(screen=>screen.classList.toggle('active',screen.id===id))}document.body.classList.toggle('game-home-active',id==='homeScreen'||isGameOverlay);$$('.hud-drawer').forEach(drawer=>{drawer.classList.remove('show');drawer.setAttribute('aria-hidden','true')});$('#hudDrawerScrim')?.classList.remove('show');const adopted=!!Game.get();$('#abandonBtn').classList.toggle('show',adopted&&Game.catCount()>1&&(id==='homeScreen'||isGameOverlay));if($('#routeSectionTitle'))$('#routeSectionTitle').textContent=adopted?'再获得一只新猫':'先获得一只小猫';if(!isGameOverlay)window.scrollTo({top:0,behavior:'smooth'});if(id==='homeScreen'){PhoneHud.show(true)}else{PhoneHud.hold()}}
     function renderCandidate(){const c=Game.getCandidate(),breed=CONFIG.breeds[c.breedKey];Visual.preload(c);Visual.renderScene('#candidateArt',{...c,houseDamage:0,mood:'neutral',isSick:false},{showAssetHint:true});$('#candidateTitle').textContent=c.ageStage==='adult'?'你决定领养这只成年猫':'你遇见了一只小猫';$('#originStory').textContent=c.story;$('#candidateAge').textContent=c.ageStage==='adult'?'成年猫（性格固定）':'幼猫（第7天成年）';$('#candidateBreed').textContent=breed.name;$('#candidateSex').textContent=c.sex;$('#candidatePersonality').textContent=`${CONFIG.personalities[c.personality].name} · ${breed.forcedPersonality?'品种固定性格':c.ageStage==='adult'?'不会变化':'成年时重新定型'}`;const select=$('#candidateBreedSelect'),allowed=Game.allowedBreedsForRoute(c.routeKey);select.innerHTML=allowed.map(key=>{const item=CONFIG.breeds[key];return `<option value="${key}" ${key===c.breedKey?'selected':''}>${item.name}${item.shopOnly?'（宠物店限定）':''}${item.imageReady?'':'（图片开发中）'}</option>`}).join('');if(breed.shopOnly)$('#candidateBreedHint').textContent='美短银虎斑仅可在宠物店获得，性格100%固定为灵珠。当前图片尚未完成时会使用内置轻量画面。';else $('#candidateBreedHint').textContent=breed.imageReady?'这个品种已有 WebP 图片；如果尚未缓存，系统会在领养前自动准备。':'该品种 WebP 图片仍在开发中，目前会使用内置轻量画面。';$('#catNameInput').value=c.suggestedName;$('#rerollBtn').style.display=c.rerollable?'block':'none';const hasShelter=!!Game.getShelter(),full=hasShelter&&!Game.hasRoom();$('#adoptBtn').textContent=hasShelter?'加入猫舍':'带它回家';$('#adoptBtn').disabled=full;if(full)$('#candidateBreedHint').textContent='猫舍已经满了。请先返回猫舍处理现有猫咪。'}
     function statCards(game,keys){const labels={health:'❤️ 健康',trust:'🤝 信任',vitality:'⚡ 活力',courage:'🛡️ 胆量',intimacy:'💗 亲密',hunger:'🥣 饱腹',cleanliness:'✨ 清洁'};return keys.map(k=>{const v=game.stats[k];const p=v/Game.maxFor(k)*100;return `<div class="stat-card"><div class="stat-head"><span>${labels[k]}</span><span>${Math.round(v)}</span></div><div class="bar"><span style="width:${clamp(p)}%"></span></div></div>`}).join('')}
     function hudStats(game){
@@ -755,7 +787,7 @@ const RelationshipSystem = window.RelationshipSystem;
     }
     function damageLabel(d){return d<15?'房间完好':d<40?'轻微破坏':d<70?'明显破坏':'惨不忍睹'}
     function renderDailyTask(g){const task=TaskSystem.view(g),card=$('#dailyTaskCard'),button=$('#taskClaimBtn');$('#dailyTaskEmoji').textContent=task.emoji;$('#dailyTaskName').textContent=task.name;$('#dailyTaskReward').textContent=`奖励 ${task.reward}金币`;$('#dailyTaskDesc').textContent=task.desc;$('#dailyTaskProgressText').textContent=task.progressText;$('#dailyTaskStatus').textContent=task.claimed?'已领取':task.completed?'已完成':'进行中';$('#dailyTaskProgressBar').style.width=`${task.percent}%`;card.classList.toggle('claimed',task.claimed);button.disabled=!task.completed||task.claimed;button.textContent=task.claimed?'今日奖励已领取':task.completed?'领取任务奖励':'完成后领取'}
-    function renderHome(){const g=Game.get();if(!g)return;TaskSystem.ensure(g);TaskSystem.refresh(g);const relation=Game.relationshipView();$('#dayChip').textContent=`第 ${g.day} 天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · ${CONFIG.personalities[g.personality].name}`;$('#homeRelationshipChip').textContent=`${relation.emoji} ${relation.name} · 亲密 ${relation.value}/${relation.maximum}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careLabel').textContent=g.isSick?'小猫生病了':g.bathDue?'需要护理':'护理与看病';$('#compactStats').innerHTML=hudStats(g);renderDailyTask(g);const task=TaskSystem.view(g);$('#taskDot').classList.toggle('show',task.completed&&!task.claimed);const dailyChoice=Game.dailyChoiceView();$('#dailyEventDot')?.classList.toggle('show',Boolean(dailyChoice&&!dailyChoice.resolved));$('#actionPointsText').textContent=`今日行动 ${g.actionsLeft}/4`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年 ${Game.growthDaysLeft()}天`;const root=Game.getShelter();if($('#shelterCount'))$('#shelterCount').textContent=`${root.cats.length}/${root.slots}`;$$('.action-btn').forEach(button=>{button.disabled=(button.id!=='sleepBtn'&&button.id!=='mobileActionMoreBtn'&&button.dataset.action!=='feed'&&g.actionsLeft<=0)});$$('.action-remaining').forEach(el=>el.textContent=g.actionsLeft);if($('#feedNormalBtn'))$('#feedNormalBtn').disabled=g.actionsLeft<=0;renderMall();$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;if($('#moreCleanBtn'))$('#moreCleanBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;if($('#mobileCleanLitterBtn'))$('#mobileCleanLitterBtn').disabled=g.actionsLeft<=0;if($('#mobileWorkBtn'))$('#mobileWorkBtn').disabled=g.actionsLeft<=0;$('#cleanRoomLabel').textContent=g.houseDamage>0?`打扫房间 -25%`:'房间很干净';$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('');renderMall();Storage.save(g);PhoneHud.schedule()}
+    function renderHome(){const g=Game.get();if(!g)return;TaskSystem.ensure(g);TaskSystem.refresh(g);const relation=Game.relationshipView();$('#dayChip').textContent=`第 ${g.day} 天`;$('#homeCatName').textContent=g.name;$('#homeCatSub').textContent=`${CONFIG.breeds[g.breedKey].name} · ${g.sex} · ${g.ageStage==='adult'?'成年猫':'幼猫'} · ${CONFIG.personalities[g.personality].name}`;$('#homeRelationshipChip').textContent=`${relation.emoji} ${relation.name} · 亲密 ${relation.value}/${relation.maximum}`;const equippedTitle=Game.currentTitle(),titleChip=$('#homeTitleChip');titleChip.hidden=!equippedTitle;if(equippedTitle)titleChip.textContent=`${equippedTitle.emoji} 称号 · ${equippedTitle.name}`;Visual.preload(g);Visual.renderScene('#roomArt',g);$('#roomCaption').textContent=roomCaption(g);$('#damageLabel').textContent=`${damageLabel(g.houseDamage)} · ${Math.round(g.houseDamage)}%`;$('#careBtn').classList.toggle('alert',g.bathDue||g.isSick);$('#careLabel').textContent=g.isSick?'小猫生病了':g.bathDue?'需要护理':'护理与看病';$('#compactStats').innerHTML=hudStats(g);renderDailyTask(g);const task=TaskSystem.view(g);$('#taskDot').classList.toggle('show',task.completed&&!task.claimed);const dailyChoice=Game.dailyChoiceView();$('#dailyEventDot')?.classList.toggle('show',Boolean(dailyChoice&&!dailyChoice.resolved));$('#actionPointsText').textContent=`今日行动 ${g.actionsLeft}/4`;$('#growthText').textContent=g.ageStage==='adult'?'已成年':`距离成年 ${Game.growthDaysLeft()}天`;const root=Game.getShelter();if($('#shelterCount'))$('#shelterCount').textContent=`${root.cats.length}/${root.slots}`;const dex=Game.collectionView();if($('#catDexCount')&&dex)$('#catDexCount').textContent=`${dex.summary.unlocked}/${dex.summary.total}`;const achievementData=Game.achievementView();if($('#achievementCount')&&achievementData)$('#achievementCount').textContent=`${achievementData.summary.unlocked}/${achievementData.summary.total}`;$$('.action-btn').forEach(button=>{button.disabled=(button.id!=='sleepBtn'&&button.id!=='mobileActionMoreBtn'&&button.dataset.action!=='feed'&&g.actionsLeft<=0)});$$('.action-remaining').forEach(el=>el.textContent=g.actionsLeft);if($('#feedNormalBtn'))$('#feedNormalBtn').disabled=g.actionsLeft<=0;renderMall();$('#cleanRoomBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;if($('#moreCleanBtn'))$('#moreCleanBtn').disabled=g.actionsLeft<=0||g.houseDamage<=0;if($('#mobileCleanLitterBtn'))$('#mobileCleanLitterBtn').disabled=g.actionsLeft<=0;if($('#mobileWorkBtn'))$('#mobileWorkBtn').disabled=g.actionsLeft<=0;$('#cleanRoomLabel').textContent=g.houseDamage>0?`打扫房间 -25%`:'房间很干净';$('#logList').innerHTML=g.logs.map(x=>`<div class="log-item">${x}</div>`).join('');renderMall();Storage.save(g);PhoneHud.schedule()}
     function roomCaption(g){if(g.isSick)return `${g.name}生病了，看起来没有精神。`;if(g.mood==='angry')return `${g.name}现在看起来不太高兴。`;if(g.mood==='sleepy')return `${g.name}困了，正准备找地方睡觉。`;if(g.mood==='happy')return `${g.name}心情很好，尾巴轻轻晃着。`;if(g.stats.hunger<25)return `${g.name}正在等你放饭。`;const relation=Game.relationshipView();if(relation.rank>=5)return `${g.name}几乎一直守在你身边，已经和你形影不离。`;if(relation.rank>=4)return `${g.name}一看见你就会主动靠近。`;if(relation.rank>=2)return `${g.name}在你身边很放松，安静地观察着房间。`;return `${g.name}在房间里观察你。`}
     function renderShelter(){
       const root=Game.getShelter(),g=Game.get();if(!root||!g)return;
@@ -777,6 +809,50 @@ const RelationshipSystem = window.RelationshipSystem;
     function renderAttributes(){const g=Game.get(),p=CONFIG.personalities[g.personality],relation=Game.relationshipView();$('#attributeDay').textContent=`第${g.day}天`;$('#attributeName').textContent=`${g.name}的档案`;Visual.renderScene('#attributeArt',g);$('#attributeInfo').innerHTML=`<div class="info-box"><small>品种</small><strong>${CONFIG.breeds[g.breedKey].name}</strong></div><div class="info-box"><small>性别</small><strong>${g.sex}</strong></div><div class="info-box"><small>年龄</small><strong>${g.ageStage==='adult'?'成年猫':'幼猫'}</strong></div><div class="info-box"><small>获得方式</small><strong>${g.routeName}</strong></div><div class="info-box"><small>初始性格</small><strong>${CONFIG.personalities[g.initialPersonality].name}</strong></div><div class="info-box"><small>亲密关系</small><strong>${relation.emoji} ${relation.name}</strong></div>`;$('#attributeStats').innerHTML=statCards(g,['health','trust','vitality','courage','intimacy','hunger','cleanliness']);const nextText=relation.next?(relation.cappedBeforeNext?`受当前性格上限影响，亲密最高为 ${relation.maximum}，暂时无法到达「${relation.next.name}」。`:`距离「${relation.next.name}」还需要 ${Math.max(0,relation.nextAt-relation.value)} 点亲密。`):'你们已经达到最高关系等级。';$('#attributeRelationship').innerHTML=`<div class="relationship-detail-head"><div><small>亲密关系</small><h3>${relation.emoji} ${relation.name}</h3></div><strong class="relationship-detail-value">${relation.value}/${relation.maximum}</strong></div><div class="relationship-progress"><span style="width:${relation.segmentPercent}%"></span></div><p>${relation.description}</p><p class="relationship-next">${nextText}</p><div class="relationship-unlocks">${relation.unlocked.map(item=>`<span class="relationship-unlock">${item.emoji} ${item.unlock}</span>`).join('')}</div>`;$('#attributePersonality').textContent=`当前性格：${p.name}`;$('#attributePersonalityDesc').textContent=p.desc}
     function renderCare(){const g=Game.get();if(!g)return;const cost=g.isSick?(Number.isInteger(g.treatmentCost)?g.treatmentCost:Game.becomeSick()):null;$('#careDay').textContent=`第${g.day}天`;Visual.renderScene('#careArt',g,{state:g.isSick?'sick':null});$('#bathStatus').textContent=g.bathDue?'现在需要护理':`下次第${g.nextBathDay}天`;$('#illnessStatus').textContent=g.isSick?`生病中 · 治疗${cost}金币`:'健康';$('#careActionsLeft').textContent=`${g.actionsLeft}/4`;$('#careCoins').textContent=`${g.coins}`;$('#careNotice').innerHTML=g.isSick?`<div class="sick-note">${g.name}正在生病。生病期间每天会继续损失健康，本次治疗费用为${cost}金币，请尽快看病。</div>`:`<div class="healthy-note">${g.name}目前没有生病。每天结束时有4%的概率随机生病，每次治疗费用会在100～300金币之间随机生成。</div>`;$('#bathBtn').disabled=!g.bathDue||g.actionsLeft<=0;$('#bathBtnHint').textContent=g.bathDue?'本次护理会消耗1次行动':'还没有到需要护理的时间';$('#doctorBtnHint').textContent=g.isSick?`本次治疗需要${cost}金币，并消耗1次行动`:'每次生病的治疗费在100～300金币之间随机生成';$('#doctorBtn').disabled=!g.isSick||g.actionsLeft<=0||g.coins<cost}
     function renderMall(){const g=Game.get();if(!g)return;const bag=Game.getShelter()?.inventory||{catStrip:0,can:0},hunger=Math.round(g.stats.hunger),full=g.stats.hunger>=100,total=(bag.catStrip||0)+(bag.can||0);$('#mallCoins').textContent=`金币：${g.coins}`;$('#mallSummary').innerHTML=`<strong>🎒 猫舍共享背包：${total}件</strong><div>🍗 猫条 ×${bag.catStrip||0}　🥫 猫罐头 ×${bag.can||0}</div>`;if($('#feedDrawerSummary'))$('#feedDrawerSummary').innerHTML=`${g.name}的饱腹为 <strong>${hunger}/100</strong>。背包：猫条 <strong>×${bag.catStrip||0}</strong>，罐头 <strong>×${bag.can||0}</strong>。`;if($('#feedCatStripCount'))$('#feedCatStripCount').textContent=`库存 ×${bag.catStrip||0}`;if($('#feedCanCount'))$('#feedCanCount').textContent=`库存 ×${bag.can||0}`;if($('#bagCatStripCount'))$('#bagCatStripCount').textContent=bag.catStrip||0;if($('#bagCanCount'))$('#bagCanCount').textContent=bag.can||0;if($('#bagCount'))$('#bagCount').textContent=total;if($('#mallCatStripStock'))$('#mallCatStripStock').textContent=`背包 ×${bag.catStrip||0}`;if($('#mallCanStock'))$('#mallCanStock').textContent=`背包 ×${bag.can||0}`;$('#mallNote').textContent=`商品购买后会进入共享背包。当前选中的猫是${g.name}，使用食物时才会增加饱腹和亲密。`;$$('[data-buy-item]').forEach(button=>{const price=button.dataset.buyItem==='catStrip'?5:10;button.disabled=g.coins<price});$$('[data-use-item]').forEach(button=>{const key=button.dataset.useItem;button.disabled=full||(bag[key]||0)<=0})}
+
+    function renderCatDex(filter=catDexFilter){
+      const data=Game.collectionView();if(!data)return;
+      catDexFilter=filter;
+      $('#catDexDay').textContent=`第${Game.get().day}天`;
+      $('#catDexSummary').innerHTML=`<div class="catdex-summary-item"><small>已发现品种</small><strong>${data.summary.unlocked} / ${data.summary.total}</strong></div><div class="catdex-summary-item"><small>图鉴完成度</small><strong>${data.summary.percent}%</strong></div><div class="catdex-summary-item"><small>当前猫舍</small><strong>${data.summary.currentOwned}只</strong></div><div class="catdex-summary-item"><small>累计获得</small><strong>${data.summary.totalObtained}只</strong></div>`;
+      $$('#catDexFilter [data-catdex-filter]').forEach(button=>button.classList.toggle('active',button.dataset.catdexFilter===filter));
+      const list=data.list.filter(item=>filter==='all'||(filter==='unlocked'?item.unlocked:!item.unlocked));
+      $('#catDexGrid').innerHTML=list.map(item=>{
+        const stageTags=item.unlocked?item.ageStages.map(stage=>`<span>${stage==='adult'?'成年':'幼猫'}</span>`).join(''):'';
+        const status=item.unlocked?`当前拥有 ${item.currentOwned}只 · 累计获得 ${item.totalObtained}只`:'尚未收入图鉴';
+        return `<button class="catdex-card ${item.unlocked?'unlocked':'locked'}" data-catdex-breed="${item.breedKey}">${item.unlocked?'':'<span class="catdex-card-lock">未发现</span>'}<div class="catdex-card-art ${item.unlocked?'':'locked'}" data-catdex-art="${item.breedKey}"></div><div class="catdex-card-body"><div class="catdex-card-top"><strong>${item.emoji} ${item.name}</strong><span class="catdex-card-rarity">${item.rarity}</span></div><div class="catdex-card-status">${status}</div><div class="catdex-card-tags">${stageTags}${item.shopOnly?'<span>宠物店限定</span>':''}${item.imageReady?'':'<span>图片开发中</span>'}</div></div></button>`;
+      }).join('');
+      list.forEach(item=>Visual.renderCatPreview($(`[data-catdex-art="${item.breedKey}"]`),item.breedKey,'kitten',item.unlocked));
+      if($('#catDexCount'))$('#catDexCount').textContent=`${data.summary.unlocked}/${data.summary.total}`;
+    }
+    function openCatDexDetail(breedKey){
+      const data=Game.collectionView(),item=data?.list.find(entry=>entry.breedKey===breedKey);if(!item)return;
+      $('#catDexDetailEmoji').textContent=item.unlocked?item.emoji:'❔';$('#catDexDetailRarity').textContent=item.rarity;$('#catDexDetailTitle').textContent=item.name;
+      $('#catDexDetailSummary').textContent=item.unlocked?item.summary:'你还没有获得过这个品种。第一次把它带回猫舍后，会解锁完整资料和获得记录。';
+      $('#catDexDetailStats').innerHTML=`<div><small>当前拥有</small><strong>${item.currentOwned}只</strong></div><div><small>累计获得</small><strong>${item.totalObtained}只</strong></div><div><small>首次获得</small><strong>${item.firstObtainedDay?`第${item.firstObtainedDay}天`:'尚未获得'}</strong></div>`;
+      const routeNames=item.routeKeys.map(key=>CONFIG.routes[key]?.name).filter(Boolean),personalityNames=item.personalityKeys.map(key=>CONFIG.personalities[key]?.name).filter(Boolean),stageNames=item.ageStages.map(stage=>stage==='adult'?'成年猫':'幼猫');
+      const row=(label,values,empty)=>`<div class="catdex-record-row"><strong>${label}</strong><div class="catdex-record-chips">${values.length?values.map(value=>`<span>${value}</span>`).join(''):`<span>${empty}</span>`}</div></div>`;
+      $('#catDexDetailRecords').innerHTML=row('遇见过的获得方式',routeNames,'尚无记录')+row('遇见过的性格',personalityNames,'尚无记录')+row('已见成长阶段',stageNames,'尚无记录')+row('当前猫舍成员',item.currentNames,'目前没有');
+      $('#catDexDetailHint').textContent=`🔎 获得提示：${item.hint}`;
+      Visual.renderCatPreview('#catDexKittenPreview',breedKey,'kitten',item.unlocked);Visual.renderCatPreview('#catDexAdultPreview',breedKey,'adult',item.unlocked&&item.ageStages.includes('adult'));
+      $('#catDexDetailOverlay').classList.add('show');PhoneHud.hold();
+    }
+    function closeCatDexDetail(){$('#catDexDetailOverlay').classList.remove('show');PhoneHud.show(true)}
+
+    function renderAchievements(filter=achievementFilter){
+      const data=Game.achievementView(filter);if(!data)return;
+      achievementFilter=filter;
+      $('#achievementDay').textContent=`第${Game.get().day}天`;
+      const current=data.currentTitle;
+      $('#achievementCurrentTitleEmoji').textContent=current?.emoji||'🏆';
+      $('#achievementCurrentTitle').textContent=current?.name||'尚未佩戴';
+      $('#achievementCurrentTitleHint').textContent=current?`来自成就“${current.achievementName}”。称号会显示在主房间的猫咪信息旁。`:'解锁成就后，可以在对应卡片上选择称号。';
+      $('#achievementClearTitleBtn').disabled=!current;
+      $('#achievementSummary').innerHTML=`<div class="achievement-summary-item"><small>已完成成就</small><strong>${data.summary.unlocked} / ${data.summary.total}</strong></div><div class="achievement-summary-item"><small>完成度</small><strong>${data.summary.percent}%</strong></div><div class="achievement-summary-item"><small>已解锁称号</small><strong>${data.summary.titles}个</strong></div><div class="achievement-summary-item"><small>当前称号</small><strong>${current?`${current.emoji} ${current.name}`:'未佩戴'}</strong></div>`;
+      $$('#achievementFilter [data-achievement-filter]').forEach(button=>button.classList.toggle('active',button.dataset.achievementFilter===filter));
+      $('#achievementGrid').innerHTML=data.list.map(item=>`<article class="achievement-card ${item.unlocked?'unlocked':'locked'}">${item.unlocked?`<span class="achievement-unlock-day">第${item.unlockedDay}天</span>`:''}<div class="achievement-card-top"><span class="achievement-card-emoji">${item.unlocked?item.emoji:'🔒'}</span><div class="achievement-card-heading"><h3>${item.name}</h3><span class="achievement-category">${item.categoryEmoji} ${item.categoryName}</span></div></div><p class="achievement-card-desc">${item.desc}</p><div class="achievement-progress-line"><span>${item.unlocked?'已完成':'当前进度'}</span><strong>${Math.min(item.value,item.target)} / ${item.target}</strong></div><div class="achievement-progress"><span style="width:${item.percent}%"></span></div><div class="achievement-card-footer"><div class="achievement-reward"><span>称号奖励</span><strong>${item.title.emoji} ${item.title.name}</strong></div>${item.unlocked?`<button class="achievement-equip ${item.selected?'current':''}" data-achievement-title="${item.id}" ${item.selected?'disabled':''}>${item.selected?'佩戴中':'佩戴称号'}</button>`:'<span class="achievement-locked-label">尚未解锁</span>'}</div></article>`).join('');
+      if($('#achievementCount'))$('#achievementCount').textContent=`${data.summary.unlocked}/${data.summary.total}`;
+    }
 
     function renderDailyChoice(){
       const data=Game.dailyChoiceView();if(!data)return null;
@@ -826,8 +902,8 @@ const RelationshipSystem = window.RelationshipSystem;
       $('#eventOverlay').classList.remove('show');
       PhoneHud.show(true);
       const cb=eventCloseCallback,pose=eventHomePose;eventCloseCallback=null;eventHomePose=null;
-      const relationshipEvents=Game.takeRelationshipEvents();
-      if(relationshipEvents.length){showEventSequence(relationshipEvents,cb);return}
+      const pendingEvents=[...Game.takeRelationshipEvents(),...Game.takeAchievementEvents()];
+      if(pendingEvents.length){showEventSequence(pendingEvents,cb);return}
       if(cb)cb();
       requestAnimationFrame(()=>{
         if($('#eventOverlay').classList.contains('show'))return;
@@ -840,7 +916,7 @@ const RelationshipSystem = window.RelationshipSystem;
     function showGrowth(growth){$('#growthEmoji').textContent=growth.next==='spirit'?'💗':growth.next==='demon'?'😼':'🌫️';$('#growthBody').textContent=`${growth.story} 成年性格：${CONFIG.personalities[growth.next].name}`;$('#growthOverlay').classList.add('show')}
     function updateContinue(){const root=Storage.load(),cat=root?.cats?.find(item=>item.id===root.activeCatId)||root?.cats?.[0];$('#continueBox').classList.toggle('show',!!cat);if(cat){$('#continueTitle').textContent=`${cat.name}和猫舍伙伴正在等你回来`;$('#continueText').textContent=`第${root.day}天 · ${root.cats.length}/${root.slots}只猫 · 当前：${CONFIG.breeds[cat.breedKey].name}`;$('#routeSectionTitle').textContent='再获得一只新猫'}}
     function toast(text){const t=$('#toast');t.textContent=text;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),1700)}
-    return {showAssetLoading,hideAssetLoading,updateAssetModeButton,updateBackgroundStatus,showScreen,renderCandidate,renderHome,renderShelter,renderAttributes,renderCare,renderMall,renderDailyChoice,showDailyChoice,closeDailyChoice,showEvent,showEventSequence,closeEvent,showGrowth,showDeath,updateContinue,toast};
+    return {showAssetLoading,hideAssetLoading,updateAssetModeButton,updateBackgroundStatus,showScreen,renderCandidate,renderHome,renderShelter,renderAttributes,renderCare,renderMall,renderCatDex,openCatDexDetail,closeCatDexDetail,renderAchievements,renderDailyChoice,showDailyChoice,closeDailyChoice,showEvent,showEventSequence,closeEvent,showGrowth,showDeath,updateContinue,toast};
   })();
 
   /* =========================
@@ -946,8 +1022,11 @@ const RelationshipSystem = window.RelationshipSystem;
 
     function showEntryMoments(){
       const showDaily=()=>{const event=Game.dailyChoiceView();if(event&&!event.resolved)UI.showDailyChoice()};
+      const moments=[];
       const welcome=Game.welcomeEvent();
-      if(welcome)UI.showEvent(welcome,showDaily);else showDaily();
+      if(welcome)moments.push(welcome);
+      moments.push(...Game.takeRelationshipEvents(),...Game.takeAchievementEvents());
+      if(moments.length)UI.showEventSequence(moments,showDaily);else showDaily();
     }
 
     function bindAssetSetup(){
@@ -989,6 +1068,8 @@ const RelationshipSystem = window.RelationshipSystem;
       $('#addCatFromShelterBtn').addEventListener('click',()=>{if(!Game.hasRoom()){UI.toast('猫舍已经满了');return}UI.showScreen('startScreen')});
       $('#catShelterGrid').addEventListener('click',async event=>{const switchButton=event.target.closest('[data-shelter-switch]');if(switchButton){const result=Game.switchCat(switchButton.dataset.shelterSwitch);if(result.error){UI.toast(result.error);return}UI.showAssetLoading(`正在准备${result.game.name}的图片……`);try{await prepareGameVisuals(result.game,'正在切换猫咪并读取本地素材……')}finally{UI.hideAssetLoading()}Visual.resetCache();UI.renderHome();UI.renderShelter();UI.showScreen('homeScreen');if(result.growth)UI.showGrowth(result.growth);else setTimeout(showEntryMoments,280);return}if(event.target.closest('[data-add-cat]')){if(!Game.hasRoom()){UI.toast('猫舍已经满了');return}UI.showScreen('startScreen')}});
       $('#attributeBtn').addEventListener('click',()=>{UI.renderAttributes();UI.showScreen('attributeScreen')});
+      $('#catDexHudBtn')?.addEventListener('click',()=>{UI.renderCatDex();UI.showScreen('catDexScreen')});
+      $('#achievementHudBtn')?.addEventListener('click',()=>{UI.renderAchievements();UI.showScreen('achievementScreen')});
       $('#careBtn').addEventListener('click',()=>{UI.renderCare();UI.showScreen('careScreen')});
       const feedDockButton=$('.action-btn[data-action="feed"]');if(feedDockButton)feedDockButton.addEventListener('click',event=>{event.stopImmediatePropagation();UI.renderMall();toggleHudDrawer('feedDrawer')});
       $('#taskHudBtn').addEventListener('click',()=>toggleHudDrawer('taskDrawer'));
@@ -998,11 +1079,20 @@ const RelationshipSystem = window.RelationshipSystem;
       $('#moreHudBtn')?.addEventListener('click',()=>toggleHudDrawer('moreDrawer'));
       $('#mobileActionMoreBtn')?.addEventListener('click',()=>toggleHudDrawer('moreDrawer'));
       $('#moreCareBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#careBtn').click()});
+      $('#moreCatDexBtn')?.addEventListener('click',()=>{closeHudDrawers();UI.renderCatDex();UI.showScreen('catDexScreen')});
+      $('#moreAchievementBtn')?.addEventListener('click',()=>{closeHudDrawers();UI.renderAchievements();UI.showScreen('achievementScreen')});
       $('#moreAttributeBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#attributeBtn').click()});
       $('#moreCleanBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#cleanRoomBtn').click()});
       $('#moreLogBtn')?.addEventListener('click',()=>toggleHudDrawer('logDrawer'));
       $('#moreSettingsBtn')?.addEventListener('click',()=>{closeHudDrawers();openAssetSetup()});
       $('#moreAbandonBtn')?.addEventListener('click',()=>{closeHudDrawers();$('#abandonBtn').click()});
+      $('#catDexFilter')?.addEventListener('click',event=>{const button=event.target.closest('[data-catdex-filter]');if(button)UI.renderCatDex(button.dataset.catdexFilter)});
+      $('#catDexGrid')?.addEventListener('click',event=>{const card=event.target.closest('[data-catdex-breed]');if(card)UI.openCatDexDetail(card.dataset.catdexBreed)});
+      $('#catDexDetailClose')?.addEventListener('click',UI.closeCatDexDetail);
+      $('#catDexDetailOverlay')?.addEventListener('click',event=>{if(event.target===event.currentTarget)UI.closeCatDexDetail()});
+      $('#achievementFilter')?.addEventListener('click',event=>{const button=event.target.closest('[data-achievement-filter]');if(button)UI.renderAchievements(button.dataset.achievementFilter)});
+      $('#achievementGrid')?.addEventListener('click',event=>{const button=event.target.closest('[data-achievement-title]');if(!button)return;const result=Game.selectTitle(button.dataset.achievementTitle);if(result.error){UI.toast(result.error);return}UI.renderAchievements();UI.renderHome();UI.toast(`已佩戴称号：${result.title.emoji} ${result.title.name}`)});
+      $('#achievementClearTitleBtn')?.addEventListener('click',()=>{Game.selectTitle('none');UI.renderAchievements();UI.renderHome();UI.toast('已隐藏称号')});
       $('#hudDrawerScrim').addEventListener('click',closeHudDrawers);
       $$('[data-close-drawer]').forEach(button=>button.addEventListener('click',closeHudDrawers));
       $$('.game-overlay-screen').forEach(screen=>screen.addEventListener('click',event=>{if(event.target===screen){UI.renderHome();UI.showScreen('homeScreen')}}));
@@ -1012,7 +1102,7 @@ const RelationshipSystem = window.RelationshipSystem;
     function endGameIfDead(){const current=Game.get();if(!current||!Game.isDead())return false;const name=current.name;const result=Game.removeActiveCat({allowLast:true});Visual.resetCache();UI.updateContinue();if(result.game){UI.renderHome();UI.renderShelter()}UI.showDeath(name,!!result.game);return true}
 
     function bindGame(){
-      $('#adoptBtn').addEventListener('click',async()=>{const result=Game.adopt($('#catNameInput').value.trim());if(result.error){UI.toast(result.error);return}const game=result.game;await prepareGameVisuals(game,'正在准备这只猫的六种状态，完成后互动切换会更流畅。');UI.renderHome();UI.renderShelter();UI.updateContinue();UI.showScreen('homeScreen');startBackgroundAssets(game);setTimeout(showEntryMoments,550)});
+      $('#adoptBtn').addEventListener('click',async()=>{const result=Game.adopt($('#catNameInput').value.trim());if(result.error){UI.toast(result.error);return}const game=result.game;await prepareGameVisuals(game,'正在准备这只猫的六种状态，完成后互动切换会更流畅。');UI.renderHome();UI.renderShelter();UI.updateContinue();UI.showScreen('homeScreen');startBackgroundAssets(game);if(result.collectionUnlock)UI.toast(`图鉴解锁：${CONFIG.breeds[game.breedKey].name}`);setTimeout(showEntryMoments,550)});
       const runBasicAction=actionKey=>{const result=Game.action(actionKey);if(!result){UI.toast('今天已经没有行动次数了');return}closeHudDrawers();UI.renderHome();UI.showEvent(result.event,()=>{if(result.death)endGameIfDead()})};
       $$('.action-btn[data-action]').filter(button=>button.dataset.action!=='feed').forEach(button=>button.addEventListener('click',()=>runBasicAction(button.dataset.action)));
       $('#feedNormalBtn').addEventListener('click',()=>runBasicAction('feed'));

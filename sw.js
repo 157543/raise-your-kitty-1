@@ -1,17 +1,19 @@
 "use strict";
 
-const APP_VERSION = "cloud-cat-app-v4-3-1-20260806";
+const APP_VERSION = "cloud-cat-app-v4-5-20260806";
 const APP_CACHE = `${APP_VERSION}-shell`;
-const IMAGE_CACHE = "cloud-cat-webp-local-cache-v16-webp-20260806-v4-3-1-expanded-events";
+const IMAGE_CACHE = "cloud-cat-webp-local-cache-v18-webp-20260806-v4-5-achievements";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./style.css",
   "./cats.js",
+  "./encyclopedia.js",
   "./assets.js",
   "./relationships.js",
   "./events.js",
   "./tasks.js",
+  "./achievements.js",
   "./game.js"
 ];
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#fff4e8">
-  <title>云养小猫 · 模块化随机事件版 V4.2</title>
+  <title>云养小猫 · 成就与称号版 V4.5</title>
   
   <link rel="stylesheet" href="style.css">
 </head>
@@ -53,6 +53,8 @@
               <button class="hud-icon-button" id="taskHudBtn" aria-label="今日任务">📋<span class="hud-notice-dot" id="taskDot"></span></button>
               <button class="hud-icon-button" id="dailyEventHudBtn" aria-label="每日随机事件">✨<span class="hud-notice-dot" id="dailyEventDot"></span></button>
               <button class="hud-icon-button" id="shelterHudBtn" aria-label="猫舍">🐈<span class="hud-count-badge" id="shelterCount">1/3</span></button>
+              <button class="hud-icon-button" id="catDexHudBtn" aria-label="猫咪图鉴">📚<span class="hud-count-badge" id="catDexCount">0/8</span></button>
+              <button class="hud-icon-button" id="achievementHudBtn" aria-label="成就与称号">🏆<span class="hud-count-badge" id="achievementCount">0/24</span></button>
               <button class="hud-icon-button" id="bagHudBtn" aria-label="背包">🎒<span class="hud-count-badge" id="bagCount">0</span></button>
               <button class="hud-icon-button" id="logHudBtn" aria-label="猫咪日记">📖</button>
               <button class="hud-icon-button" id="mallBtn" aria-label="商场">🛒</button>
@@ -69,7 +71,7 @@
 
           <div class="game-cat-card">
             <h2 class="cat-name" id="homeCatName"></h2>
-            <div class="cat-sub" id="homeCatSub"></div><div class="relationship-chip" id="homeRelationshipChip"></div>
+            <div class="cat-sub" id="homeCatSub"></div><div class="relationship-chip" id="homeRelationshipChip"></div><div class="achievement-title-chip" id="homeTitleChip" hidden></div>
           </div>
           <div class="room-caption" id="roomCaption"></div>
           <div class="room-damage-label" id="damageLabel"></div>
@@ -131,6 +133,8 @@
               <button class="more-menu-button mobile-quick-menu" id="mobileCleanLitterBtn"><span>🧹</span><strong>清理猫砂</strong></button>
               <button class="more-menu-button mobile-quick-menu" id="mobileWorkBtn"><span>💼</span><strong>打工赚钱</strong></button>
               <button class="more-menu-button" id="moreShelterBtn"><span>🐈</span><strong>我的猫舍</strong></button>
+              <button class="more-menu-button" id="moreCatDexBtn"><span>📚</span><strong>猫咪图鉴</strong></button>
+              <button class="more-menu-button" id="moreAchievementBtn"><span>🏆</span><strong>成就与称号</strong></button>
               <button class="more-menu-button" id="moreBagBtn"><span>🎒</span><strong>猫舍背包</strong></button>
               <button class="more-menu-button" id="moreCareBtn"><span>🩺</span><strong>护理与看病</strong></button>
               <button class="more-menu-button" id="moreAttributeBtn"><span>📊</span><strong>属性详情</strong></button>
@@ -156,6 +160,49 @@
         <div class="cat-shelter-grid" id="catShelterGrid"></div>
         <button class="shelter-add-btn" id="addCatFromShelterBtn">＋ 获得一只新猫</button>
         <div class="shelter-note">🐾 未出场的猫会在猫舍里安心休息，不会消耗饱腹、清洁或健康。每天的行动次数、金币、房间和任务由整个猫舍共享。</div>
+      </div>
+    </section>
+
+
+    <section class="screen game-overlay-screen" id="catDexScreen">
+      <div class="panel catdex-panel">
+        <div class="attribute-head">
+          <button class="back-link" data-go="homeScreen">← 返回房间</button>
+          <span class="day-chip" id="catDexDay"></span>
+        </div>
+        <h2>猫咪图鉴</h2>
+        <p class="subtitle">领养过的品种会永久点亮。即使猫咪后来离开猫舍，发现记录、获得方式和成长阶段仍会保留。</p>
+        <div class="catdex-summary" id="catDexSummary"></div>
+        <div class="catdex-filter" id="catDexFilter" aria-label="图鉴筛选">
+          <button class="active" data-catdex-filter="all">全部</button>
+          <button data-catdex-filter="unlocked">已发现</button>
+          <button data-catdex-filter="locked">未发现</button>
+        </div>
+        <div class="catdex-grid" id="catDexGrid"></div>
+      </div>
+    </section>
+
+
+    <section class="screen game-overlay-screen" id="achievementScreen">
+      <div class="panel achievement-panel">
+        <div class="attribute-head">
+          <button class="back-link" data-go="homeScreen">← 返回房间</button>
+          <span class="day-chip" id="achievementDay"></span>
+        </div>
+        <h2>成就与称号</h2>
+        <p class="subtitle">长期照顾、收集与探索会解锁成就。每项成就都会带来一个可以佩戴的称号。</p>
+        <div class="achievement-title-banner">
+          <span class="achievement-title-icon" id="achievementCurrentTitleEmoji">🏆</span>
+          <div><small>当前佩戴称号</small><strong id="achievementCurrentTitle">尚未佩戴</strong><p id="achievementCurrentTitleHint">解锁成就后，可以在对应卡片上选择称号。</p></div>
+          <button class="secondary" id="achievementClearTitleBtn">不显示称号</button>
+        </div>
+        <div class="achievement-summary" id="achievementSummary"></div>
+        <div class="achievement-filter" id="achievementFilter" aria-label="成就筛选">
+          <button class="active" data-achievement-filter="all">全部</button>
+          <button data-achievement-filter="unlocked">已完成</button>
+          <button data-achievement-filter="locked">进行中</button>
+        </div>
+        <div class="achievement-grid" id="achievementGrid"></div>
       </div>
     </section>
 
@@ -212,6 +259,25 @@
   </main>
 
   <button class="abandon-corner" id="abandonBtn">弃养</button>
+
+
+  <div class="overlay" id="catDexDetailOverlay" aria-modal="true" role="dialog">
+    <div class="modal-card catdex-detail-card">
+      <button class="catdex-detail-close" id="catDexDetailClose" aria-label="关闭图鉴详情">×</button>
+      <div class="catdex-detail-heading">
+        <span class="catdex-detail-emoji" id="catDexDetailEmoji">🐱</span>
+        <div><span class="catdex-rarity" id="catDexDetailRarity"></span><h2 id="catDexDetailTitle"></h2></div>
+      </div>
+      <div class="catdex-detail-previews" id="catDexDetailPreviews">
+        <div><div class="catdex-preview" id="catDexKittenPreview"></div><small>幼猫形态</small></div>
+        <div><div class="catdex-preview" id="catDexAdultPreview"></div><small>成年形态</small></div>
+      </div>
+      <p class="catdex-detail-summary" id="catDexDetailSummary"></p>
+      <div class="catdex-detail-stats" id="catDexDetailStats"></div>
+      <div class="catdex-detail-records" id="catDexDetailRecords"></div>
+      <div class="catdex-detail-hint" id="catDexDetailHint"></div>
+    </div>
+  </div>
 
   <div class="overlay" id="eventOverlay"><div class="modal-card event-card"><div class="event-illustration" id="eventIllustration"></div><div class="event-emoji" id="eventEmoji"></div><h2 id="eventTitle"></h2><div class="event-body" id="eventBody"></div><div class="effect-list" id="effectList"></div><div class="tap-hint">点击任意位置继续</div></div></div>
 
@@ -297,10 +363,12 @@
   <div class="asset-background-status" id="assetBackgroundStatus"></div>
   <div class="toast" id="toast"></div>
   <script src="cats.js" defer></script>
+  <script src="encyclopedia.js" defer></script>
   <script src="assets.js" defer></script>
   <script src="relationships.js" defer></script>
   <script src="events.js" defer></script>
   <script src="tasks.js" defer></script>
+  <script src="achievements.js" defer></script>
   <script src="game.js" defer></script>
 </body>
 </html>
